@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import heroImg from "@/assets/hero-bar.jpg";
+import logo from "@/assets/logo.png";
 
 const HeroSection = () => {
   const scrollTo = (id: string) => {
@@ -16,11 +17,20 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="mb-6"
+        >
+          <img src={logo} alt="Cosmic Café" className="h-32 md:h-44 lg:h-52 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)]" />
+        </motion.div>
+
         <motion.h1
           className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] mb-4 neon-glow-pink"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          transition={{ duration: 1, delay: 0.5 }}
         >
           COSMIC CAFÉ
         </motion.h1>
