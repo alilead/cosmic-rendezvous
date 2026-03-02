@@ -1,0 +1,83 @@
+import { motion } from "framer-motion";
+import heroImg from "@/assets/hero-bar.jpg";
+
+const HeroSection = () => {
+  const scrollTo = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0">
+        <img src={heroImg} alt="Cosmic Café ambiance" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/50 to-background" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <motion.h1
+          className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] mb-4 neon-glow-pink"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          COSMIC CAFÉ
+        </motion.h1>
+
+        <motion.p
+          className="font-display text-sm md:text-base tracking-[0.3em] text-secondary mb-8 uppercase"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.7 }}
+        >
+          Le bar électro-alien de Genève
+        </motion.p>
+
+        <motion.p
+          className="font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+        >
+          Nuits vibrantes. Ambiance d'un autre monde.
+          <br />
+          <span className="text-primary">Espace privatisable disponible.</span>
+        </motion.p>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.3 }}
+        >
+          <button
+            onClick={() => scrollTo("#rental")}
+            className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
+          >
+            Réserver l'espace
+          </button>
+          <button
+            onClick={() => scrollTo("#about")}
+            className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-secondary text-secondary hover:bg-secondary/10 transition-all duration-300 rounded-sm neon-border-cyan"
+          >
+            Découvrir l'univers
+          </button>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={{ y: [0, 10, 0], opacity: [0.3, 0.8, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <div className="w-6 h-10 border border-muted-foreground/30 rounded-full flex items-start justify-center p-1">
+          <div className="w-1.5 h-3 bg-primary rounded-full" />
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+export default HeroSection;
