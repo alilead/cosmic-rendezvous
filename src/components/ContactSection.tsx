@@ -25,7 +25,7 @@ const ContactSection = () => {
               { icon: MapPin, label: "Genève, Suisse", href: "#" },
               { icon: Phone, label: "+41 XX XXX XX XX", href: "tel:+41000000000" },
               { icon: Instagram, label: "@cosmiccafe.geneva", href: "https://instagram.com" },
-              { icon: Mail, label: "hello@cosmiccafe.ch", href: "mailto:hello@cosmiccafe.ch" },
+              { icon: Mail, label: "info@cosmiccafe.ch", href: "mailto:info@cosmiccafe.ch" },
             ].map((item, i) => (
               <motion.a
                 key={item.label}
@@ -50,7 +50,7 @@ const ContactSection = () => {
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.8 }}
-            onClick={() => window.location.href = "mailto:hello@cosmiccafe.ch"}
+            onClick={() => window.location.href = "mailto:info@cosmiccafe.ch"}
           >
             Entrer dans la nuit cosmique
           </motion.button>
