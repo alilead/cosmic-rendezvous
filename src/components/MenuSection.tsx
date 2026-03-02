@@ -1,13 +1,91 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const drinks = [
-  { name: "Nébuleuse Rose", desc: "Gin, litchi, rose, prosecco", price: "18", category: "Signature" },
-  { name: "Alien Acid", desc: "Mezcal, citron vert, agave, vert chartreuse", price: "20", category: "Signature" },
-  { name: "Cosmic Spritz", desc: "Aperol, prosecco, soda, zeste cosmique", price: "16", category: "Spritz" },
-  { name: "Dark Matter", desc: "Whisky, charbon, miel, fumée", price: "22", category: "Signature" },
-  { name: "Plasma Tonic", desc: "Vodka, tonic UV, concombre, basilic", price: "17", category: "Long Drink" },
-  { name: "Stardust Margarita", desc: "Tequila, triple sec, citron, sel étoilé", price: "19", category: "Classique" },
+type MenuItem = { name: string; price: string };
+type MenuCategory = { title: string; note?: string; items: MenuItem[] };
+
+const menu: MenuCategory[] = [
+  {
+    title: "Boissons Chaudes",
+    items: [
+      { name: "Café / Thé", price: "3.50" },
+      { name: "Lait", price: "3.–" },
+      { name: "Renversé / Cappuccino", price: "4.50" },
+      { name: "Iced Coffee", price: "4.50" },
+      { name: "Chocolat Chaud", price: "4.50" },
+      { name: "Hot Ginger", price: "5.–" },
+      { name: "Grog", price: "9.–" },
+    ],
+  },
+  {
+    title: "Softs",
+    note: "3 dl",
+    items: [
+      { name: "Sirop", price: "3.–" },
+      { name: "Limonade", price: "3.–" },
+      { name: "Pepsi / Pepsi O / Ice Tea", price: "4.–" },
+      { name: "Jus / Eau Gaz / Tonic", price: "4.–" },
+      { name: "Ginger Ale", price: "5.–" },
+      { name: "Maté / Ginger Beer", price: "5.–" },
+    ],
+  },
+  {
+    title: "Bières",
+    note: "30 cl / 50 cl",
+    items: [
+      { name: "Blonde", price: "4.– / 7.–" },
+      { name: "Blanche", price: "5.50 / 9.–" },
+      { name: "IPA", price: "5.50 / 8.–" },
+      { name: "Supp Ginger", price: "+1.–" },
+    ],
+  },
+  {
+    title: "Vins",
+    note: "15 dl",
+    items: [
+      { name: "Chasselas", price: "6.–" },
+      { name: "Gamaret", price: "6.–" },
+      { name: "Rosé", price: "6.–" },
+      { name: "Chardonnay", price: "7.50" },
+      { name: "Pinot", price: "7.50" },
+      { name: "Prosecco", price: "7.–" },
+    ],
+  },
+  {
+    title: "Shots",
+    note: "2 cl",
+    items: [
+      { name: "Berliner", price: "4.–" },
+      { name: "Rhum / Vodka / Amaretto", price: "5.–" },
+      { name: "Tequila", price: "5.– / 7.–" },
+      { name: "Mezcal", price: "7.– / 9.–" },
+    ],
+  },
+  {
+    title: "Long Drinks",
+    items: [
+      { name: "Vodka Maté", price: "" },
+      { name: "Mule (Moscow / Jamaican / London)", price: "" },
+      { name: "Marry Love Bloody", price: "" },
+      { name: "Vodka / Gin", price: "" },
+      { name: "Rhum / Whisky + Soft", price: "" },
+    ],
+  },
+  {
+    title: "Apéro / Digestifs",
+    items: [
+      { name: "Suze / Martini / Ricard", price: "" },
+      { name: "Williamine / Abricotine", price: "" },
+      { name: "Moitié Moitié (Poire / Abricot)", price: "" },
+      { name: "Baileys", price: "" },
+      { name: "Absinthe", price: "" },
+      { name: "Cognac", price: "" },
+      { name: "Armagnac", price: "" },
+      { name: "Spritz Aperol", price: "" },
+      { name: "Spritz Campari", price: "" },
+      { name: "Hugo", price: "13.–" },
+    ],
+  },
 ];
 
 const MenuSection = () => {
@@ -24,27 +102,44 @@ const MenuSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.1em] mb-4 neon-glow-cyan">
-            COCKTAILS COSMIQUES
+            LA CARTE
           </h2>
           <p className="font-body text-muted-foreground">Des élixirs d'un autre monde</p>
         </motion.div>
 
-        {/* Scrollable cards */}
-        <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
-          {drinks.map((drink, i) => (
+        {/* Scrollable category cards */}
+        <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory -mx-4 px-4">
+          {menu.map((cat, i) => (
             <motion.div
-              key={drink.name}
-              className="min-w-[280px] md:min-w-[320px] snap-center border border-border rounded-lg p-6 glass-dark group hover:neon-border-cyan transition-all duration-500 flex-shrink-0"
+              key={cat.title}
+              className="min-w-[300px] md:min-w-[340px] snap-center border border-border rounded-lg p-6 glass-dark group hover:neon-border-cyan transition-all duration-500 flex-shrink-0"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1 * i, duration: 0.6 }}
             >
-              <span className="text-xs font-display tracking-[0.2em] text-neon-cyan uppercase">{drink.category}</span>
-              <h3 className="font-display text-lg tracking-wider mt-2 mb-3 group-hover:neon-glow-pink transition-all">
-                {drink.name}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground mb-4">{drink.desc}</p>
-              <p className="font-display text-2xl text-primary">{drink.price} CHF</p>
+              <div className="flex items-baseline gap-3 mb-5">
+                <h3 className="font-display text-base tracking-[0.15em] text-neon-cyan uppercase">
+                  {cat.title}
+                </h3>
+                {cat.note && (
+                  <span className="text-xs font-body text-muted-foreground">[{cat.note}]</span>
+                )}
+              </div>
+
+              <ul className="space-y-2.5">
+                {cat.items.map((item) => (
+                  <li key={item.name} className="flex justify-between items-baseline gap-4 group/item">
+                    <span className="font-body text-sm text-muted-foreground group-hover/item:text-foreground transition-colors">
+                      {item.name}
+                    </span>
+                    {item.price && (
+                      <span className="font-display text-sm text-primary whitespace-nowrap">
+                        {item.price}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           ))}
         </div>
