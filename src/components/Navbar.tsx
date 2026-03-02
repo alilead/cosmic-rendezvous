@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
 
 const navItems = [
   { label: "Accueil", href: "#hero" },
@@ -30,8 +29,8 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <button onClick={() => scrollTo("#hero")} className="flex items-center gap-3">
-          <img src={logo} alt="Cosmic Café" className="h-10 w-auto" />
-          <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC CAFÉ</span>
+          <img src="/logo.svg" alt="Cosmic Rendezvous" className="h-10 w-auto" />
+          <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>
         </button>
 
         {/* Desktop */}

@@ -1,0 +1,37 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Cosmic Rendezvous Logo</title>
+  <desc id="desc">Circular neon gradient with the initials C R in the center.</desc>
+  <defs>
+    <radialGradient id="cosmicGlow" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#ff8cf7" />
+      <stop offset="40%" stop-color="#ff3dbf" />
+      <stop offset="100%" stop-color="#2a0b63" />
+    </radialGradient>
+    <filter id="outerGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="4" y="4" width="56" height="56" rx="18" ry="18" fill="url(#cosmicGlow)" filter="url(#outerGlow)" />
+
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.7" />
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#8ffcff" stroke-width="1" stroke-dasharray="4 3" stroke-opacity="0.7" />
+
+  <text
+    x="50%"
+    y="52%"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+    font-size="18"
+    font-weight="700"
+    letter-spacing="2"
+    fill="#ffffff"
+  >
+    CR
+  </text>
+</svg>
+
