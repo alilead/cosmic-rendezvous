@@ -29,7 +29,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <button onClick={() => scrollTo("#hero")} className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Cosmic Rendezvous" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Cosmic Rendezvous" className="h-10 w-auto" />
           <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>
         </button>
 

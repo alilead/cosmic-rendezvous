@@ -23,7 +23,7 @@ const HeroSection = () => {
           className="mb-6"
         >
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="Cosmic Rendezvous"
             className="h-32 md:h-44 lg:h-52 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)]"
           />
