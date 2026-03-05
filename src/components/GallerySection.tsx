@@ -6,19 +6,20 @@ import g3 from "@/assets/gallery-3.jpg";
 import g4 from "@/assets/gallery-4.jpg";
 import heroImg from "@/assets/hero-bar.jpg";
 import rentalImg from "@/assets/space-rental.jpg";
-
-const images = [
-  { src: g1, alt: "Ambiance néon rouge" },
-  { src: g2, alt: "Danse cosmique" },
-  { src: g3, alt: "Cocktails lumineux" },
-  { src: g4, alt: "Alien neon art" },
-  { src: heroImg, alt: "Atmosphère du bar" },
-  { src: rentalImg, alt: "Espace événementiel" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const GallerySection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
+  const images = [
+    { src: g1, alt: t("galleryAlt1") },
+    { src: g2, alt: t("galleryAlt2") },
+    { src: g3, alt: t("galleryAlt3") },
+    { src: g4, alt: t("galleryAlt4") },
+    { src: heroImg, alt: t("galleryAlt5") },
+    { src: rentalImg, alt: t("galleryAlt6") },
+  ];
 
   return (
     <section id="gallery" className="relative py-24 md:py-32 scroll-mt-20">
@@ -30,9 +31,9 @@ const GallerySection = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.1em] mb-4 neon-glow-green">
-            GALERIE
+            {t("galleryTitle")}
           </h2>
-          <p className="font-body text-muted-foreground">Fragments d'un univers parallèle</p>
+          <p className="font-body text-muted-foreground">{t("gallerySubtitle")}</p>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">

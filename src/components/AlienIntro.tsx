@@ -1,12 +1,14 @@
 import { useState, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Spline from "@splinetool/react-spline";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SPLINE_SCENE = "https://prod.spline.design/DE1R5Mj-ZqMo9n9M/scene.splinecode";
 
 const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
   const [phase, setPhase] = useState<"flying" | "ready" | "exit">("flying");
   const [showPrompt, setShowPrompt] = useState(false);
+  const { t } = useLanguage();
 
   const handleEnter = useCallback(() => {
     if (phase !== "ready") return;
@@ -65,13 +67,13 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
                 }}
                 className="pointer-events-auto min-h-[48px] px-10 py-3 font-display text-lg md:text-xl tracking-[0.25em] uppercase border-2 border-primary text-primary bg-primary/20 hover:bg-primary/40 active:scale-95 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation flex items-center gap-3"
               >
-                ENTRER
+                {t("introEnter")}
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
               </button>
               <p className="text-xs md:text-sm tracking-[0.2em] text-muted-foreground font-body uppercase pointer-events-none">
-                ou appuyez n&apos;importe où
+                {t("introHint")}
               </p>
             </motion.div>
           )}

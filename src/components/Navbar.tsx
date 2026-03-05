@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const navItems = [
-  { label: "Accueil", href: "#hero" },
-  { label: "À propos", href: "#about" },
-  { label: "Louez l'espace", href: "#rental" },
-  { label: "La Carte", href: "#menu" },
-  { label: "Galerie", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
+const navKeys = [
+  { key: "navHome" as const, href: "#hero" },
+  { key: "navAbout" as const, href: "#about" },
+  { key: "navRental" as const, href: "#rental" },
+  { key: "navMenu" as const, href: "#menu" },
+  { key: "navGallery" as const, href: "#gallery" },
+  { key: "navContact" as const, href: "#contact" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t, lang, setLang } = useLanguage();
 
   const scrollTo = (href: string) => {
     setIsOpen(false);
@@ -33,22 +35,40 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3 min-h-[44px] min-w-[44px] touch-manipulation py-1">
-          <img src="/logo.png" alt="Cosmic Rendezvous" className="h-10 w-auto" />
+          <img src="/logo.png" alt={t("altLogo")} className="h-10 w-auto" />
           <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>
         </button>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+        {/* Desktop: nav + language switch */}
+        <div className="hidden md:flex items-center gap-6">
+          {navKeys.map(({ key, href }) => (
             <button
               type="button"
-              key={item.href}
-              onClick={() => scrollTo(item.href)}
+              key={href}
+              onClick={() => scrollTo(href)}
               className="min-h-[44px] min-w-[44px] text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 uppercase touch-manipulation px-2"
             >
-              {item.label}
+              {t(key)}
             </button>
           ))}
+          <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden ml-2">
+            <button
+              type="button"
+              onClick={() => setLang("fr")}
+              className={`min-h-[36px] min-w-[44px] px-2 text-xs font-display uppercase touch-manipulation transition-colors ${lang === "fr" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              aria-label="Français"
+            >
+              FR
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang("en")}
+              className={`min-h-[36px] min-w-[44px] px-2 text-xs font-display uppercase touch-manipulation transition-colors ${lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              aria-label="English"
+            >
+              EN
+            </button>
+          </div>
         </div>
 
         {/* Mobile toggle */}
@@ -67,16 +87,32 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
           >
             <div className="flex flex-col items-center py-6 gap-4">
-              {navItems.map((item) => (
+              {navKeys.map(({ key, href }) => (
                 <button
                   type="button"
-                  key={item.href}
-                  onClick={() => scrollTo(item.href)}
+                  key={href}
+                  onClick={() => scrollTo(href)}
                   className="min-h-[44px] min-w-[44px] w-full text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors uppercase touch-manipulation py-3"
                 >
-                  {item.label}
+                  {t(key)}
                 </button>
               ))}
+              <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden mt-2">
+                <button
+                  type="button"
+                  onClick={() => { setLang("fr"); setIsOpen(false); }}
+                  className={`min-h-[40px] min-w-[52px] px-3 text-xs font-display uppercase touch-manipulation ${lang === "fr" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                >
+                  FR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setLang("en"); setIsOpen(false); }}
+                  className={`min-h-[40px] min-w-[52px] px-3 text-xs font-display uppercase touch-manipulation ${lang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                >
+                  EN
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

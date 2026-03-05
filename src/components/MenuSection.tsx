@@ -1,12 +1,14 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 
 type MenuItem = { name: string; price: string };
-type MenuCategory = { title: string; note?: string; items: MenuItem[] };
+type MenuCategory = { titleKey: TranslationKey; note?: string; items: MenuItem[] };
 
 const menu: MenuCategory[] = [
   {
-    title: "Boissons Chaudes",
+    titleKey: "menuCatHot",
     items: [
       { name: "Café / Thé", price: "3.50" },
       { name: "Lait", price: "3.–" },
@@ -18,7 +20,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Softs",
+    titleKey: "menuCatSofts",
     note: "3 dl",
     items: [
       { name: "Sirop", price: "3.–" },
@@ -30,7 +32,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Bières",
+    titleKey: "menuCatBeers",
     note: "30 cl / 50 cl",
     items: [
       { name: "Blonde", price: "4.– / 7.–" },
@@ -40,7 +42,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Vins",
+    titleKey: "menuCatWines",
     note: "15 dl",
     items: [
       { name: "Chasselas", price: "6.–" },
@@ -52,7 +54,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Shots",
+    titleKey: "menuCatShots",
     note: "2 cl",
     items: [
       { name: "Berliner", price: "4.–" },
@@ -62,7 +64,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Long Drinks",
+    titleKey: "menuCatLong",
     items: [
       { name: "Vodka Maté", price: "" },
       { name: "Mule (Moscow / Jamaican / London)", price: "" },
@@ -72,7 +74,7 @@ const menu: MenuCategory[] = [
     ],
   },
   {
-    title: "Apéro / Digestifs",
+    titleKey: "menuCatApero",
     items: [
       { name: "Suze / Martini / Ricard", price: "" },
       { name: "Williamine / Abricotine", price: "" },
@@ -91,6 +93,7 @@ const menu: MenuCategory[] = [
 const MenuSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
 
   return (
     <section id="menu" className="relative py-24 md:py-32 cosmic-gradient noise-bg scroll-mt-20">
@@ -102,16 +105,16 @@ const MenuSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.1em] mb-4 neon-glow-cyan">
-            LA CARTE
+            {t("menuTitle")}
           </h2>
-          <p className="font-body text-muted-foreground">Des élixirs d'un autre monde</p>
+          <p className="font-body text-muted-foreground">{t("menuSubtitle")}</p>
         </motion.div>
 
         {/* Scrollable category cards */}
         <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory -mx-4 px-4">
           {menu.map((cat, i) => (
             <motion.div
-              key={cat.title}
+              key={cat.titleKey}
               className="min-w-[300px] md:min-w-[340px] snap-center border border-border rounded-lg p-6 glass-dark group hover:neon-border-cyan transition-all duration-500 flex-shrink-0"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -119,7 +122,7 @@ const MenuSection = () => {
             >
               <div className="flex items-baseline gap-3 mb-5">
                 <h3 className="font-display text-base tracking-[0.15em] text-neon-cyan uppercase">
-                  {cat.title}
+                  {t(cat.titleKey)}
                 </h3>
                 {cat.note && (
                   <span className="text-xs font-body text-muted-foreground">[{cat.note}]</span>
