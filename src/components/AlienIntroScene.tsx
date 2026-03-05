@@ -55,6 +55,32 @@ function Alien({ ready }: { ready: boolean }) {
         <cylinderGeometry args={[0.04, 0.04, 0.35, 12]} />
         <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
       </mesh>
+      {/* Legs — full figure */}
+      <mesh position={[0.15, 0.15, 0.08]} rotation={[0.15, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.05, 0.06, 0.35, 12]} />
+        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
+      </mesh>
+      <mesh position={[-0.15, 0.15, 0.08]} rotation={[0.15, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.05, 0.06, 0.35, 12]} />
+        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
+      </mesh>
+      {/* Antennae */}
+      <mesh position={[-0.1, 1.75, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.25, 8]} />
+        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.4} />
+      </mesh>
+      <mesh position={[0.1, 1.75, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.25, 8]} />
+        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.4} />
+      </mesh>
+      <mesh position={[-0.1, 1.95, 0]}>
+        <sphereGeometry args={[0.04, 12, 12]} />
+        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.6} />
+      </mesh>
+      <mesh position={[0.1, 1.95, 0]}>
+        <sphereGeometry args={[0.04, 12, 12]} />
+        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.6} />
+      </mesh>
     </group>
   );
 }
@@ -64,10 +90,10 @@ function UFO() {
 
   useFrame((state) => {
     if (!ref.current) return;
-    const t = state.clock.elapsedTime * 0.4;
-    ref.current.position.x = Math.sin(t) * 2.2;
-    ref.current.position.z = Math.cos(t * 0.7) * 2 - 2;
-    ref.current.position.y = Math.sin(t * 0.5) * 0.4 + 1.2;
+    const t = state.clock.elapsedTime * 0.35;
+    ref.current.position.x = Math.sin(t) * 2.4;
+    ref.current.position.z = Math.cos(t * 0.7) * 1.8 - 2;
+    ref.current.position.y = Math.sin(t * 0.5) * 0.35 + 1;
     ref.current.rotation.y = t * 0.5;
   });
 
@@ -85,22 +111,22 @@ function UFO() {
         />
       </mesh>
       <mesh position={[0, -0.05, 0]} castShadow>
-        <cylinderGeometry args={[0.35, 0.4, 0.08, 32]} />
+        <cylinderGeometry args={[0.38, 0.44, 0.1, 32]} />
         <meshStandardMaterial
           color={NEON_PINK}
           emissive={NEON_PINK}
-          emissiveIntensity={0.3}
+          emissiveIntensity={0.5}
           metalness={0.7}
           roughness={0.3}
         />
       </mesh>
-      {/* Dome top */}
-      <mesh position={[0, 0.2, 0]} castShadow>
-        <sphereGeometry args={[0.18, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
+      {/* Dome top — more visible spaceship */}
+      <mesh position={[0, 0.22, 0]} castShadow>
+        <sphereGeometry args={[0.2, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
         <meshStandardMaterial
           color={NEON_CYAN}
           emissive={NEON_CYAN}
-          emissiveIntensity={0.2}
+          emissiveIntensity={0.4}
           metalness={0.6}
           roughness={0.4}
         />

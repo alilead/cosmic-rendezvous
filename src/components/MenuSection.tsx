@@ -93,7 +93,7 @@ const MenuSection = () => {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="menu" className="relative py-24 md:py-32 cosmic-gradient noise-bg">
+    <section id="menu" className="relative py-24 md:py-32 cosmic-gradient noise-bg scroll-mt-20">
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
         <motion.div
           className="text-center mb-16"

@@ -5,8 +5,8 @@ import { Menu, X } from "lucide-react";
 const navItems = [
   { label: "Accueil", href: "#hero" },
   { label: "À propos", href: "#about" },
-  { label: "Location", href: "#rental" },
-  { label: "Menu", href: "#menu" },
+  { label: "Louez l'espace", href: "#rental" },
+  { label: "La Carte", href: "#menu" },
   { label: "Galerie", href: "#gallery" },
   { label: "Contact", href: "#contact" },
 ];
@@ -16,8 +16,12 @@ const Navbar = () => {
 
   const scrollTo = (href: string) => {
     setIsOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      const el = document.querySelector(href);
+      if (el) {
+        (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 150);
   };
 
   return (

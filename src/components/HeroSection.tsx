@@ -7,7 +7,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-0">
       {/* Background */}
       <div className="absolute inset-0">
         <img src={heroImg} alt="Cosmic Rendezvous ambiance" className="w-full h-full object-cover" />

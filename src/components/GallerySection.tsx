@@ -21,7 +21,7 @@ const GallerySection = () => {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="gallery" className="relative py-24 md:py-32">
+    <section id="gallery" className="relative py-24 md:py-32 scroll-mt-20">
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
         <motion.div
           className="text-center mb-16"

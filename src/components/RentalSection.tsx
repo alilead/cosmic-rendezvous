@@ -15,7 +15,7 @@ const RentalSection = () => {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="rental" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="rental" className="relative py-24 md:py-32 overflow-hidden scroll-mt-20">
       {/* Background image */}
       <div className="absolute inset-0">
         <img src={rentalImg} alt="Espace événementiel" className="w-full h-full object-cover opacity-30" />
@@ -37,19 +37,21 @@ const RentalSection = () => {
           </p>
         </motion.div>
 
-        {/* Features grid */}
+        {/* Features grid — clickable, scroll to contact */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {features.map((f, i) => (
-            <motion.div
+            <motion.button
+              type="button"
               key={f.label}
-              className="border border-border rounded-lg p-6 text-center glass-dark hover:neon-border-pink transition-all duration-500"
+              onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="border border-border rounded-lg p-6 text-center glass-dark hover:neon-border-pink hover:bg-primary/5 active:scale-[0.98] active:bg-primary/10 transition-all duration-300 touch-manipulation min-h-[44px]"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 + i * 0.1, duration: 0.6 }}
             >
               <f.icon className="w-8 h-8 mx-auto mb-4 text-primary" />
               <p className="font-body text-sm text-muted-foreground">{f.label}</p>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
 
