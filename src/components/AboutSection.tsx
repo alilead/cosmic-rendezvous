@@ -18,7 +18,7 @@ const AboutSection = () => {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <img src={gallery1} alt="Intérieur Cosmic Café" className="w-full aspect-[4/5] object-cover" />
+            <img src={gallery1} alt="Intérieur Cosmic Rendezvous" className="w-full aspect-[4/5] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
             <div className="absolute inset-0 border border-primary/20 rounded-lg neon-border-pink" />
           </motion.div>
@@ -34,7 +34,7 @@ const AboutSection = () => {
             </h2>
             <div className="space-y-5 font-body text-muted-foreground leading-relaxed">
               <p>
-                Le <span className="text-primary font-medium">Cosmic Café</span> n'est pas un bar ordinaire. C'est un portail vers un univers parallèle où l'énergie électro rencontre l'esthétique alien.
+                Le <span className="text-primary font-medium">Cosmic Rendezvous</span> n'est pas un bar ordinaire. C'est un portail vers un univers parallèle où l'énergie électro rencontre l'esthétique alien.
               </p>
               <p>
                 Immergez-vous dans une atmosphère <span className="text-secondary">vibrante</span> où les couleurs néon dansent avec la musique, où chaque cocktail raconte une histoire interstellaire.

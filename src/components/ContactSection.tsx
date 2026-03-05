@@ -22,7 +22,7 @@ const ContactSection = () => {
 
           <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {[
-              { icon: MapPin, label: "Genève, Suisse", href: "#" },
+              { icon: MapPin, label: "Genève, Suisse", href: "https://www.google.com/maps/search/genève+cosmic+bar" },
               { icon: Phone, label: "+41 XX XXX XX XX", href: "tel:+41000000000" },
               { icon: Instagram, label: "@cosmiccafe.geneva", href: "https://instagram.com" },
               { icon: Mail, label: "info@cosmiccafe.ch", href: "mailto:info@cosmiccafe.ch" },
@@ -45,21 +45,21 @@ const ContactSection = () => {
             ))}
           </div>
 
-          <motion.button
-            className="px-12 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
+          <motion.a
+            href="mailto:info@cosmiccafe.ch"
+            className="inline-block px-12 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.8 }}
-            onClick={() => window.location.href = "mailto:info@cosmiccafe.ch"}
           >
             Entrer dans la nuit cosmique
-          </motion.button>
+          </motion.a>
         </motion.div>
 
         {/* Footer */}
         <div className="mt-24 pt-8 border-t border-border text-center">
           <p className="font-display text-xs tracking-[0.3em] text-muted-foreground">
-            © 2025 COSMIC CAFÉ — GENÈVE
+            © 2025 COSMIC RENDEZVOUS — GENÈVE
           </p>
         </div>
       </div>

@@ -28,7 +28,7 @@ const Navbar = () => {
       transition={{ delay: 0.5, duration: 0.6 }}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <button onClick={() => scrollTo("#hero")} className="flex items-center gap-3">
+        <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3">
           <img src="/logo.png" alt="Cosmic Rendezvous" className="h-10 w-auto" />
           <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>
         </button>
@@ -37,6 +37,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <button
+              type="button"
               key={item.href}
               onClick={() => scrollTo(item.href)}
               className="text-sm font-body tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300 uppercase"
@@ -47,7 +48,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
+        <button type="button" aria-label="Menu" className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -64,6 +65,7 @@ const Navbar = () => {
             <div className="flex flex-col items-center py-6 gap-4">
               {navItems.map((item) => (
                 <button
+                  type="button"
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
                   className="text-sm font-body tracking-wider text-muted-foreground hover:text-primary transition-colors uppercase"

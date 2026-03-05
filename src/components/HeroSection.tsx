@@ -10,7 +10,7 @@ const HeroSection = () => {
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <img src={heroImg} alt="Cosmic Café ambiance" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Cosmic Rendezvous ambiance" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/50 to-background" />
       </div>
 
@@ -65,12 +65,14 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 1.3 }}
         >
           <button
+            type="button"
             onClick={() => scrollTo("#rental")}
             className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
           >
             Réserver l'espace
           </button>
           <button
+            type="button"
             onClick={() => scrollTo("#about")}
             className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-secondary text-secondary hover:bg-secondary/10 transition-all duration-300 rounded-sm neon-border-cyan"
           >

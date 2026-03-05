@@ -69,6 +69,7 @@ const RentalSection = () => {
             ))}
           </div>
           <button
+            type="button"
             onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
             className="px-10 py-4 font-display text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:bg-primary/80 transition-all duration-300 rounded-sm animate-pulse-glow"
           >
