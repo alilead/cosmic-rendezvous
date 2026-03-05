@@ -28,7 +28,7 @@ const Navbar = () => {
       transition={{ delay: 0.5, duration: 0.6 }}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3">
+        <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3 min-h-[44px] min-w-[44px] touch-manipulation py-1">
           <img src="/logo.png" alt="Cosmic Rendezvous" className="h-10 w-auto" />
           <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>
         </button>
@@ -40,7 +40,7 @@ const Navbar = () => {
               type="button"
               key={item.href}
               onClick={() => scrollTo(item.href)}
-              className="text-sm font-body tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300 uppercase"
+              className="min-h-[44px] min-w-[44px] text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 uppercase touch-manipulation px-2"
             >
               {item.label}
             </button>
@@ -48,7 +48,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile toggle */}
-        <button type="button" aria-label="Menu" className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
+        <button type="button" aria-label="Menu" className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground touch-manipulation" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -68,7 +68,7 @@ const Navbar = () => {
                   type="button"
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
-                  className="text-sm font-body tracking-wider text-muted-foreground hover:text-primary transition-colors uppercase"
+                  className="min-h-[44px] min-w-[44px] w-full text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors uppercase touch-manipulation py-3"
                 >
                   {item.label}
                 </button>

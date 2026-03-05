@@ -67,14 +67,14 @@ const HeroSection = () => {
           <button
             type="button"
             onClick={() => scrollTo("#rental")}
-            className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
+            className="min-h-[44px] min-w-[44px] px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
           >
             Réserver l'espace
           </button>
           <button
             type="button"
             onClick={() => scrollTo("#about")}
-            className="px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-secondary text-secondary hover:bg-secondary/10 transition-all duration-300 rounded-sm neon-border-cyan"
+            className="min-h-[44px] min-w-[44px] px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-secondary text-secondary hover:bg-secondary/10 active:bg-secondary/20 transition-all duration-300 rounded-sm neon-border-cyan touch-manipulation"
           >
             Découvrir l'univers
           </button>

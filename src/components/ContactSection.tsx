@@ -23,16 +23,16 @@ const ContactSection = () => {
           <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {[
               { icon: MapPin, label: "Genève, Suisse", href: "https://www.google.com/maps/search/genève+cosmic+bar" },
-              { icon: Phone, label: "+41 XX XXX XX XX", href: "tel:+41000000000" },
+              { icon: Phone, label: "+41 79 524 77 54", href: "tel:+41795247754" },
               { icon: Instagram, label: "@cosmiccafe.geneva", href: "https://instagram.com" },
-              { icon: Mail, label: "info@cosmiccafe.ch", href: "mailto:info@cosmiccafe.ch" },
+              { icon: Mail, label: "info@cosmicrendezvous.ch", href: "mailto:info@cosmicrendezvous.ch" },
             ].map((item, i) => (
               <motion.a
                 key={item.label}
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-5 border border-border rounded-lg glass-dark hover:neon-border-pink transition-all duration-500 group"
+                className="flex items-center gap-4 min-h-[44px] p-5 border border-border rounded-lg glass-dark hover:neon-border-pink active:opacity-90 transition-all duration-500 group touch-manipulation"
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.1, duration: 0.6 }}
@@ -46,8 +46,8 @@ const ContactSection = () => {
           </div>
 
           <motion.a
-            href="mailto:info@cosmiccafe.ch"
-            className="inline-block px-12 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow"
+            href="mailto:info@cosmicrendezvous.ch"
+            className="inline-block min-h-[44px] min-w-[44px] px-12 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.8 }}

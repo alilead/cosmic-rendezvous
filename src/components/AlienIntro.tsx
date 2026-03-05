@@ -1,8 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Spline from "@splinetool/react-spline";
-
-const SPLINE_SCENE = "https://prod.spline.design/VioIzR3DIl5LAdp1/scene.splinecode";
+import { Canvas } from "@react-three/fiber";
+import { AlienIntroScene } from "./AlienIntroScene";
 
 const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
   const [phase, setPhase] = useState<"flying" | "ready" | "exit">("flying");
@@ -14,7 +13,7 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
     setTimeout(onEnter, 600);
   }, [onEnter, phase]);
 
-  const handleSplineLoad = useCallback(() => {
+  const handleSceneReady = useCallback(() => {
     setPhase("ready");
     setTimeout(() => setShowPrompt(true), 800);
   }, []);
@@ -27,39 +26,29 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
         initial={false}
         exit={{ opacity: 0, transition: { duration: 0.6 } }}
       >
-        {/* Spline scene: flies in from the back */}
         <motion.div
           className="absolute inset-0 w-full h-full"
-          initial={{
-            opacity: 0,
-            scale: 0.35,
-            filter: "blur(12px)",
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            filter: "blur(0px)",
-          }}
-          transition={{
-            duration: 2.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-          style={{ perspective: "1200px" }}
+          initial={{ opacity: 0, scale: 0.4, filter: "blur(14px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          onAnimationComplete={() => handleSceneReady()}
         >
-          <Spline
-            scene={SPLINE_SCENE}
-            onLoad={handleSplineLoad}
-            style={{ width: "100%", height: "100%" }}
-          />
+          <Suspense fallback={null}>
+            <Canvas
+              camera={{ position: [0, 0, 5], fov: 50 }}
+              gl={{ antialias: true, alpha: true }}
+              dpr={[1, 2]}
+            >
+              <AlienIntroScene ready={phase === "ready"} />
+            </Canvas>
+          </Suspense>
         </motion.div>
 
-        {/* Dark overlay so content is readable */}
         <div
           className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/40 pointer-events-none"
           aria-hidden
         />
 
-        {/* Enter prompt */}
         <AnimatePresence>
           {showPrompt && phase === "ready" && (
             <motion.div
