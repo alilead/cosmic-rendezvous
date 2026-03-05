@@ -1,7 +1,8 @@
 import { useState, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
-import { AlienIntroScene } from "./AlienIntroScene";
+import Spline from "@splinetool/react-spline";
+
+const SPLINE_SCENE = "https://prod.spline.design/DE1R5Mj-ZqMo9n9M/scene.splinecode";
 
 const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
   const [phase, setPhase] = useState<"flying" | "ready" | "exit">("flying");
@@ -13,7 +14,7 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
     setTimeout(onEnter, 600);
   }, [onEnter, phase]);
 
-  const handleSceneReady = useCallback(() => {
+  const handleSplineLoad = useCallback(() => {
     setPhase("ready");
     setTimeout(() => setShowPrompt(true), 800);
   }, []);
@@ -31,16 +32,14 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
           initial={{ opacity: 0, scale: 0.4, filter: "blur(14px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          onAnimationComplete={() => handleSceneReady()}
+          style={{ perspective: "1200px" }}
         >
           <Suspense fallback={null}>
-            <Canvas
-              camera={{ position: [0, 0, 5], fov: 50 }}
-              gl={{ antialias: true, alpha: true }}
-              dpr={[1, 2]}
-            >
-              <AlienIntroScene ready={phase === "ready"} />
-            </Canvas>
+            <Spline
+              scene={SPLINE_SCENE}
+              onLoad={handleSplineLoad}
+              style={{ width: "100%", height: "100%" }}
+            />
           </Suspense>
         </motion.div>
 
@@ -60,7 +59,10 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
             >
               <button
                 type="button"
-                onClick={(e) => { e.stopPropagation(); handleEnter(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEnter();
+                }}
                 className="pointer-events-auto min-h-[48px] px-10 py-3 font-display text-lg md:text-xl tracking-[0.25em] uppercase border-2 border-primary text-primary bg-primary/20 hover:bg-primary/40 active:scale-95 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation flex items-center gap-3"
               >
                 ENTRER
