@@ -24,7 +24,7 @@ const RentalSection = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10" ref={ref}>
+      <div className="container mx-auto px-4 relative z-10 min-w-0 max-w-[100vw]" ref={ref}>
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 40 }}

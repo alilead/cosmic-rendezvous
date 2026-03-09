@@ -16,7 +16,7 @@ const ContactSection = () => {
 
   return (
     <section id="contact" className="relative py-24 md:py-32 cosmic-gradient noise-bg scroll-mt-20">
-      <div className="container mx-auto px-4 relative z-10 max-w-3xl" ref={ref}>
+      <div className="container mx-auto px-4 relative z-10 max-w-3xl min-w-0" ref={ref}>
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 40 }}

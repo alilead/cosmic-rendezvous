@@ -57,11 +57,25 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
+  }
+
+  /* Safe area for notched phones */
+  .safe-area-padding {
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+  }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-body;
     overflow-x: hidden;
+    max-width: 100%;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -12,18 +12,19 @@ const GallerySection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useLanguage();
+  // Order so hero/rental (bar photos) are not next to each other — avoids duplicate-looking pair side by side
   const images = [
     { src: g1, alt: t("galleryAlt1") },
+    { src: heroImg, alt: t("galleryAlt5") },
     { src: g2, alt: t("galleryAlt2") },
+    { src: rentalImg, alt: t("galleryAlt6") },
     { src: g3, alt: t("galleryAlt3") },
     { src: g4, alt: t("galleryAlt4") },
-    { src: heroImg, alt: t("galleryAlt5") },
-    { src: rentalImg, alt: t("galleryAlt6") },
   ];
 
   return (
     <section id="gallery" className="relative py-24 md:py-32 scroll-mt-20">
-      <div className="container mx-auto px-4 relative z-10" ref={ref}>
+      <div className="container mx-auto px-4 relative z-10 min-w-0 max-w-[100vw]" ref={ref}>
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 40 }}

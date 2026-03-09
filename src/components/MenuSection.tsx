@@ -97,7 +97,7 @@ const MenuSection = () => {
 
   return (
     <section id="menu" className="relative py-24 md:py-32 cosmic-gradient noise-bg scroll-mt-20">
-      <div className="container mx-auto px-4 relative z-10" ref={ref}>
+      <div className="container mx-auto px-4 relative z-10 min-w-0 max-w-[100vw]" ref={ref}>
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 40 }}
@@ -135,11 +135,9 @@ const MenuSection = () => {
                     <span className="font-body text-sm text-muted-foreground group-hover/item:text-foreground transition-colors">
                       {item.name}
                     </span>
-                    {item.price && (
-                      <span className="font-display text-sm text-primary whitespace-nowrap">
-                        {item.price}
-                      </span>
-                    )}
+                    <span className="font-display text-sm text-primary whitespace-nowrap">
+                      {item.price || t("menuOnRequest")}
+                    </span>
                   </li>
                 ))}
               </ul>

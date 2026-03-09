@@ -33,7 +33,7 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
     >
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between min-w-0 safe-area-padding">
         <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3 min-h-[44px] min-w-[44px] touch-manipulation py-1">
           <img src="/logo.png" alt={t("altLogo")} className="h-10 w-auto" />
           <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline">COSMIC RENDEZVOUS</span>

@@ -27,12 +27,12 @@ const HeroSection = () => {
           <img
             src="/logo.png"
             alt={t("altLogo")}
-            className="h-32 md:h-44 lg:h-52 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)]"
+            className="h-24 sm:h-32 md:h-44 lg:h-52 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[90vw]"
           />
         </motion.div>
 
         <motion.h1
-          className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] mb-4 neon-glow-pink"
+          className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] sm:tracking-[0.15em] mb-4 neon-glow-pink break-words"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}

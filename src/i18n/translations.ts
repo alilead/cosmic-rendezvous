@@ -49,6 +49,7 @@ export const translations = {
     menuCatShots: "Shots",
     menuCatLong: "Long Drinks",
     menuCatApero: "Apéro / Digestifs",
+    menuOnRequest: "Sur demande",
 
     // Gallery
     galleryTitle: "GALERIE",
@@ -122,6 +123,7 @@ export const translations = {
     menuCatShots: "Shots",
     menuCatLong: "Long Drinks",
     menuCatApero: "Aperitif / Digestifs",
+    menuOnRequest: "On request",
 
     galleryTitle: "GALLERY",
     gallerySubtitle: "Fragments of a parallel universe",
