@@ -32,12 +32,12 @@ const HeroSection = () => {
         </motion.div>
 
         <motion.h1
-          className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] sm:tracking-[0.15em] mb-4 neon-glow-pink break-words"
+          className="font-display text-2xl min-[400px]:text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] sm:tracking-[0.15em] mb-4 neon-glow-pink whitespace-nowrap"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          COSMIC RENDEZVOUS
+          COSMIC RENDEZ-VOUS
         </motion.h1>
 
         <motion.p

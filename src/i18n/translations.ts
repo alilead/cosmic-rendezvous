@@ -23,7 +23,7 @@ export const translations = {
 
     // About
     aboutTitle: "BIENVENUE DANS UNE AUTRE DIMENSION",
-    aboutP1: "Le Cosmic Rendezvous n'est pas un bar ordinaire. C'est un portail vers un univers parallèle où l'énergie électro rencontre l'esthétique alien.",
+    aboutP1: "Le Cosmic Rendez-vous n'est pas un bar ordinaire. C'est un portail vers un univers parallèle où l'énergie électro rencontre l'esthétique alien.",
     aboutP2: "Immergez-vous dans une atmosphère vibrante où les couleurs néon dansent avec la musique, où chaque cocktail raconte une histoire interstellaire.",
     aboutP3: "Situé au cœur de Genève, notre espace underground offre une expérience unique pour vos soirées privées, anniversaires, showcases artistiques et DJ sets.",
     aboutTags: ["Électro", "Néon", "Underground", "Cosmique"] as readonly string[],
@@ -49,6 +49,7 @@ export const translations = {
     menuCatShots: "Shots",
     menuCatLong: "Long Drinks",
     menuCatApero: "Apéro / Digestifs",
+    menuCatCocktails: "Cocktails",
     menuOnRequest: "Sur demande",
 
     // Gallery
@@ -69,12 +70,12 @@ export const translations = {
     contactInstagram: "@cosmiccafe.geneva",
     contactEmail: "info@cosmicrendezvous.ch",
     contactCta: "Entrer dans la nuit cosmique",
-    footer: "© 2025 COSMIC RENDEZVOUS — GENÈVE",
+    footer: "© 2025 COSMIC RENDEZ-VOUS — GENÈVE",
 
     // Alt texts
-    altLogo: "Cosmic Rendezvous",
-    altHero: "Cosmic Rendezvous ambiance",
-    altAboutImg: "Intérieur Cosmic Rendezvous",
+    altLogo: "Cosmic Rendez-vous",
+    altHero: "Cosmic Rendez-vous ambiance",
+    altAboutImg: "Intérieur Cosmic Rendez-vous",
     altRentalImg: "Espace événementiel",
 
     // 404
@@ -99,7 +100,7 @@ export const translations = {
     heroDiscover: "Discover the universe",
 
     aboutTitle: "WELCOME TO ANOTHER DIMENSION",
-    aboutP1: "Cosmic Rendezvous is not your average bar. It's a portal to a parallel universe where electro energy meets alien aesthetics.",
+    aboutP1: "Cosmic Rendez-vous is not your average bar. It's a portal to a parallel universe where electro energy meets alien aesthetics.",
     aboutP2: "Immerse yourself in a vibrant atmosphere where neon colours dance with the music, and every cocktail tells an interstellar story.",
     aboutP3: "Located in the heart of Geneva, our underground space offers a unique experience for private parties, birthdays, artist showcases and DJ sets.",
     aboutTags: ["Electro", "Neon", "Underground", "Cosmic"] as readonly string[],
@@ -123,6 +124,7 @@ export const translations = {
     menuCatShots: "Shots",
     menuCatLong: "Long Drinks",
     menuCatApero: "Aperitif / Digestifs",
+    menuCatCocktails: "Cocktails",
     menuOnRequest: "On request",
 
     galleryTitle: "GALLERY",
@@ -141,11 +143,11 @@ export const translations = {
     contactInstagram: "@cosmiccafe.geneva",
     contactEmail: "info@cosmicrendezvous.ch",
     contactCta: "Step into the cosmic night",
-    footer: "© 2025 COSMIC RENDEZVOUS — GENEVA",
+    footer: "© 2025 COSMIC RENDEZ-VOUS — GENEVA",
 
-    altLogo: "Cosmic Rendezvous",
-    altHero: "Cosmic Rendezvous ambiance",
-    altAboutImg: "Cosmic Rendezvous interior",
+    altLogo: "Cosmic Rendez-vous",
+    altHero: "Cosmic Rendez-vous ambiance",
+    altAboutImg: "Cosmic Rendez-vous interior",
     altRentalImg: "Event space",
 
     notFoundTitle: "Oops! Page not found",
