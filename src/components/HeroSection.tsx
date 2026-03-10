@@ -32,7 +32,7 @@ const HeroSection = () => {
         </motion.div>
 
         <motion.h1
-          className="font-display text-2xl min-[400px]:text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] sm:tracking-[0.15em] mb-4 neon-glow-pink whitespace-nowrap"
+          className="font-display text-2xl min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.05em] sm:tracking-[0.1em] mb-4 neon-glow-pink whitespace-nowrap overflow-visible px-2"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -50,14 +50,12 @@ const HeroSection = () => {
         </motion.p>
 
         <motion.p
-          className="font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-12"
+          className="font-body text-sm md:text-base text-muted-foreground max-w-md mx-auto mb-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
         >
           {t("heroDesc")}
-          <br />
-          <span className="text-primary">{t("heroCta")}</span>
         </motion.p>
 
         <motion.div

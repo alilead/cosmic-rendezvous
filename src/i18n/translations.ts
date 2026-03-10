@@ -16,7 +16,7 @@ export const translations = {
 
     // Hero
     heroTagline: "Le bar électro-alien de Genève",
-    heroDesc: "Nuits vibrantes. Ambiance d'un autre monde.",
+    heroDesc: "Nuits vibrantes. Espace privatisable.",
     heroCta: "Espace privatisable disponible.",
     heroBook: "Réserver l'espace",
     heroDiscover: "Découvrir l'univers",
@@ -94,7 +94,7 @@ export const translations = {
     navContact: "Contact",
 
     heroTagline: "Geneva's electro-alien bar",
-    heroDesc: "Vibrant nights. Otherworldly vibes.",
+    heroDesc: "Vibrant nights. Space for hire.",
     heroCta: "Private space available.",
     heroBook: "Book the space",
     heroDiscover: "Discover the universe",
