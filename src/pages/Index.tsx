@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import AlienWaveHero from "@/components/AlienWaveHero";
+import AlienIntro from "@/components/AlienIntro";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -15,7 +15,7 @@ const Index = () => {
   return (
     <>
       <AnimatePresence>
-        {showIntro && <AlienWaveHero onEnter={() => setShowIntro(false)} />}
+        {showIntro && <AlienIntro onEnter={() => setShowIntro(false)} />}
       </AnimatePresence>
 
       {!showIntro && (
