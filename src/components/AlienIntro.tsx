@@ -36,7 +36,7 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
         >
           <Suspense fallback={null}>
             <Canvas
-              camera={{ position: [0, 0, 4.5], fov: 42 }}
+              camera={{ position: [0, 0.5, 5], fov: 50 }}
               onCreated={handleCreated}
               gl={{ antialias: true, alpha: true }}
               className="w-full h-full"

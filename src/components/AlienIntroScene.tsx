@@ -1,166 +1,89 @@
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const NEON_GREEN = new THREE.Color("#00ff88");
-const NEON_PINK = new THREE.Color("#ff00aa");
-const NEON_CYAN = new THREE.Color("#00ffff");
-
-const WAVE_DELAY = 1;
-const WAVE_DURATION = 1.2;
-const WAVE_PAUSE = 4;
-const CYCLE = WAVE_DELAY + WAVE_DURATION + WAVE_PAUSE;
-
-// Keyframes for wave: raise arm, wave 3 times, lower (radians). Rest arm rotation.x ≈ 0.3.
-const WAVE_KEYFRAMES = [0.3, -0.44, 0.26, -0.26, 0.17, 0.3];
-const WAVE_TIMES = [0, 0.125, 0.375, 0.625, 0.875, 1]; // normalized 0..1 over WAVE_DURATION
-
-function Alien({ ready }: { ready: boolean }) {
-  const group = useRef<THREE.Group>(null);
+function AlienModel() {
   const armRef = useRef<THREE.Group>(null);
-  const leftEyePos: [number, number, number] = [-0.12, 1.48, 0.28];
-  const rightEyePos: [number, number, number] = [0.12, 1.48, 0.28];
+  const groupRef = useRef<THREE.Group>(null);
+
+  const greenMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#39ff14",
+        roughness: 0.2,
+        metalness: 0.3,
+      }),
+    []
+  );
+
+  const eyeMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#111111",
+        roughness: 0.1,
+        metalness: 0.8,
+      }),
+    []
+  );
 
   useFrame((state) => {
-    if (!group.current || !armRef.current) return;
-    const t = state.clock.elapsedTime;
-
-    // Idle float: gentle up/down ~3px in world units
-    const floatY = Math.sin(t * 0.8) * 0.015;
-    group.current.position.y = -0.5 + floatY;
-
-    if (!ready) return;
-
-    const phase = t % CYCLE;
-    if (phase < WAVE_DELAY || phase >= WAVE_DELAY + WAVE_DURATION) {
-      armRef.current.rotation.x = THREE.MathUtils.lerp(armRef.current.rotation.x, 0.3, 0.08);
-      return;
+    const t = state.clock.getElapsedTime();
+    if (armRef.current) {
+      armRef.current.rotation.x = Math.sin(t * 2) * 0.6 + 0.5;
     }
-    const waveT = (phase - WAVE_DELAY) / WAVE_DURATION;
-    const idx = WAVE_TIMES.findIndex((s) => s >= waveT);
-    if (idx <= 0) {
-      armRef.current.rotation.x = WAVE_KEYFRAMES[0];
-      return;
+    if (groupRef.current) {
+      groupRef.current.position.y = Math.sin(t * 0.7) * 0.03;
     }
-    const i = Math.min(idx, WAVE_TIMES.length - 1);
-    const t0 = WAVE_TIMES[i - 1];
-    const t1 = WAVE_TIMES[i];
-    const local = (waveT - t0) / (t1 - t0);
-    armRef.current.rotation.x = THREE.MathUtils.lerp(
-      WAVE_KEYFRAMES[i - 1],
-      WAVE_KEYFRAMES[i],
-      local
-    );
   });
 
   return (
-    <group ref={group} position={[0, -0.5, 0]} scale={1.2}>
+    <group ref={groupRef} position={[0, -0.4, 0]} scale={0.5}>
       {/* Head */}
-      <mesh position={[0, 1.4, 0]} castShadow>
-        <sphereGeometry args={[0.35, 24, 24]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.3} />
+      <mesh position={[0, 1.8, 0]} material={greenMaterial} castShadow>
+        <sphereGeometry args={[0.8, 64, 64]} />
       </mesh>
-      {/* Eyes */}
-      <mesh position={leftEyePos}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.8} />
-      </mesh>
-      <mesh position={rightEyePos}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.8} />
-      </mesh>
+
       {/* Body */}
-      <mesh position={[0, 0.6, 0]} castShadow>
-        <cylinderGeometry args={[0.25, 0.35, 0.6, 24]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
+      <mesh
+        position={[0, 0.8, 0]}
+        scale={[0.5, 0.7, 0.4]}
+        material={greenMaterial}
+        castShadow
+      >
+        <sphereGeometry args={[1, 64, 64]} />
       </mesh>
-      {/* Waving arm */}
-      <group ref={armRef} position={[0.35, 1, 0]} rotation={[0.3, 0, 0]}>
-        <mesh position={[0.2, 0, 0]} castShadow>
-          <cylinderGeometry args={[0.04, 0.04, 0.4, 12]} />
-          <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.3} />
+
+      {/* Eyes */}
+      <mesh position={[-0.25, 2, 0.6]} material={eyeMaterial}>
+        <sphereGeometry args={[0.2, 32, 32]} />
+      </mesh>
+      <mesh position={[0.25, 2, 0.6]} material={eyeMaterial}>
+        <sphereGeometry args={[0.2, 32, 32]} />
+      </mesh>
+
+      {/* Left Arm */}
+      <mesh
+        position={[-0.7, 1.2, 0]}
+        rotation={[0, 0, Math.PI / 4]}
+        material={greenMaterial}
+        castShadow
+      >
+        <cylinderGeometry args={[0.08, 0.08, 1.2, 32]} />
+      </mesh>
+
+      {/* Right Arm (Animated) */}
+      <group ref={armRef} position={[0.7, 1.2, 0]}>
+        <mesh position={[0, -0.6, 0]} material={greenMaterial} castShadow>
+          <cylinderGeometry args={[0.08, 0.08, 1.2, 32]} />
         </mesh>
       </group>
-      {/* Other arm (static) */}
-      <mesh position={[-0.35, 1, 0]} rotation={[0.2, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.04, 0.04, 0.35, 12]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
-      </mesh>
-      {/* Legs — full figure */}
-      <mesh position={[0.15, 0.15, 0.08]} rotation={[0.15, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.05, 0.06, 0.35, 12]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
-      </mesh>
-      <mesh position={[-0.15, 0.15, 0.08]} rotation={[0.15, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.05, 0.06, 0.35, 12]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.2} />
-      </mesh>
-      {/* Antennae */}
-      <mesh position={[-0.1, 1.75, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 0.25, 8]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.4} />
-      </mesh>
-      <mesh position={[0.1, 1.75, 0]}>
-        <cylinderGeometry args={[0.02, 0.02, 0.25, 8]} />
-        <meshStandardMaterial color={NEON_GREEN} emissive={NEON_GREEN} emissiveIntensity={0.4} />
-      </mesh>
-      <mesh position={[-0.1, 1.95, 0]}>
-        <sphereGeometry args={[0.04, 12, 12]} />
-        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.6} />
-      </mesh>
-      <mesh position={[0.1, 1.95, 0]}>
-        <sphereGeometry args={[0.04, 12, 12]} />
-        <meshStandardMaterial color={NEON_CYAN} emissive={NEON_CYAN} emissiveIntensity={0.6} />
-      </mesh>
-    </group>
-  );
-}
 
-function UFO() {
-  const ref = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    const t = state.clock.elapsedTime * 0.35;
-    ref.current.position.x = Math.sin(t) * 2.4;
-    ref.current.position.z = Math.cos(t * 0.7) * 1.8 - 2;
-    ref.current.position.y = Math.sin(t * 0.5) * 0.35 + 1;
-    ref.current.rotation.y = t * 0.5;
-  });
-
-  return (
-    <group ref={ref}>
-      {/* Saucer body */}
-      <mesh castShadow>
-        <sphereGeometry args={[0.25, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.4]} />
-        <meshStandardMaterial
-          color={NEON_PINK}
-          emissive={NEON_PINK}
-          emissiveIntensity={0.4}
-          metalness={0.8}
-          roughness={0.2}
-        />
+      {/* Legs */}
+      <mesh position={[-0.2, -0.3, 0]} material={greenMaterial} castShadow>
+        <cylinderGeometry args={[0.1, 0.1, 1.5, 32]} />
       </mesh>
-      <mesh position={[0, -0.05, 0]} castShadow>
-        <cylinderGeometry args={[0.38, 0.44, 0.1, 32]} />
-        <meshStandardMaterial
-          color={NEON_PINK}
-          emissive={NEON_PINK}
-          emissiveIntensity={0.5}
-          metalness={0.7}
-          roughness={0.3}
-        />
-      </mesh>
-      {/* Dome top — more visible spaceship */}
-      <mesh position={[0, 0.22, 0]} castShadow>
-        <sphereGeometry args={[0.2, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
-        <meshStandardMaterial
-          color={NEON_CYAN}
-          emissive={NEON_CYAN}
-          emissiveIntensity={0.4}
-          metalness={0.6}
-          roughness={0.4}
-        />
+      <mesh position={[0.2, -0.3, 0]} material={greenMaterial} castShadow>
+        <cylinderGeometry args={[0.1, 0.1, 1.5, 32]} />
       </mesh>
     </group>
   );
@@ -169,12 +92,11 @@ function UFO() {
 export function AlienIntroScene({ ready }: { ready: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.6} />
       <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-      <pointLight position={[-3, 2, 2]} color={NEON_PINK} intensity={2} />
-      <pointLight position={[3, 1, 2]} color={NEON_CYAN} intensity={1.5} />
-      <Alien ready={ready} />
-      <UFO />
+      <pointLight position={[-2, 2, 3]} intensity={0.8} />
+      <pointLight position={[2, 1, 3]} intensity={0.6} />
+      <AlienModel />
     </>
   );
 }
