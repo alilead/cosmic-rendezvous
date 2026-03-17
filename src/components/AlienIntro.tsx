@@ -1,24 +1,23 @@
 import { useState, useCallback, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Spline from "@splinetool/react-spline";
+import { Canvas } from "@react-three/fiber";
+import { AlienIntroScene } from "@/components/AlienIntroScene";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const SPLINE_SCENE = "https://prod.spline.design/DE1R5Mj-ZqMo9n9M/scene.splinecode";
-
 const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
-  const [phase, setPhase] = useState<"flying" | "ready" | "exit">("flying");
+  const [phase, setPhase] = useState<"loading" | "ready" | "exit">("loading");
   const [showPrompt, setShowPrompt] = useState(false);
   const { t } = useLanguage();
 
   const handleEnter = useCallback(() => {
     if (phase !== "ready") return;
     setPhase("exit");
-    setTimeout(onEnter, 600);
+    setTimeout(onEnter, 500);
   }, [onEnter, phase]);
 
-  const handleSplineLoad = useCallback(() => {
+  const handleCreated = useCallback(() => {
     setPhase("ready");
-    setTimeout(() => setShowPrompt(true), 800);
+    setTimeout(() => setShowPrompt(true), 600);
   }, []);
 
   return (
@@ -27,26 +26,28 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
         className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden cursor-pointer"
         onClick={handleEnter}
         initial={false}
-        exit={{ opacity: 0, transition: { duration: 0.6 } }}
+        exit={{ opacity: 0, transition: { duration: 0.5 } }}
       >
         <motion.div
           className="absolute inset-0 w-full h-full"
-          initial={{ opacity: 0, scale: 0.4, filter: "blur(14px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{ perspective: "1200px" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
         >
           <Suspense fallback={null}>
-            <Spline
-              scene={SPLINE_SCENE}
-              onLoad={handleSplineLoad}
-              style={{ width: "100%", height: "100%" }}
-            />
+            <Canvas
+              camera={{ position: [0, 0, 4.5], fov: 42 }}
+              onCreated={handleCreated}
+              gl={{ antialias: true, alpha: true }}
+              className="w-full h-full"
+            >
+              <AlienIntroScene ready={phase === "ready"} />
+            </Canvas>
           </Suspense>
         </motion.div>
 
         <div
-          className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/40 pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-background/30 pointer-events-none"
           aria-hidden
         />
 

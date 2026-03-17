@@ -6,6 +6,15 @@ const NEON_GREEN = new THREE.Color("#00ff88");
 const NEON_PINK = new THREE.Color("#ff00aa");
 const NEON_CYAN = new THREE.Color("#00ffff");
 
+const WAVE_DELAY = 1;
+const WAVE_DURATION = 1.2;
+const WAVE_PAUSE = 4;
+const CYCLE = WAVE_DELAY + WAVE_DURATION + WAVE_PAUSE;
+
+// Keyframes for wave: raise arm, wave 3 times, lower (radians). Rest arm rotation.x ≈ 0.3.
+const WAVE_KEYFRAMES = [0.3, -0.44, 0.26, -0.26, 0.17, 0.3];
+const WAVE_TIMES = [0, 0.125, 0.375, 0.625, 0.875, 1]; // normalized 0..1 over WAVE_DURATION
+
 function Alien({ ready }: { ready: boolean }) {
   const group = useRef<THREE.Group>(null);
   const armRef = useRef<THREE.Group>(null);
@@ -13,12 +22,34 @@ function Alien({ ready }: { ready: boolean }) {
   const rightEyePos: [number, number, number] = [0.12, 1.48, 0.28];
 
   useFrame((state) => {
-    if (!armRef.current || !ready) return;
+    if (!group.current || !armRef.current) return;
     const t = state.clock.elapsedTime;
+
+    // Idle float: gentle up/down ~3px in world units
+    const floatY = Math.sin(t * 0.8) * 0.015;
+    group.current.position.y = -0.5 + floatY;
+
+    if (!ready) return;
+
+    const phase = t % CYCLE;
+    if (phase < WAVE_DELAY || phase >= WAVE_DELAY + WAVE_DURATION) {
+      armRef.current.rotation.x = THREE.MathUtils.lerp(armRef.current.rotation.x, 0.3, 0.08);
+      return;
+    }
+    const waveT = (phase - WAVE_DELAY) / WAVE_DURATION;
+    const idx = WAVE_TIMES.findIndex((s) => s >= waveT);
+    if (idx <= 0) {
+      armRef.current.rotation.x = WAVE_KEYFRAMES[0];
+      return;
+    }
+    const i = Math.min(idx, WAVE_TIMES.length - 1);
+    const t0 = WAVE_TIMES[i - 1];
+    const t1 = WAVE_TIMES[i];
+    const local = (waveT - t0) / (t1 - t0);
     armRef.current.rotation.x = THREE.MathUtils.lerp(
-      armRef.current.rotation.x,
-      Math.sin(t * 2) * 0.6,
-      0.05
+      WAVE_KEYFRAMES[i - 1],
+      WAVE_KEYFRAMES[i],
+      local
     );
   });
 
