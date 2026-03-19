@@ -1,16 +1,15 @@
+functionsDirectory = "c:\\Users\\attia\\OneDrive\\Bureau\\Paginas web\\cosmic bar\\cosmic-rendezvous\\netlify\\functions"
+functionsDirectoryOrigin = "config-v1"
 redirectsOrigin = "config"
 plugins = []
 headers = []
 
-[functions]
-
-[functions."*"]
-
 [build]
-publish = "C:\\Users\\attia\\OneDrive\\Bureau\\Paginas web\\cosmic bar\\cosmic-rendezvous\\dist"
+publish = "c:\\Users\\attia\\OneDrive\\Bureau\\Paginas web\\cosmic bar\\cosmic-rendezvous\\dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
+functions = "c:\\Users\\attia\\OneDrive\\Bureau\\Paginas web\\cosmic bar\\cosmic-rendezvous\\netlify\\functions"
 
 [build.environment]
 
@@ -25,6 +24,10 @@ command = "npm run build"
 [build.processing.js]
 
 [build.services]
+
+[functions]
+
+[functions."*"]
 
 [[redirects]]
 from = "/*"

@@ -1,7 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Users, Music, Lightbulb, MapPin } from "lucide-react";
 import rentalImg from "@/assets/space-rental.jpg";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/i18n/translations";
 
@@ -72,13 +74,9 @@ const RentalSection = () => {
               </span>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="min-h-[44px] min-w-[44px] px-10 py-4 font-display text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:bg-primary/80 active:bg-primary/90 transition-all duration-300 rounded-sm animate-pulse-glow touch-manipulation"
-          >
-            {t("rentalCta")}
-          </button>
+          <Button asChild className="min-h-[44px] px-10 py-4 font-display text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:bg-primary/80 rounded-sm animate-pulse-glow">
+            <Link to="/booking">{t("rentalCta")}</Link>
+          </Button>
         </motion.div>
       </div>
     </section>

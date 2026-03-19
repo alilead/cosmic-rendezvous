@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -6,23 +7,30 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const navKeys = [
   { key: "navHome" as const, href: "#hero" },
   { key: "navAbout" as const, href: "#about" },
-  { key: "navRental" as const, href: "#rental" },
+  { key: "navRental" as const, path: "/booking" as const },
   { key: "navMenu" as const, href: "#menu" },
   { key: "navGallery" as const, href: "#gallery" },
+  { key: "navGame" as const, path: "/game" as const },
   { key: "navContact" as const, href: "#contact" },
 ];
 
+const navClass =
+  "min-h-[44px] min-w-[44px] text-xs font-body tracking-[0.12em] text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 uppercase touch-manipulation px-1.5 leading-tight flex items-center";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   const { t, lang, setLang } = useLanguage();
 
   const scrollTo = (href: string) => {
     setIsOpen(false);
+    if (location.pathname !== "/") {
+      window.location.href = `/${href}`;
+      return;
+    }
     setTimeout(() => {
       const el = document.querySelector(href);
-      if (el) {
-        (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      if (el) (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
     }, 150);
   };
 
@@ -33,24 +41,25 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
     >
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between min-w-0 safe-area-padding">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between min-w-0 safe-area-padding">
         <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3 min-h-[44px] min-w-[44px] touch-manipulation py-1">
-          <img src="/logo.png" alt={t("altLogo")} className="h-10 w-auto" />
-          <span className="font-display text-lg tracking-[0.2em] neon-glow-pink hidden sm:inline whitespace-nowrap">COSMIC RENDEZ-VOUS</span>
+          <img src="/logo.png" alt={t("altLogo")} className="h-12 w-auto" />
+          <span className="font-display text-base tracking-[0.15em] neon-glow-pink hidden sm:inline whitespace-nowrap">COSMIC RENDEZ-VOUS</span>
         </button>
 
         {/* Desktop: nav + language switch */}
-        <div className="hidden md:flex items-center gap-6">
-          {navKeys.map(({ key, href }) => (
-            <button
-              type="button"
-              key={href}
-              onClick={() => scrollTo(href)}
-              className="min-h-[44px] min-w-[44px] text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors duration-300 uppercase touch-manipulation px-2"
-            >
-              {t(key)}
-            </button>
-          ))}
+        <div className="hidden md:flex items-center gap-3 lg:gap-4">
+          {navKeys.map((item) =>
+            "path" in item ? (
+              <Link key={item.path} to={item.path} className={navClass}>
+                {t(item.key)}
+              </Link>
+            ) : (
+              <button type="button" key={item.href} onClick={() => scrollTo(item.href)} className={navClass}>
+                {t(item.key)}
+              </button>
+            )
+          )}
           <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden ml-2">
             <button
               type="button"
@@ -87,16 +96,27 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
           >
             <div className="flex flex-col items-center py-6 gap-4">
-              {navKeys.map(({ key, href }) => (
-                <button
-                  type="button"
-                  key={href}
-                  onClick={() => scrollTo(href)}
-                  className="min-h-[44px] min-w-[44px] w-full text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors uppercase touch-manipulation py-3"
-                >
-                  {t(key)}
-                </button>
-              ))}
+              {navKeys.map((item) =>
+                "path" in item ? (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className="min-h-[44px] w-full text-sm font-body tracking-wider text-muted-foreground hover:text-primary transition-colors uppercase touch-manipulation py-3 text-center"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {t(item.key)}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    key={item.href}
+                    onClick={() => scrollTo(item.href)}
+                    className="min-h-[44px] min-w-[44px] w-full text-sm font-body tracking-wider text-muted-foreground hover:text-primary active:text-primary transition-colors uppercase touch-manipulation py-3"
+                  >
+                    {t(item.key)}
+                  </button>
+                )
+              )}
               <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden mt-2">
                 <button
                   type="button"

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import heroImg from "@/assets/hero-bar.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -27,7 +28,7 @@ const HeroSection = () => {
           <img
             src="/logo.png"
             alt={t("altLogo")}
-            className="h-24 sm:h-32 md:h-44 lg:h-52 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[90vw]"
+            className="h-28 sm:h-40 md:h-52 lg:h-60 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[90vw]"
           />
         </motion.div>
 
@@ -50,7 +51,7 @@ const HeroSection = () => {
         </motion.p>
 
         <motion.p
-          className="font-body text-sm md:text-base text-muted-foreground max-w-md mx-auto mb-12"
+          className="font-body text-sm md:text-base max-w-md mx-auto mb-12 text-foreground bg-background/75 px-4 py-3 rounded-md shadow-[0_0_20px_rgba(0,0,0,0.7)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
@@ -64,13 +65,12 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.3 }}
         >
-          <button
-            type="button"
-            onClick={() => scrollTo("#rental")}
-            className="min-h-[44px] min-w-[44px] px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
+          <Link
+            to="/booking"
+            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
           >
             {t("heroBook")}
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => scrollTo("#about")}

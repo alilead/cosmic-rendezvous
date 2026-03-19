@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import gallery1 from "@/assets/gallery-1.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/i18n/translations";
 
@@ -11,9 +10,9 @@ const AboutSection = () => {
   const { t, lang } = useLanguage();
 
   return (
-    <section id="about" className="relative py-24 md:py-32 cosmic-gradient noise-bg scroll-mt-20">
+    <section id="about" className="relative py-12 md:py-20 cosmic-gradient noise-bg scroll-mt-20">
       <div className="container mx-auto px-4 relative z-10 min-w-0 max-w-[100vw]">
-        <div ref={ref} className="space-y-12 md:space-y-16">
+        <div ref={ref} className="space-y-8 md:space-y-10">
           {/* Header above image — better UX */}
           <motion.h2
             className="font-display text-3xl md:text-4xl tracking-[0.1em] text-center md:text-left neon-glow-cyan"
@@ -24,15 +23,15 @@ const AboutSection = () => {
             {t("aboutTitle")}
           </motion.h2>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Image */}
             <motion.div
-              className="relative rounded-lg overflow-hidden"
+              className="relative rounded-lg overflow-hidden h-[280px] sm:h-[320px] md:h-[360px]"
               initial={{ opacity: 0, x: -60 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              <img src={gallery1} alt={t("altAboutImg")} className="w-full aspect-[4/5] object-cover" />
+              <img src="/photo/cosmic.jpeg" alt={t("altAboutImg")} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
               <div className="absolute inset-0 border border-primary/20 rounded-lg neon-border-pink" />
             </motion.div>
@@ -43,7 +42,7 @@ const AboutSection = () => {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-            <div className="space-y-5 font-body text-muted-foreground leading-relaxed">
+            <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-base md:text-lg max-w-xl">
               <p>{t("aboutP1")}</p>
               <p>{t("aboutP2")}</p>
               <p>{t("aboutP3")}</p>

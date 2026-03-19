@@ -1,26 +1,25 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import g1 from "@/assets/gallery-1.jpg";
-import g2 from "@/assets/gallery-2.jpg";
-import g3 from "@/assets/gallery-3.jpg";
-import g4 from "@/assets/gallery-4.jpg";
-import heroImg from "@/assets/hero-bar.jpg";
-import rentalImg from "@/assets/space-rental.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+// Photos from /photo folder (copied to public/photo)
+const GALLERY_PHOTOS = [
+  "section.jpeg",
+  "WhatsApp Image 2026-03-05 at 18.49.44.jpeg",
+  "WhatsApp Image 2026-03-05 at 18.49.45.jpeg",
+  "WhatsApp Image 2026-03-05 at 18.49.46.jpeg",
+  "WhatsApp Image 2026-03-05 at 18.49.47.jpeg",
+];
 
 const GallerySection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useLanguage();
-  // Order so hero/rental (bar photos) are not next to each other — avoids duplicate-looking pair side by side
-  const images = [
-    { src: g1, alt: t("galleryAlt1") },
-    { src: heroImg, alt: t("galleryAlt5") },
-    { src: g2, alt: t("galleryAlt2") },
-    { src: rentalImg, alt: t("galleryAlt6") },
-    { src: g3, alt: t("galleryAlt3") },
-    { src: g4, alt: t("galleryAlt4") },
-  ];
+  const galleryAlts = [t("galleryAlt5"), t("galleryAlt2"), t("galleryAlt6"), t("galleryAlt3"), t("galleryAlt4")];
+  const images = GALLERY_PHOTOS.map((file, i) => ({
+    src: `/photo/${encodeURIComponent(file)}`,
+    alt: galleryAlts[i] ?? t("galleryTitle"),
+  }));
 
   return (
     <section id="gallery" className="relative py-24 md:py-32 scroll-mt-20">
@@ -37,7 +36,7 @@ const GallerySection = () => {
           <p className="font-body text-muted-foreground">{t("gallerySubtitle")}</p>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 auto-rows-fr">
           {images.map((img, i) => (
             <motion.div
               key={i}
