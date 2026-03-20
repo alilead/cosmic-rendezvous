@@ -18,6 +18,7 @@ create table if not exists public.bookings (
 
 alter table public.bookings enable row level security;
 
+drop policy if exists "Service role only" on public.bookings;
 create policy "Service role only"
   on public.bookings
   for all
@@ -37,6 +38,7 @@ create index if not exists idx_game_scores_score on public.game_scores (score de
 
 alter table public.game_scores enable row level security;
 
+drop policy if exists "Service role only" on public.game_scores;
 create policy "Service role only"
   on public.game_scores
   for all
