@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import heroImg from "@/assets/hero-bar.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -65,12 +66,13 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.3 }}
         >
-          <Link
-            to="/booking"
+          <button
+            type="button"
+            onClick={() => navigate("/booking")}
             className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-8 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
           >
             {t("heroBook")}
-          </Link>
+          </button>
           <button
             type="button"
             onClick={() => scrollTo("#about")}

@@ -19,7 +19,7 @@ export const translations = {
     heroTagline: "Le bar alien de Genève",
     heroDesc: "Nuits vibrantes. Espace privatisable.",
     heroCta: "Espace privatisable disponible.",
-    heroBook: "Réserver l'espace",
+    heroBook: "Réservez l'espace",
     heroDiscover: "Découvrir l'univers",
 
     // About
