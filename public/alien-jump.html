@@ -324,7 +324,13 @@
   }
 
   function setupKeyboardControls() {
+    function isTypingTarget(target) {
+      if (!target) return false;
+      var tag = (target.tagName || '').toUpperCase();
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || !!target.isContentEditable;
+    }
     document.addEventListener('keydown', function(e) {
+      if (isTypingTarget(e.target)) return;
       var key = e.keyCode;
       if (key === 37) { dir = 'left'; if (player) player.isMovingLeft = true; }
       else if (key === 39) { dir = 'right'; if (player) player.isMovingRight = true; }
@@ -647,7 +653,7 @@
       var touchZones = document.getElementById('touchZones');
       var startX = 0;
       var activeDir = null; // 'left' | 'right' | null
-      var threshold = 14; // px before we treat as swipe
+      var threshold = 28; // less sensitive swipe threshold on phones
       function setDir(d) {
         if (!player) return;
         if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; }
