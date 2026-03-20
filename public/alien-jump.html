@@ -232,7 +232,11 @@
   </div>
   <script>
 (function() {
-  var API = '/.netlify/functions/leaderboard';
+  var SAME_ORIGIN_API = '/.netlify/functions/leaderboard';
+  var NETLIFY_API = 'https://cosmic-bar.netlify.app/.netlify/functions/leaderboard';
+  var API = (window.location.hostname.indexOf('netlify.app') !== -1)
+    ? SAME_ORIGIN_API
+    : NETLIFY_API;
   window.requestAnimFrame = (function() {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
@@ -458,7 +462,10 @@
     if (loading) loading.style.display = 'block';
     if (el) el.innerHTML = '';
     if (goEl) goEl.innerHTML = '<span>Loading…</span>';
-    fetch(API).then(function(r) { return r.json(); }).then(function(data) {
+    fetch(API).then(function(r) {
+      if (!r.ok) throw new Error('Leaderboard GET failed');
+      return r.json();
+    }).then(function(data) {
       if (loading) loading.style.display = 'none';
       var listHtml = '';
       if (data.scores && data.scores.length) {
@@ -698,7 +705,10 @@
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ player_name: name.slice(0, 20), score: score, email: email })
-    }).then(function(r) { return r.json(); }).then(function(data) {
+    }).then(function(r) {
+      if (!r.ok) throw new Error('Leaderboard POST failed');
+      return r.json();
+    }).then(function(data) {
       if (msgEl) msgEl.innerHTML = 'Score submitted!';
       fetchLeaderboard();
       btn.disabled = false;
