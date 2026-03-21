@@ -29,7 +29,7 @@ const HeroSection = () => {
           <img
             src="/logo.png"
             alt={t("altLogo")}
-            className="h-28 sm:h-40 md:h-52 lg:h-60 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[90vw]"
+            className="h-40 min-[400px]:h-44 sm:h-52 md:h-64 lg:h-72 xl:h-80 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[min(92vw,28rem)] w-auto object-contain"
           />
         </motion.div>
 

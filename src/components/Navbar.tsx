@@ -43,7 +43,11 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-3 flex items-center justify-between min-w-0 safe-area-padding">
         <button type="button" onClick={() => scrollTo("#hero")} className="flex items-center gap-3 min-h-[44px] min-w-[44px] touch-manipulation py-1">
-          <img src="/logo.png" alt={t("altLogo")} className="h-12 w-auto" />
+          <img
+            src="/logo.png"
+            alt={t("altLogo")}
+            className="h-16 w-auto sm:h-[4.5rem] md:h-20 lg:h-24 xl:h-28 object-contain"
+          />
           <span className="font-display text-base tracking-[0.15em] neon-glow-pink hidden sm:inline whitespace-nowrap">COSMIC RENDEZ-VOUS</span>
         </button>
 
