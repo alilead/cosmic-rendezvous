@@ -114,6 +114,13 @@ export const translations = {
     bookingErrorMessage: "Une erreur est survenue",
     bookingSendByEmail: "Envoyer par email en secours",
 
+    privacyModalTitle: "Protection des données",
+    privacyModalIntro:
+      "Pour utiliser ce site (formulaires, jeu, réservation), vous devez accepter notre politique de confidentialité.",
+    privacyModalCheckboxBefore: "J'ai lu et j'accepte la",
+    privacyModalReadPolicy: "politique de confidentialité",
+    privacyModalAccept: "Accepter et continuer",
+
     // 404
     notFoundTitle: "Oups ! Page introuvable",
     notFoundLink: "Retour à l'accueil",
@@ -221,6 +228,13 @@ export const translations = {
     bookingValidationGuests: "Number of guests required",
     bookingErrorMessage: "Something went wrong",
     bookingSendByEmail: "Send by email as fallback",
+
+    privacyModalTitle: "Privacy",
+    privacyModalIntro:
+      "To use this site (forms, game, bookings), please accept our privacy policy.",
+    privacyModalCheckboxBefore: "I have read and accept the",
+    privacyModalReadPolicy: "Privacy Policy",
+    privacyModalAccept: "Accept and continue",
 
     notFoundTitle: "Oops! Page not found",
     notFoundLink: "Return to Home",

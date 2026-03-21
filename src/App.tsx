@@ -11,6 +11,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import GameNotification from "./components/GameNotification";
+import { PrivacyConsentModal } from "./components/PrivacyConsentModal";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <PrivacyConsentModal />
         <GameNotification />
         <Routes>
           <Route path="/" element={<Index />} />

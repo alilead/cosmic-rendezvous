@@ -249,6 +249,29 @@
   var API = (window.location.hostname.indexOf('netlify.app') !== -1)
     ? SAME_ORIGIN_API
     : NETLIFY_API;
+  var PRIVACY_LS = 'cosmic-privacy-consent-v1';
+  function hasSitePrivacyConsent() {
+    try { return localStorage.getItem(PRIVACY_LS) === '1'; } catch (e) { return false; }
+  }
+  function syncPrivacyUiForGame() {
+    var c = document.getElementById('privacyConsent');
+    var row = c ? c.closest('.consent-row') : null;
+    if (hasSitePrivacyConsent()) {
+      if (c) { c.checked = true; c.disabled = true; }
+      if (row) row.style.display = 'none';
+    } else {
+      if (c) { c.disabled = false; }
+      if (row) row.style.display = '';
+    }
+  }
+  window.addEventListener('message', function(ev) {
+    if (ev.data && ev.data.type === 'cosmic-privacy-consent') syncPrivacyUiForGame();
+  });
+  try {
+    window.addEventListener('storage', function(e) {
+      if (e.key === PRIVACY_LS) syncPrivacyUiForGame();
+    });
+  } catch (e2) {}
   window.requestAnimFrame = (function() {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
@@ -634,8 +657,7 @@
         document.getElementById('igBtn').href = 'https://www.instagram.com/cosmiccafe.geneva/';
         var submitBox = document.getElementById('submitScoreBox');
         if (submitBox) { submitBox.style.display = 'block'; document.getElementById('submitMsg').innerHTML = ''; }
-        var consent = document.getElementById('privacyConsent');
-        if (consent) consent.checked = false;
+        syncPrivacyUiForGame();
         fetchLeaderboard();
       }
     }
@@ -708,8 +730,7 @@
     var touchZones = document.getElementById('touchZones');
     if (touchZones) touchZones.style.pointerEvents = '';
     document.getElementById('scoreBoard').style.zIndex = 1;
-    var consent = document.getElementById('privacyConsent');
-    if (consent) consent.checked = false;
+    syncPrivacyUiForGame();
   };
 
   window.init = init;
@@ -722,7 +743,7 @@
     var btn = this;
     var name = (nameEl && nameEl.value.trim()) || 'Alien';
     var email = (emailEl && emailEl.value.trim()) || '';
-    var consentGiven = !!(consentEl && consentEl.checked);
+    var consentGiven = hasSitePrivacyConsent() || !!(consentEl && consentEl.checked);
     if (!consentGiven) {
       if (msgEl) msgEl.innerHTML = 'Please accept the Privacy Policy before submitting.';
       return;
@@ -766,6 +787,7 @@
   spring = new SpringObj();
   platform_broken_substitute = new BrokenSub();
   for (var i = 0; i < platformCount; i++) platforms.push(new Platform());
+  syncPrivacyUiForGame();
   fetchLeaderboard();
   setupKeyboardControls();
 })();

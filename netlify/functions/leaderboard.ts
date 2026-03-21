@@ -64,15 +64,35 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid score" }) };
       }
 
-      const { data, error } = await supabase
+      function missingEmailColumn(err: { message?: string } | null): boolean {
+        const m = (err?.message ?? "").toLowerCase();
+        if (!m.includes("email")) return false;
+        return (
+          m.includes("column") ||
+          m.includes("schema") ||
+          m.includes("does not exist") ||
+          m.includes("unknown column")
+        );
+      }
+
+      const baseRow = { player_name: playerName, score: scoreVal };
+      const withEmail =
+        emailVal.length > 0 ? { ...baseRow, email: emailVal } : { ...baseRow, email: null as string | null };
+
+      let { data, error } = await supabase
         .from(GAME_SCORES_TABLE)
-        .insert({
-          player_name: playerName,
-          score: scoreVal,
-          email: emailVal.length > 0 ? emailVal : null,
-        })
+        .insert(withEmail)
         .select("id, player_name, score, created_at")
         .single();
+
+      if (error && missingEmailColumn(error)) {
+        console.warn("[leaderboard] email column missing in DB; retrying insert without email");
+        ({ data, error } = await supabase
+          .from(GAME_SCORES_TABLE)
+          .insert(baseRow)
+          .select("id, player_name, score, created_at")
+          .single());
+      }
 
       if (error) {
         console.error("[leaderboard] insert error:", error);
