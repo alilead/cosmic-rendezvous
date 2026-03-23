@@ -530,7 +530,9 @@
   function init() {
     dir = 'left';
     var jumpCount = 0;
-    var sidePadding = 14;
+    var sidePadding = isMobile ? 22 : 14;
+    var leftBound = sidePadding;
+    var rightBound = width - sidePadding;
     firstRun = false;
     base = new Base();
     player = new Player();
@@ -540,7 +542,11 @@
     platforms = [];
     particles = [];
     lastScore = 0;
-    for (var i = 0; i < platformCount; i++) platforms.push(new Platform());
+    for (var i = 0; i < platformCount; i++) {
+      var p = new Platform();
+      p.x = Math.max(leftBound, Math.min(rightBound - p.width, p.x));
+      platforms.push(p);
+    }
     initBgStars();
 
     function paintCanvas() {
@@ -575,11 +581,12 @@
       }
     }
 
-    var accel = isMobile ? 0.075 : 0.15;
-    var friction = isMobile ? 0.22 : 0.1;
-    var maxSpeed = isMobile ? 4.0 : 8;
+    var accel = isMobile ? 0.06 : 0.15;
+    var friction = isMobile ? 0.30 : 0.1;
+    var maxSpeed = isMobile ? 2.6 : 8;
 
     function playerCalc() {
+      var prevBottom = player.y + player.height;
       if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
       else if (dir === 'right') { player.dir = 'right'; if (player.vy < -7 && player.vy > -15) player.dir = 'right_land'; }
 
@@ -587,8 +594,8 @@
       if (player.isMovingRight) { player.x += player.vx; player.vx += accel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= friction; }
       if (player.vx > maxSpeed) player.vx = maxSpeed; else if (player.vx < -maxSpeed) player.vx = -maxSpeed;
       // Keep alien inside visible play area (no wrap-around hide).
-      if (player.x < sidePadding) { player.x = sidePadding; if (player.vx < 0) player.vx = 0; }
-      if (player.x + player.width > width - sidePadding) { player.x = width - sidePadding - player.width; if (player.vx > 0) player.vx = 0; }
+      if (player.x < leftBound) { player.x = leftBound; if (player.vx < 0) player.vx = 0; }
+      if (player.x + player.width > rightBound) { player.x = rightBound - player.width; if (player.vx > 0) player.vx = 0; }
 
       if ((player.y + player.height) > base.y && base.y < height) player.jump();
       if (base.y > height && (player.y + player.height) > height && player.isDead !== 'lol') player.isDead = true;
@@ -604,6 +611,8 @@
         if (player.vy >= 0) { player.y += player.vy; player.vy += gravity; }
         score++;
       }
+      player.prevBottom = prevBottom;
+      player.currBottom = player.y + player.height;
       collides();
       if (player.isDead === true) gameOver();
     }
@@ -621,7 +630,12 @@
     function platformCalc() {
       var subs = platform_broken_substitute;
       platforms.forEach(function(p, i) {
-        if (p.type === 2) { if (p.x < 0 || p.x + p.width > width) p.vx *= -1; p.x += p.vx; }
+        if (p.type === 2) {
+          if (p.x < leftBound || p.x + p.width > rightBound) p.vx *= -1;
+          p.x += p.vx;
+          if (p.x < leftBound) p.x = leftBound;
+          if (p.x + p.width > rightBound) p.x = rightBound - p.width;
+        }
         if (p.flag === 1 && !subs.appearance && jumpCount === 0) { subs.x = p.x; subs.y = p.y; subs.appearance = true; jumpCount++; }
         p.draw();
       });
@@ -630,15 +644,33 @@
     }
 
     function collides() {
+      var prevBottom = (typeof player.prevBottom === 'number') ? player.prevBottom : (player.y + player.height);
+      var currBottom = (typeof player.currBottom === 'number') ? player.currBottom : (player.y + player.height);
       platforms.forEach(function(p) {
-        if (player.vy > 0 && p.state === 0 && (player.x + 15 < p.x + p.width) && (player.x + player.width - 15 > p.x) && (player.y + player.height > p.y) && (player.y + player.height < p.y + p.height)) {
+        if (
+          player.vy > 0 &&
+          p.state === 0 &&
+          (player.x + 15 < p.x + p.width) &&
+          (player.x + player.width - 15 > p.x) &&
+          (prevBottom <= p.y + 2) &&
+          (currBottom >= p.y - 2) &&
+          (currBottom <= p.y + p.height + Math.max(10, Math.abs(player.vy) + 4))
+        ) {
           if (p.type === 3 && p.flag === 0) { p.flag = 1; jumpCount = 0; return; }
           else if (p.type === 4 && p.state === 0) { player.jump(); p.state = 1; }
           else if (p.flag === 1) return;
           else player.jump();
         }
       });
-      if (player.vy > 0 && spring.state === 0 && (player.x + 15 < spring.x + spring.width) && (player.x + player.width - 15 > spring.x) && (player.y + player.height > spring.y) && (player.y + player.height < spring.y + spring.height)) {
+      if (
+        player.vy > 0 &&
+        spring.state === 0 &&
+        (player.x + 15 < spring.x + spring.width) &&
+        (player.x + player.width - 15 > spring.x) &&
+        (prevBottom <= spring.y + 2) &&
+        (currBottom >= spring.y - 2) &&
+        (currBottom <= spring.y + spring.height + Math.max(10, Math.abs(player.vy) + 4))
+      ) {
         spring.state = 1; player.jumpHigh();
       }
     }
@@ -698,7 +730,7 @@
       var movedSinceStart = false;
       var activeDir = null; // 'left' | 'right' | null
       var threshold = 36; // less sensitive swipe threshold on phones
-      var tapNudge = 2.0; // short tap impulse, closer to classic doodle feel
+      var tapNudge = 0.9; // tiny tap impulse so short taps don't over-steer
       function setDir(d) {
         if (!player) return;
         if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; dir = 'left'; }
@@ -817,15 +849,16 @@
     ctx.clearRect(0, 0, width, height);
     if (!player) { requestAnimFrame(menuLoop); return; }
     player.y += player.vy; player.vy += gravity;
-    var menuAccel = isMobile ? 0.075 : 0.15;
-    var menuFriction = isMobile ? 0.22 : 0.1;
-    var menuMaxSpeed = isMobile ? 4.0 : 8;
+    var menuPadding = isMobile ? 22 : 14;
+    var menuAccel = isMobile ? 0.06 : 0.15;
+    var menuFriction = isMobile ? 0.30 : 0.1;
+    var menuMaxSpeed = isMobile ? 2.6 : 8;
     if (player.isMovingLeft) { player.x += player.vx; player.vx -= menuAccel; } else { player.x += player.vx; if (player.vx < 0) player.vx += menuFriction; }
     if (player.isMovingRight) { player.x += player.vx; player.vx += menuAccel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= menuFriction; }
     if (player.vx > menuMaxSpeed) player.vx = menuMaxSpeed; else if (player.vx < -menuMaxSpeed) player.vx = -menuMaxSpeed;
     if ((player.y + player.height) > height - 25 && (player.x + 15 < 260) && (player.x + player.width - 15 > 155)) player.jump();
-    if (player.x < 14) { player.x = 14; if (player.vx < 0) player.vx = 0; }
-    if (player.x + player.width > width - 14) { player.x = width - 14 - player.width; if (player.vx > 0) player.vx = 0; }
+    if (player.x < menuPadding) { player.x = menuPadding; if (player.vx < 0) player.vx = 0; }
+    if (player.x + player.width > width - menuPadding) { player.x = width - menuPadding - player.width; if (player.vx > 0) player.vx = 0; }
     if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
     else if (dir === 'right') { player.dir = 'right'; if (player.vy < -7 && player.vy > -15) player.dir = 'right_land'; }
     player.draw();
