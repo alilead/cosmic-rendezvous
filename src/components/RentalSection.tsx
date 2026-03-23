@@ -74,7 +74,10 @@ const RentalSection = () => {
               </span>
             ))}
           </div>
-          <Button asChild className="min-h-[44px] px-10 py-4 font-display text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:bg-primary/80 rounded-sm animate-pulse-glow">
+          <Button
+            asChild
+            className="w-full max-w-full sm:w-auto min-h-[44px] px-4 sm:px-8 md:px-10 py-3 sm:py-4 font-display text-xs sm:text-sm tracking-[0.12em] sm:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:bg-primary/80 rounded-sm animate-pulse-glow whitespace-normal break-words text-center leading-tight"
+          >
             <Link to="/booking">{t("rentalCta")}</Link>
           </Button>
         </motion.div>
