@@ -581,9 +581,9 @@
       }
     }
 
-    var accel = isMobile ? 0.06 : 0.15;
-    var friction = isMobile ? 0.30 : 0.1;
-    var maxSpeed = isMobile ? 2.6 : 8;
+    var accel = isMobile ? 0.045 : 0.15;
+    var friction = isMobile ? 0.38 : 0.1;
+    var maxSpeed = isMobile ? 2.0 : 8;
 
     function playerCalc() {
       var prevBottom = player.y + player.height;
@@ -729,8 +729,8 @@
       var activeTouchId = null;
       var movedSinceStart = false;
       var activeDir = null; // 'left' | 'right' | null
-      var threshold = 36; // less sensitive swipe threshold on phones
-      var tapNudge = 0.9; // tiny tap impulse so short taps don't over-steer
+      var threshold = 52; // larger threshold so accidental small drags do nothing
+      var tapNudge = 0.55; // smaller tap impulse for finer left/right control
       function setDir(d) {
         if (!player) return;
         if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; dir = 'left'; }
@@ -850,9 +850,9 @@
     if (!player) { requestAnimFrame(menuLoop); return; }
     player.y += player.vy; player.vy += gravity;
     var menuPadding = isMobile ? 22 : 14;
-    var menuAccel = isMobile ? 0.06 : 0.15;
-    var menuFriction = isMobile ? 0.30 : 0.1;
-    var menuMaxSpeed = isMobile ? 2.6 : 8;
+    var menuAccel = isMobile ? 0.045 : 0.15;
+    var menuFriction = isMobile ? 0.38 : 0.1;
+    var menuMaxSpeed = isMobile ? 2.0 : 8;
     if (player.isMovingLeft) { player.x += player.vx; player.vx -= menuAccel; } else { player.x += player.vx; if (player.vx < 0) player.vx += menuFriction; }
     if (player.isMovingRight) { player.x += player.vx; player.vx += menuAccel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= menuFriction; }
     if (player.vx > menuMaxSpeed) player.vx = menuMaxSpeed; else if (player.vx < -menuMaxSpeed) player.vx = -menuMaxSpeed;
