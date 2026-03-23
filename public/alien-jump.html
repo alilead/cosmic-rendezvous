@@ -495,6 +495,14 @@
   }
 
   var base, spring, platform_broken_substitute;
+  function detectCollision(a, b) {
+    return (
+      a.x < b.x + b.width &&
+      a.x + a.width > b.x &&
+      a.y < b.y + b.height &&
+      a.y + a.height > b.y
+    );
+  }
 
   function fetchLeaderboard() {
     var el = document.getElementById('leaderboardList');
@@ -662,12 +670,17 @@
       var prevBottom = (typeof player.prevBottom === 'number') ? player.prevBottom : (player.y + player.height);
       var currBottom = (typeof player.currBottom === 'number') ? player.currBottom : (player.y + player.height);
       platforms.forEach(function(p) {
-        var landingSlack = Math.max(14, Math.abs(player.vy) + 8);
+        var landingSlack = Math.max(12, Math.abs(player.vy) + 6);
+        var hitbox = {
+          x: player.x + 8,
+          y: player.y + 2,
+          width: player.width - 16,
+          height: player.height - 2
+        };
         if (
           player.vy > 0 &&
           p.state === 0 &&
-          (player.x + 15 < p.x + p.width) &&
-          (player.x + player.width - 15 > p.x) &&
+          detectCollision(hitbox, p) &&
           (
             (currBottom >= p.y - 4 && currBottom <= p.y + p.height + landingSlack) ||
             (prevBottom <= p.y + p.height && currBottom >= p.y - 4)
@@ -680,11 +693,16 @@
         }
       });
       var springSlack = Math.max(14, Math.abs(player.vy) + 8);
+      var springHitbox = {
+        x: player.x + 8,
+        y: player.y + 2,
+        width: player.width - 16,
+        height: player.height - 2
+      };
       if (
         player.vy > 0 &&
         spring.state === 0 &&
-        (player.x + 15 < spring.x + spring.width) &&
-        (player.x + player.width - 15 > spring.x) &&
+        detectCollision(springHitbox, spring) &&
         (
           (currBottom >= spring.y - 4 && currBottom <= spring.y + spring.height + springSlack) ||
           (prevBottom <= spring.y + spring.height && currBottom >= spring.y - 4)
@@ -823,7 +841,14 @@
     spring = new SpringObj();
     platform_broken_substitute = new BrokenSub();
     platforms = [];
-    for (var i = 0; i < platformCount; i++) platforms.push(new Platform());
+    var resetPadding = isMobile ? 22 : 14;
+    var resetLeft = resetPadding;
+    var resetRight = width - resetPadding;
+    for (var i = 0; i < platformCount; i++) {
+      var rp = new Platform();
+      rp.x = Math.max(resetLeft, Math.min(resetRight - rp.width, rp.x));
+      platforms.push(rp);
+    }
     var goMenu = document.getElementById('gameOverMenu');
     if (goMenu) goMenu.classList.remove('visible');
     var touchZones = document.getElementById('touchZones');
