@@ -530,6 +530,7 @@
   function init() {
     dir = 'left';
     var jumpCount = 0;
+    var sidePadding = 14;
     firstRun = false;
     base = new Base();
     player = new Player();
@@ -545,6 +546,19 @@
     function paintCanvas() {
       ctx.clearRect(0, 0, width, height);
       drawAlienBackground();
+      // Phone-friendly side rails so play area limits are visible.
+      var railGrad = ctx.createLinearGradient(0, 0, 0, height);
+      railGrad.addColorStop(0, 'rgba(233,30,140,0.55)');
+      railGrad.addColorStop(1, 'rgba(0,212,255,0.45)');
+      ctx.fillStyle = railGrad;
+      ctx.fillRect(0, 0, sidePadding, height);
+      ctx.fillRect(width - sidePadding, 0, sidePadding, height);
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(sidePadding + 0.5, 0); ctx.lineTo(sidePadding + 0.5, height);
+      ctx.moveTo(width - sidePadding - 0.5, 0); ctx.lineTo(width - sidePadding - 0.5, height);
+      ctx.stroke();
       if (!isMobile && particles.length > 0) {
         for (var i = particles.length - 1; i >= 0; i--) {
           var p = particles[i];
@@ -561,9 +575,9 @@
       }
     }
 
-    var accel = isMobile ? 0.09 : 0.15;
-    var friction = isMobile ? 0.16 : 0.1;
-    var maxSpeed = isMobile ? 5.2 : 8;
+    var accel = isMobile ? 0.075 : 0.15;
+    var friction = isMobile ? 0.22 : 0.1;
+    var maxSpeed = isMobile ? 4.0 : 8;
 
     function playerCalc() {
       if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
@@ -572,6 +586,9 @@
       if (player.isMovingLeft) { player.x += player.vx; player.vx -= accel; } else { player.x += player.vx; if (player.vx < 0) player.vx += friction; }
       if (player.isMovingRight) { player.x += player.vx; player.vx += accel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= friction; }
       if (player.vx > maxSpeed) player.vx = maxSpeed; else if (player.vx < -maxSpeed) player.vx = -maxSpeed;
+      // Keep alien inside visible play area (no wrap-around hide).
+      if (player.x < sidePadding) { player.x = sidePadding; if (player.vx < 0) player.vx = 0; }
+      if (player.x + player.width > width - sidePadding) { player.x = width - sidePadding - player.width; if (player.vx > 0) player.vx = 0; }
 
       if ((player.y + player.height) > base.y && base.y < height) player.jump();
       if (base.y > height && (player.y + player.height) > height && player.isDead !== 'lol') player.isDead = true;
@@ -678,8 +695,10 @@
       var startX = 0;
       var startY = 0;
       var activeTouchId = null;
+      var movedSinceStart = false;
       var activeDir = null; // 'left' | 'right' | null
-      var threshold = 28; // less sensitive swipe threshold on phones
+      var threshold = 36; // less sensitive swipe threshold on phones
+      var tapNudge = 2.0; // short tap impulse, closer to classic doodle feel
       function setDir(d) {
         if (!player) return;
         if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; dir = 'left'; }
@@ -695,10 +714,8 @@
           activeTouchId = t.identifier;
           startX = t.clientX;
           startY = t.clientY;
+          movedSinceStart = false;
           activeDir = null;
-          // Single tap/press to steer immediately by side.
-          var rect = touchZones.getBoundingClientRect();
-          setDir((t.clientX - rect.left) < rect.width / 2 ? 'left' : 'right');
         }, { passive: true });
         touchZones.addEventListener('touchmove', function(e) {
           if (!e.touches || !e.touches.length) return;
@@ -709,14 +726,28 @@
           if (!t) return;
           var dx = t.clientX - startX;
           var dy = t.clientY - startY;
-          if (dx > threshold) setDir('right');
-          else if (dx < -threshold) setDir('left');
+          if (dx > threshold) { setDir('right'); movedSinceStart = true; }
+          else if (dx < -threshold) { setDir('left'); movedSinceStart = true; }
           // vertical move: release direction to avoid sticky steering while scrolling
-          if (Math.abs(dy) > Math.abs(dx) + 14) setDir(null);
+          if (Math.abs(dy) > Math.abs(dx) + 14) { setDir(null); movedSinceStart = true; }
           // prevent scroll while swiping on the game
           if (activeDir) e.preventDefault();
         }, { passive: false });
-        touchZones.addEventListener('touchend', function() { activeTouchId = null; setDir(null); }, { passive: true });
+        touchZones.addEventListener('touchend', function(e) {
+          // Quick tap on left/right = small impulse instead of long hold.
+          if (!movedSinceStart && player && e.changedTouches && e.changedTouches[0]) {
+            var t = e.changedTouches[0];
+            var rect = touchZones.getBoundingClientRect();
+            var goLeft = (t.clientX - rect.left) < rect.width / 2;
+            player.vx += goLeft ? -tapNudge : tapNudge;
+            if (player.vx > maxSpeed) player.vx = maxSpeed;
+            if (player.vx < -maxSpeed) player.vx = -maxSpeed;
+            dir = goLeft ? 'left' : 'right';
+          }
+          activeTouchId = null;
+          movedSinceStart = false;
+          setDir(null);
+        }, { passive: true });
         touchZones.addEventListener('touchcancel', function() { activeTouchId = null; setDir(null); }, { passive: true });
       }
       // Extra safety: always release movement on global touch end/cancel/blur.
@@ -786,14 +817,15 @@
     ctx.clearRect(0, 0, width, height);
     if (!player) { requestAnimFrame(menuLoop); return; }
     player.y += player.vy; player.vy += gravity;
-    var menuAccel = isMobile ? 0.09 : 0.15;
-    var menuFriction = isMobile ? 0.16 : 0.1;
-    var menuMaxSpeed = isMobile ? 5.2 : 8;
+    var menuAccel = isMobile ? 0.075 : 0.15;
+    var menuFriction = isMobile ? 0.22 : 0.1;
+    var menuMaxSpeed = isMobile ? 4.0 : 8;
     if (player.isMovingLeft) { player.x += player.vx; player.vx -= menuAccel; } else { player.x += player.vx; if (player.vx < 0) player.vx += menuFriction; }
     if (player.isMovingRight) { player.x += player.vx; player.vx += menuAccel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= menuFriction; }
     if (player.vx > menuMaxSpeed) player.vx = menuMaxSpeed; else if (player.vx < -menuMaxSpeed) player.vx = -menuMaxSpeed;
     if ((player.y + player.height) > height - 25 && (player.x + 15 < 260) && (player.x + player.width - 15 > 155)) player.jump();
-    if (player.x > width) player.x = -player.width; else if (player.x < -player.width) player.x = width;
+    if (player.x < 14) { player.x = 14; if (player.vx < 0) player.vx = 0; }
+    if (player.x + player.width > width - 14) { player.x = width - 14 - player.width; if (player.vx > 0) player.vx = 0; }
     if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
     else if (dir === 'right') { player.dir = 'right'; if (player.vy < -7 && player.vy > -15) player.dir = 'right_land'; }
     player.draw();
