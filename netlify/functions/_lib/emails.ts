@@ -42,7 +42,7 @@ export function guestRequestReceivedHtml(data: BookingEmailData): string {
 <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#111;border:1px solid ${pink};">
 <tr><td style="padding:32px 24px;text-align:center;">
   <p style="margin:0;font-size:11px;letter-spacing:4px;color:${cyan};">Bar électro-alien</p>
-  <h1 style="margin:8px 0 0;font-size:28px;letter-spacing:4px;color:${pink};">COSMIC RENDEZ-VOUS</h1>
+  <h1 style="margin:8px 0 0;font-size:28px;letter-spacing:4px;color:${pink};">COSMIC CAFE</h1>
   <p style="margin:4px 0 0;font-size:12px;color:#888;">Genève</p>
 </td></tr>
 <tr><td style="padding:0 24px 24px;">
@@ -66,7 +66,7 @@ export function guestRequestReceivedHtml(data: BookingEmailData): string {
 /** Bar: new rental request. */
 export function barNotificationHtml(data: BookingEmailData): string {
   const displayDate = formatDate(data.date);
-  return `<p><strong>Nouvelle demande de location d'espace – Cosmic Rendez-vous</strong></p><ul>
+  return `<p><strong>Nouvelle demande de location d'espace – Cosmic Cafe</strong></p><ul>
 <li><strong>Nom:</strong> ${data.name}</li>
 <li><strong>Email:</strong> ${data.email}</li>
 <li><strong>Téléphone:</strong> ${data.phone}</li>

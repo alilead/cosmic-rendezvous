@@ -1,4 +1,4 @@
-# Supabase setup for Cosmic Rendez-vous (booking / space rental)
+# Supabase setup for Cosmic Cafe (booking / space rental)
 
 The booking system stores rental requests in **Supabase** and sends confirmation emails via **Resend**. This guide covers the database and environment variables.
 

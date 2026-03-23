@@ -1,4 +1,4 @@
-# Cosmic Rendezvous — Infomaniak / production config
+# Cosmic Cafe — Infomaniak / production config
 # Copy to .env.local and fill for deployment (e.g. Infomaniak).
 
 # Contact email (used in ContactSection and mailto links)

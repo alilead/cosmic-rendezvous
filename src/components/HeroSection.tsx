@@ -29,7 +29,7 @@ const HeroSection = () => {
           <img
             src="/logo.png"
             alt={t("altLogo")}
-            className="h-40 min-[400px]:h-44 sm:h-52 md:h-64 lg:h-72 xl:h-80 mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[min(92vw,28rem)] w-auto object-contain"
+            className="h-48 min-[400px]:h-52 sm:h-60 md:h-72 lg:h-80 xl:h-[22rem] mx-auto drop-shadow-[0_0_30px_hsl(var(--neon-pink)/0.5)] max-w-[min(94vw,32rem)] w-auto object-contain"
           />
         </motion.div>
 
@@ -39,7 +39,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          COSMIC RENDEZ-VOUS
+          COSMIC CAFE
         </motion.h1>
 
         <motion.p

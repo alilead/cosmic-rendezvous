@@ -191,7 +191,7 @@ export default function Admin() {
           <Card className="w-full max-w-sm">
             <CardHeader>
               <CardTitle className="text-2xl font-display tracking-wider text-primary">Admin</CardTitle>
-              <p className="text-sm text-muted-foreground">Cosmic Rendez-vous · Bookings</p>
+              <p className="text-sm text-muted-foreground">Cosmic Cafe · Bookings</p>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleLogin} className="space-y-4">

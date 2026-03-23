@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const ALIEN_ALT = "Cosmic Rendez-vous mascot";
+const ALIEN_ALT = "Cosmic Cafe mascot";
 
 /**
  * AlienWaveHero – full-screen hero with centered alien mascot.
@@ -24,7 +24,7 @@ const AlienWaveHero = ({ onEnter }: { onEnter: () => void }) => {
         onClick={handleEnter}
         initial={false}
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
-        aria-label="Enter Cosmic Rendez-vous"
+        aria-label="Enter Cosmic Cafe"
       >
         {/* Centered alien with layers */}
         <div className="relative flex items-center justify-center flex-1 w-full">

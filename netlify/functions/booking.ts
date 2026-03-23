@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { getSupabase, BOOKINGS_TABLE } from "./_lib/supabase";
 import { guestRequestReceivedHtml, barNotificationHtml } from "./_lib/emails";
 
-const FROM = "Cosmic Rendez-vous <info@cosmic-cafe.ch>";
+const FROM = "Cosmic Cafe <info@cosmic-cafe.ch>";
 const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
 
 const EVENT_TYPES = ["birthday", "private_party", "corporate", "dj_night", "other"] as const;
@@ -114,7 +114,7 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         from: FROM,
         to: [email],
         bcc: [BAR_EMAIL],
-        subject: `Demande de location – Cosmic Rendez-vous – ${name}`,
+        subject: `Demande de location – Cosmic Cafe – ${name}`,
         html: guestRequestReceivedHtml(emailData),
       });
       if (sendErr) {

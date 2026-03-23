@@ -1,4 +1,4 @@
--- Cosmic Rendez-vous: run this entire file in Supabase → SQL Editor
+-- Cosmic Cafe: run this entire file in Supabase → SQL Editor
 
 -- 1. Bookings table (reservation / space rental)
 create table if not exists public.bookings (

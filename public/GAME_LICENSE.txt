@@ -1,4 +1,4 @@
-Alien Jump (Cosmic Rendez-vous) – game logic is based on the following work:
+Alien Jump (Cosmic Cafe) – game logic is based on the following work:
 
   Doodle Jump (HTML5)
   Copyright (c) 2021 - FRADAR

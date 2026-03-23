@@ -11,13 +11,13 @@ export default function PrivacyPolicy() {
           </h1>
 
           <p className="text-muted-foreground text-sm mb-4">
-            This page displays the privacy policy PDF for Cosmic Rendez-vous.
+            This page displays the privacy policy PDF for Cosmic Cafe.
           </p>
 
           <div className="rounded-lg border border-border overflow-hidden bg-card">
             <iframe
               src="/cosmic-privacy-policy-en.pdf"
-              title="Cosmic Rendez-vous Privacy Policy"
+              title="Cosmic Cafe Privacy Policy"
               className="w-full h-[72vh] md:h-[80vh]"
             />
           </div>

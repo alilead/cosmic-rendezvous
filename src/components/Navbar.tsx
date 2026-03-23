@@ -46,9 +46,9 @@ const Navbar = () => {
           <img
             src="/logo.png"
             alt={t("altLogo")}
-            className="h-16 w-auto sm:h-[4.5rem] md:h-20 lg:h-24 xl:h-28 object-contain"
+            className="h-20 w-auto sm:h-[5.25rem] md:h-24 lg:h-28 xl:h-32 object-contain"
           />
-          <span className="font-display text-base tracking-[0.15em] neon-glow-pink hidden sm:inline whitespace-nowrap">COSMIC RENDEZ-VOUS</span>
+          <span className="font-display text-base tracking-[0.15em] neon-glow-pink hidden sm:inline whitespace-nowrap">COSMIC CAFE</span>
         </button>
 
         {/* Desktop: nav + language switch */}
