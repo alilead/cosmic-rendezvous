@@ -585,6 +585,22 @@
     var friction = isMobile ? 0.38 : 0.1;
     var maxSpeed = isMobile ? 2.0 : 8;
 
+    function enforcePlayerBounds(shouldBounce) {
+      if (!player) return;
+      if (player.x < leftBound) {
+        player.x = leftBound;
+        if (player.vx < 0) {
+          player.vx = shouldBounce ? Math.max(1.1, Math.abs(player.vx) * 0.55) : 0;
+        }
+      }
+      if (player.x + player.width > rightBound) {
+        player.x = rightBound - player.width;
+        if (player.vx > 0) {
+          player.vx = shouldBounce ? -Math.max(1.1, Math.abs(player.vx) * 0.55) : 0;
+        }
+      }
+    }
+
     function playerCalc() {
       var prevBottom = player.y + player.height;
       if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
@@ -593,9 +609,8 @@
       if (player.isMovingLeft) { player.x += player.vx; player.vx -= accel; } else { player.x += player.vx; if (player.vx < 0) player.vx += friction; }
       if (player.isMovingRight) { player.x += player.vx; player.vx += accel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= friction; }
       if (player.vx > maxSpeed) player.vx = maxSpeed; else if (player.vx < -maxSpeed) player.vx = -maxSpeed;
-      // Keep alien inside visible play area (no wrap-around hide).
-      if (player.x < leftBound) { player.x = leftBound; if (player.vx < 0) player.vx = 0; }
-      if (player.x + player.width > rightBound) { player.x = rightBound - player.width; if (player.vx > 0) player.vx = 0; }
+      // Keep alien inside visible play area and rebound on side walls.
+      enforcePlayerBounds(true);
 
       if ((player.y + player.height) > base.y && base.y < height) player.jump();
       if (base.y > height && (player.y + player.height) > height && player.isDead !== 'lol') player.isDead = true;
@@ -647,31 +662,37 @@
       var prevBottom = (typeof player.prevBottom === 'number') ? player.prevBottom : (player.y + player.height);
       var currBottom = (typeof player.currBottom === 'number') ? player.currBottom : (player.y + player.height);
       platforms.forEach(function(p) {
+        var landingSlack = Math.max(14, Math.abs(player.vy) + 8);
         if (
           player.vy > 0 &&
           p.state === 0 &&
           (player.x + 15 < p.x + p.width) &&
           (player.x + player.width - 15 > p.x) &&
-          (prevBottom <= p.y + 2) &&
-          (currBottom >= p.y - 2) &&
-          (currBottom <= p.y + p.height + Math.max(10, Math.abs(player.vy) + 4))
+          (
+            (currBottom >= p.y - 4 && currBottom <= p.y + p.height + landingSlack) ||
+            (prevBottom <= p.y + p.height && currBottom >= p.y - 4)
+          )
         ) {
           if (p.type === 3 && p.flag === 0) { p.flag = 1; jumpCount = 0; return; }
-          else if (p.type === 4 && p.state === 0) { player.jump(); p.state = 1; }
+          else if (p.type === 4 && p.state === 0) { player.y = p.y - player.height; player.jump(); p.state = 1; }
           else if (p.flag === 1) return;
-          else player.jump();
+          else { player.y = p.y - player.height; player.jump(); }
         }
       });
+      var springSlack = Math.max(14, Math.abs(player.vy) + 8);
       if (
         player.vy > 0 &&
         spring.state === 0 &&
         (player.x + 15 < spring.x + spring.width) &&
         (player.x + player.width - 15 > spring.x) &&
-        (prevBottom <= spring.y + 2) &&
-        (currBottom >= spring.y - 2) &&
-        (currBottom <= spring.y + spring.height + Math.max(10, Math.abs(player.vy) + 4))
+        (
+          (currBottom >= spring.y - 4 && currBottom <= spring.y + spring.height + springSlack) ||
+          (prevBottom <= spring.y + spring.height && currBottom >= spring.y - 4)
+        )
       ) {
-        spring.state = 1; player.jumpHigh();
+        spring.state = 1;
+        player.y = spring.y - player.height;
+        player.jumpHigh();
       }
     }
 
@@ -857,8 +878,8 @@
     if (player.isMovingRight) { player.x += player.vx; player.vx += menuAccel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= menuFriction; }
     if (player.vx > menuMaxSpeed) player.vx = menuMaxSpeed; else if (player.vx < -menuMaxSpeed) player.vx = -menuMaxSpeed;
     if ((player.y + player.height) > height - 25 && (player.x + 15 < 260) && (player.x + player.width - 15 > 155)) player.jump();
-    if (player.x < menuPadding) { player.x = menuPadding; if (player.vx < 0) player.vx = 0; }
-    if (player.x + player.width > width - menuPadding) { player.x = width - menuPadding - player.width; if (player.vx > 0) player.vx = 0; }
+    if (player.x < menuPadding) { player.x = menuPadding; if (player.vx < 0) player.vx = Math.max(1.1, Math.abs(player.vx) * 0.55); }
+    if (player.x + player.width > width - menuPadding) { player.x = width - menuPadding - player.width; if (player.vx > 0) player.vx = -Math.max(1.1, Math.abs(player.vx) * 0.55); }
     if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
     else if (dir === 'right') { player.dir = 'right'; if (player.vy < -7 && player.vy > -15) player.dir = 'right_land'; }
     player.draw();
