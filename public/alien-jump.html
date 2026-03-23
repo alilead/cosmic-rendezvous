@@ -2,6 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Alien Jump · Cosmic Rendez-vous</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -623,6 +624,8 @@
     var accel = isMobile ? 0.05 : 0.15;
     var friction = isMobile ? 0.22 : 0.1;
     var maxSpeed = isMobile ? 2.4 : 8;
+    var followActive = false;
+    var followX = width / 2;
 
     function enforcePlayerBounds(shouldBounce) {
       if (!player) return;
@@ -645,9 +648,20 @@
       if (dir === 'left') { player.dir = 'left'; if (player.vy < -7 && player.vy > -15) player.dir = 'left_land'; }
       else if (dir === 'right') { player.dir = 'right'; if (player.vy < -7 && player.vy > -15) player.dir = 'right_land'; }
 
-      if (player.isMovingLeft) { player.x += player.vx; player.vx -= accel; } else { player.x += player.vx; if (player.vx < 0) player.vx += friction; }
-      if (player.isMovingRight) { player.x += player.vx; player.vx += accel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= friction; }
-      if (player.vx > maxSpeed) player.vx = maxSpeed; else if (player.vx < -maxSpeed) player.vx = -maxSpeed;
+      if (isMobile && followActive) {
+        var targetX = followX - player.width / 2;
+        if (targetX < leftBound) targetX = leftBound;
+        if (targetX > rightBound - player.width) targetX = rightBound - player.width;
+        var dx = targetX - player.x;
+        player.vx = dx * 0.35;
+        if (player.vx > maxSpeed) player.vx = maxSpeed;
+        if (player.vx < -maxSpeed) player.vx = -maxSpeed;
+        player.x += player.vx;
+      } else {
+        if (player.isMovingLeft) { player.x += player.vx; player.vx -= accel; } else { player.x += player.vx; if (player.vx < 0) player.vx += friction; }
+        if (player.isMovingRight) { player.x += player.vx; player.vx += accel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= friction; }
+        if (player.vx > maxSpeed) player.vx = maxSpeed; else if (player.vx < -maxSpeed) player.vx = -maxSpeed;
+      }
       // Keep alien inside visible play area and rebound on side walls.
       enforcePlayerBounds(true);
 
@@ -776,31 +790,34 @@
 
     if (isMobile) {
       var touchZones = document.getElementById('touchZones');
-      var startX = 0;
-      var startY = 0;
       var activeTouchId = null;
-      var movedSinceStart = false;
-      var activeDir = null; // 'left' | 'right' | null
-      var threshold = 34;
-      var tapNudge = 0.9;
-      function setDir(d) {
-        if (!player) return;
-        if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; dir = 'left'; }
-        else if (d === 'right') { player.isMovingRight = true; player.isMovingLeft = false; dir = 'right'; }
-        else { player.isMovingLeft = false; player.isMovingRight = false; }
-        activeDir = d;
+      function stopFollow() {
+        followActive = false;
+        if (player) {
+          player.isMovingLeft = false;
+          player.isMovingRight = false;
+          player.vx *= 0.35;
+          if (Math.abs(player.vx) < 0.2) player.vx = 0;
+        }
       }
-      // Swipe anywhere on the game area
+      function updateFollow(clientX) {
+        if (!touchZones) return;
+        var rect = touchZones.getBoundingClientRect();
+        var x = clientX - rect.left;
+        if (x < 0) x = 0;
+        if (x > rect.width) x = rect.width;
+        followX = (x / rect.width) * width;
+        followActive = true;
+      }
+      // Finger-follow control on the entire game area
       if (touchZones) {
         touchZones.addEventListener('touchstart', function(e) {
           if (!e.touches || !e.touches[0]) return;
           var t = e.touches[0];
           activeTouchId = t.identifier;
-          startX = t.clientX;
-          startY = t.clientY;
-          movedSinceStart = false;
-          activeDir = null;
-        }, { passive: true });
+          updateFollow(t.clientX);
+          e.preventDefault();
+        }, { passive: false });
         touchZones.addEventListener('touchmove', function(e) {
           if (!e.touches || !e.touches.length) return;
           var t = null;
@@ -808,37 +825,20 @@
             if (activeTouchId === null || e.touches[i].identifier === activeTouchId) { t = e.touches[i]; break; }
           }
           if (!t) return;
-          var dx = t.clientX - startX;
-          var dy = t.clientY - startY;
-          if (dx > threshold) { setDir('right'); movedSinceStart = true; }
-          else if (dx < -threshold) { setDir('left'); movedSinceStart = true; }
-          // vertical move: release direction to avoid sticky steering while scrolling
-          if (Math.abs(dy) > Math.abs(dx) + 14) { setDir(null); movedSinceStart = true; }
-          // prevent scroll while swiping on the game
-          if (activeDir) e.preventDefault();
+          updateFollow(t.clientX);
+          e.preventDefault();
         }, { passive: false });
-        touchZones.addEventListener('touchend', function(e) {
-          // Quick tap on left/right = small impulse instead of long hold.
-          if (!movedSinceStart && player && e.changedTouches && e.changedTouches[0]) {
-            var t = e.changedTouches[0];
-            var rect = touchZones.getBoundingClientRect();
-            var goLeft = (t.clientX - rect.left) < rect.width / 2;
-            player.vx += goLeft ? -tapNudge : tapNudge;
-            if (player.vx > maxSpeed) player.vx = maxSpeed;
-            if (player.vx < -maxSpeed) player.vx = -maxSpeed;
-            dir = goLeft ? 'left' : 'right';
-          }
+        touchZones.addEventListener('touchend', function() {
           activeTouchId = null;
-          movedSinceStart = false;
-          setDir(null);
+          stopFollow();
         }, { passive: true });
-        touchZones.addEventListener('touchcancel', function() { activeTouchId = null; setDir(null); }, { passive: true });
+        touchZones.addEventListener('touchcancel', function() { activeTouchId = null; stopFollow(); }, { passive: true });
       }
       // Extra safety: always release movement on global touch end/cancel/blur.
-      window.addEventListener('touchend', function() { activeTouchId = null; setDir(null); }, { passive: true });
-      window.addEventListener('touchcancel', function() { activeTouchId = null; setDir(null); }, { passive: true });
-      window.addEventListener('blur', function() { activeTouchId = null; setDir(null); }, { passive: true });
-      document.addEventListener('visibilitychange', function() { if (document.hidden) { activeTouchId = null; setDir(null); } });
+      window.addEventListener('touchend', function() { activeTouchId = null; stopFollow(); }, { passive: true });
+      window.addEventListener('touchcancel', function() { activeTouchId = null; stopFollow(); }, { passive: true });
+      window.addEventListener('blur', function() { activeTouchId = null; stopFollow(); }, { passive: true });
+      document.addEventListener('visibilitychange', function() { if (document.hidden) { activeTouchId = null; stopFollow(); } });
     }
 
     (function loop() {
@@ -952,18 +952,18 @@
   </script>
   <style>
     @media (max-width: 767px) {
-      html, body { width: 100vw; height: 100vh; overflow: hidden; }
+      html, body { width: 100vw; height: 100dvh; min-height: 100dvh; overflow: hidden; }
       .wrap {
         width: 100vw;
-        height: 100vh;
-        min-height: 100vh;
+        height: 100dvh;
+        min-height: 100dvh;
         padding: 0;
         gap: 0;
       }
       .game-wrap, .container, #canvas {
         width: 100vw !important;
-        height: 100vh !important;
-        min-height: 100vh;
+        height: 100dvh !important;
+        min-height: 100dvh;
       }
       .container { border-radius: 0; }
       .leaderboard { display: none !important; }
