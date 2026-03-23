@@ -168,6 +168,32 @@
     .leaderboard .submit-score button:hover { opacity: 0.95; filter: brightness(1.1); }
     .leaderboard .submit-score button:disabled { opacity: 0.6; cursor: not-allowed; }
     .leaderboard .msg { font-size: 12px; color: var(--cosmic-green); text-align: center; margin-top: 8px; }
+    .mobile-controls {
+      display: none;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 20;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .mobile-controls button {
+      pointer-events: auto;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(5,8,18,0.7);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(2px);
+    }
+    body.touch-device .mobile-controls { display: flex; }
     .consent-row {
       display: flex; align-items: flex-start; gap: 8px; margin: 6px 0 2px;
       font-size: 12px; line-height: 1.35; color: #e8e4dc;
@@ -231,6 +257,10 @@
           <div id="touchLeft" class="touch-left"></div>
           <div id="touchRight" class="touch-right"></div>
         </div>
+        <div class="mobile-controls">
+          <button type="button" id="pauseBtn">Pause</button>
+          <button type="button" id="exitBtn">Exit</button>
+        </div>
         <img id="sprite" src="https://i.imgur.com/2WEhF.png" alt="">
         <img id="alienImg" src="/alien.png" alt="">
         <div id="scoreBoard"><p id="score">0</p></div>
@@ -290,6 +320,7 @@
   var lastScore = 0;
   var isMobile = /Android|webOS|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   if (isMobile && document.body) document.body.classList.add('touch-device');
+  var isPaused = false;
 
   var bgStars = [];
   var bgTime = 0;
@@ -589,9 +620,9 @@
       }
     }
 
-    var accel = isMobile ? 0.045 : 0.15;
-    var friction = isMobile ? 0.38 : 0.1;
-    var maxSpeed = isMobile ? 2.0 : 8;
+    var accel = isMobile ? 0.05 : 0.15;
+    var friction = isMobile ? 0.22 : 0.1;
+    var maxSpeed = isMobile ? 2.4 : 8;
 
     function enforcePlayerBounds(shouldBounce) {
       if (!player) return;
@@ -667,24 +698,14 @@
     }
 
     function collides() {
-      var prevBottom = (typeof player.prevBottom === 'number') ? player.prevBottom : (player.y + player.height);
-      var currBottom = (typeof player.currBottom === 'number') ? player.currBottom : (player.y + player.height);
       platforms.forEach(function(p) {
-        var landingSlack = Math.max(12, Math.abs(player.vy) + 6);
-        var hitbox = {
-          x: player.x + 8,
-          y: player.y + 2,
-          width: player.width - 16,
-          height: player.height - 2
-        };
+        var hitbox = { x: player.x + 12, y: player.y, width: player.width - 24, height: player.height };
         if (
           player.vy > 0 &&
           p.state === 0 &&
           detectCollision(hitbox, p) &&
-          (
-            (currBottom >= p.y - 4 && currBottom <= p.y + p.height + landingSlack) ||
-            (prevBottom <= p.y + p.height && currBottom >= p.y - 4)
-          )
+          (player.y + player.height > p.y) &&
+          (player.y + player.height < p.y + p.height + 14)
         ) {
           if (p.type === 3 && p.flag === 0) { p.flag = 1; jumpCount = 0; return; }
           else if (p.type === 4 && p.state === 0) { player.y = p.y - player.height; player.jump(); p.state = 1; }
@@ -692,21 +713,13 @@
           else { player.y = p.y - player.height; player.jump(); }
         }
       });
-      var springSlack = Math.max(14, Math.abs(player.vy) + 8);
-      var springHitbox = {
-        x: player.x + 8,
-        y: player.y + 2,
-        width: player.width - 16,
-        height: player.height - 2
-      };
+      var springHitbox = { x: player.x + 12, y: player.y, width: player.width - 24, height: player.height };
       if (
         player.vy > 0 &&
         spring.state === 0 &&
         detectCollision(springHitbox, spring) &&
-        (
-          (currBottom >= spring.y - 4 && currBottom <= spring.y + spring.height + springSlack) ||
-          (prevBottom <= spring.y + spring.height && currBottom >= spring.y - 4)
-        )
+        (player.y + player.height > spring.y) &&
+        (player.y + player.height < spring.y + spring.height + 14)
       ) {
         spring.state = 1;
         player.y = spring.y - player.height;
@@ -768,8 +781,8 @@
       var activeTouchId = null;
       var movedSinceStart = false;
       var activeDir = null; // 'left' | 'right' | null
-      var threshold = 52; // larger threshold so accidental small drags do nothing
-      var tapNudge = 0.55; // smaller tap impulse for finer left/right control
+      var threshold = 34;
+      var tapNudge = 0.9;
       function setDir(d) {
         if (!player) return;
         if (d === 'left') { player.isMovingLeft = true; player.isMovingRight = false; dir = 'left'; }
@@ -829,7 +842,7 @@
     }
 
     (function loop() {
-      update();
+      if (!isPaused) update();
       requestAnimFrame(loop);
     })();
   }
@@ -858,6 +871,21 @@
   };
 
   window.init = init;
+
+  var pauseBtn = document.getElementById('pauseBtn');
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', function() {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
+    });
+  }
+  var exitBtn = document.getElementById('exitBtn');
+  if (exitBtn) {
+    exitBtn.addEventListener('click', function() {
+      if (window.top && window.top !== window) window.top.location.href = '/';
+      else window.location.href = '/';
+    });
+  }
 
   document.getElementById('submitScoreBtn').addEventListener('click', function() {
     var nameEl = document.getElementById('playerName');
@@ -894,11 +922,12 @@
   (function menuLoop() {
     ctx.clearRect(0, 0, width, height);
     if (!player) { requestAnimFrame(menuLoop); return; }
+    if (isPaused) { requestAnimFrame(menuLoop); return; }
     player.y += player.vy; player.vy += gravity;
     var menuPadding = isMobile ? 22 : 14;
-    var menuAccel = isMobile ? 0.045 : 0.15;
-    var menuFriction = isMobile ? 0.38 : 0.1;
-    var menuMaxSpeed = isMobile ? 2.0 : 8;
+    var menuAccel = isMobile ? 0.05 : 0.15;
+    var menuFriction = isMobile ? 0.22 : 0.1;
+    var menuMaxSpeed = isMobile ? 2.4 : 8;
     if (player.isMovingLeft) { player.x += player.vx; player.vx -= menuAccel; } else { player.x += player.vx; if (player.vx < 0) player.vx += menuFriction; }
     if (player.isMovingRight) { player.x += player.vx; player.vx += menuAccel; } else { player.x += player.vx; if (player.vx > 0) player.vx -= menuFriction; }
     if (player.vx > menuMaxSpeed) player.vx = menuMaxSpeed; else if (player.vx < -menuMaxSpeed) player.vx = -menuMaxSpeed;
@@ -921,5 +950,26 @@
   setupKeyboardControls();
 })();
   </script>
+  <style>
+    @media (max-width: 767px) {
+      html, body { width: 100vw; height: 100vh; overflow: hidden; }
+      .wrap {
+        width: 100vw;
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0;
+        gap: 0;
+      }
+      .game-wrap, .container, #canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+        min-height: 100vh;
+      }
+      .container { border-radius: 0; }
+      .leaderboard { display: none !important; }
+      #scoreBoard { display: none !important; }
+      #mainMenu, #gameOverMenu { border-radius: 0; }
+    }
+  </style>
 </body>
 </html>
