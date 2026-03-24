@@ -4,7 +4,7 @@ import heroImg from "@/assets/hero-bar.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const navigate = useNavigate();
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -39,7 +39,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          COSMIC CAFE
+          {lang === "fr" ? "VOTRE ORBITE NOCTURNE" : "YOUR NIGHT ORBIT"}
         </motion.h1>
 
         <motion.p
