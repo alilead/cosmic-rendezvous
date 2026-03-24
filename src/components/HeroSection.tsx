@@ -34,7 +34,7 @@ const HeroSection = () => {
         </motion.div>
 
         <motion.h1
-          className="font-display text-2xl min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.05em] sm:tracking-[0.1em] mb-4 neon-glow-pink whitespace-nowrap overflow-visible px-2"
+          className="font-display text-xl min-[400px]:text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[0.04em] sm:tracking-[0.08em] mb-4 neon-glow-pink text-center max-w-3xl mx-auto px-2"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
