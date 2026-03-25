@@ -2,23 +2,39 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Photos from /photo folder (copied to public/photo)
+// Photos in public/photo (includes cosmic photos from Downloads\cosmic photos)
 const GALLERY_PHOTOS = [
+  "WhatsApp Image 2026-03-25 at 16.42.39 (1).jpeg",
+  "WhatsApp Image 2026-03-25 at 16.42.40.jpeg",
+  "WhatsApp Image 2026-03-25 at 16.42.41 (1).jpeg",
+  "WhatsApp Image 2026-03-25 at 16.42.41 (2).jpeg",
+  "WhatsApp Image 2026-03-25 at 16.42.41.jpeg",
+  "WhatsApp Image 2026-03-25 at 16.42.50.jpeg",
+  "cosmic.jpeg",
   "section.jpeg",
   "WhatsApp Image 2026-03-05 at 18.49.44.jpeg",
   "WhatsApp Image 2026-03-05 at 18.49.45.jpeg",
   "WhatsApp Image 2026-03-05 at 18.49.46.jpeg",
   "WhatsApp Image 2026-03-05 at 18.49.47.jpeg",
+  "WhatsApp Image 2026-03-05 at 18.49.48.jpeg",
 ];
+
+const ALT_KEYS = [
+  "galleryAlt1",
+  "galleryAlt2",
+  "galleryAlt3",
+  "galleryAlt4",
+  "galleryAlt5",
+  "galleryAlt6",
+] as const;
 
 const GallerySection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useLanguage();
-  const galleryAlts = [t("galleryAlt5"), t("galleryAlt2"), t("galleryAlt6"), t("galleryAlt3"), t("galleryAlt4")];
   const images = GALLERY_PHOTOS.map((file, i) => ({
     src: `/photo/${encodeURIComponent(file)}`,
-    alt: galleryAlts[i] ?? t("galleryTitle"),
+    alt: t(ALT_KEYS[i % ALT_KEYS.length]),
   }));
 
   return (
