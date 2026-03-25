@@ -11,7 +11,7 @@ const ContactSection = () => {
     { icon: MapPin, labelKey: "contactLocation" as const, href: "https://www.google.com/maps/search/genève+cosmic+bar" },
     { icon: Phone, labelKey: "contactPhone" as const, href: "tel:+41795247754" },
     { icon: Instagram, labelKey: "contactInstagram" as const, href: "https://www.instagram.com/cosmic_cafe_gva/" },
-    { icon: Mail, labelKey: "contactEmail" as const, href: "mailto:info@cosmicrendezvous.ch" },
+    { icon: Mail, labelKey: "contactEmail" as const, href: "mailto:info@cosmic-cafe.ch" },
   ];
 
   return (
@@ -49,7 +49,7 @@ const ContactSection = () => {
           </div>
 
           <motion.a
-            href="mailto:info@cosmicrendezvous.ch"
+            href="mailto:info@cosmic-cafe.ch"
             className="inline-block min-h-[44px] min-w-[44px] px-12 py-4 font-display text-sm tracking-[0.2em] uppercase border border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 active:bg-primary/50 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}

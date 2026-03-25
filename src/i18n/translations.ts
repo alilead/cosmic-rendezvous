@@ -82,7 +82,7 @@ export const translations = {
     contactLocation: "Genève, Suisse",
     contactPhone: "+41 79 524 77 54",
     contactInstagram: "@cosmic_cafe_gva",
-    contactEmail: "info@cosmicrendezvous.ch",
+    contactEmail: "info@cosmic-cafe.ch",
     contactCta: "Entrer dans la nuit cosmique",
     footer: "© 2025 COSMIC CAFE — GENÈVE",
 
@@ -215,7 +215,7 @@ export const translations = {
     contactLocation: "Geneva, Switzerland",
     contactPhone: "+41 79 524 77 54",
     contactInstagram: "@cosmic_cafe_gva",
-    contactEmail: "info@cosmicrendezvous.ch",
+    contactEmail: "info@cosmic-cafe.ch",
     contactCta: "Step into the cosmic night",
     footer: "© 2025 COSMIC CAFE — GENEVA",
 

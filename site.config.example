@@ -2,10 +2,10 @@
 # Copy to .env.local and fill for deployment (e.g. Infomaniak).
 
 # Contact email (used in ContactSection and mailto links)
-VITE_CONTACT_EMAIL=info@cosmicrendezvous.ch
+VITE_CONTACT_EMAIL=info@cosmic-cafe.ch
 
 # Site URL (for OG tags, canonical, etc.)
-VITE_SITE_URL=https://www.cosmicrendezvous.ch
+VITE_SITE_URL=https://www.cosmic-cafe.ch
 
 # Optional: only if the SPA is NOT on Netlify but functions are (booking / leaderboard / admin).
 # VITE_FUNCTIONS_ORIGIN=https://cosmic-bar.netlify.app

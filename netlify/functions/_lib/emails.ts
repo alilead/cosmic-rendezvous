@@ -70,7 +70,7 @@ export function guestRequestReceivedHtml(data: BookingEmailData): string {
   ${data.message ? `<tr><td colspan="2" style="padding-top:12px;border-top:1px solid #333;font-size:13px;color:${cyan};">Message</td></tr><tr><td colspan="2" style="font-size:14px;color:#e0e0e0;">${data.message}</td></tr>` : ""}
   </table>
 </td></tr>
-<tr><td style="padding:24px;text-align:center;font-size:13px;color:#666;">Genève · <a href="tel:+41795247754" style="color:${pink};">+41 79 524 77 54</a> · <a href="mailto:info@cosmicrendezvous.ch" style="color:${pink};">info@cosmicrendezvous.ch</a></td></tr>
+<tr><td style="padding:24px;text-align:center;font-size:13px;color:#666;">Genève · <a href="tel:+41795247754" style="color:${pink};">+41 79 524 77 54</a> · <a href="mailto:info@cosmic-cafe.ch" style="color:${pink};">info@cosmic-cafe.ch</a></td></tr>
 </table></td></tr></table></body></html>`;
 }
 
