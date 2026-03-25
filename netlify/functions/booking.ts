@@ -108,37 +108,52 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
       };
     }
 
-    let emailSent = true;
+    let guestEmailSent = false;
+    let barEmailSent = false;
     try {
-      const { error: sendErr } = await resend.emails.send({
+      const { error: guestErr } = await resend.emails.send({
         from: FROM,
         to: [email],
-        bcc: [BAR_EMAIL],
         subject: `Rendez-vous location – Cosmic Cafe – ${name}`,
         html: guestRequestReceivedHtml(emailData),
       });
-      if (sendErr) {
-        console.error("[booking] Guest email failed:", sendErr);
-        emailSent = false;
-      }
-      if (emailSent) {
-        const { error: barErr } = await resend.emails.send({
-          from: FROM,
-          to: [BAR_EMAIL],
-          subject: `[Cosmic] Nouveau rendez-vous location : ${name} – ${date} ${time}`,
-          html: barNotificationHtml(emailData),
-        });
-        if (barErr) console.error("[booking] Bar notification email failed:", barErr);
+      if (guestErr) {
+        console.error("[booking] Guest email failed:", guestErr);
+      } else {
+        guestEmailSent = true;
       }
     } catch (emailError) {
-      console.error("[booking] Email send threw:", emailError);
-      emailSent = false;
+      console.error("[booking] Guest email threw:", emailError);
     }
+
+    try {
+      const { error: barErr } = await resend.emails.send({
+        from: FROM,
+        to: [BAR_EMAIL],
+        subject: `[Cosmic] Nouveau rendez-vous location : ${name} – ${date} ${time}`,
+        html: barNotificationHtml(emailData),
+      });
+      if (barErr) {
+        console.error("[booking] Bar notification email failed:", barErr);
+      } else {
+        barEmailSent = true;
+      }
+    } catch (barEmailError) {
+      console.error("[booking] Bar email threw:", barEmailError);
+    }
+
+    const emailSent = guestEmailSent;
 
     return {
       statusCode: 200,
       headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({ success: true, confirmed: false, emailSent }),
+      body: JSON.stringify({
+        success: true,
+        confirmed: false,
+        emailSent,
+        guestEmailSent,
+        barEmailSent,
+      }),
     };
   } catch (err) {
     console.error("[booking] Error:", err);

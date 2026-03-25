@@ -107,6 +107,10 @@ export default {
           "80%": { transform: "translate(2px, -2px)" },
           "100%": { transform: "translate(0)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -116,6 +120,7 @@ export default {
         "twinkle": "twinkle 3s ease-in-out infinite",
         "neon-flicker": "neon-flicker 2s linear infinite",
         "glitch": "glitch 0.3s ease-in-out",
+        marquee: "marquee 50s linear infinite",
       },
     },
   },

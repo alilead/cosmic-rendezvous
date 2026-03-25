@@ -1,35 +1,72 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Gamepad2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { isFreeDrinkPromotionActive } from "@/lib/freeDrinkPromotion";
 
-export default function FreeDrinkBanner() {
+function MarqueeSegment({
+  active,
+  ariaHidden,
+}: {
+  active: boolean;
+  ariaHidden?: boolean;
+}) {
   const { t } = useLanguage();
-  const active = isFreeDrinkPromotionActive();
-
   return (
     <div
-      className={`relative z-30 border-b px-4 py-3 text-center transition-colors ${
-        active
-          ? "border-primary/40 bg-primary/10"
-          : "border-border/80 bg-muted/30"
-      }`}
+      className="flex shrink-0 items-center gap-3 px-6 py-2 text-sm md:text-base"
+      aria-hidden={ariaHidden}
     >
-      <p className="text-sm md:text-base font-body text-foreground max-w-3xl mx-auto leading-snug">
-        <span className="inline-flex items-center justify-center gap-2 align-middle">
-          <Gamepad2 className="w-4 h-4 shrink-0 text-primary" aria-hidden />
-          <span className="font-display tracking-wide text-primary">{t("freeDrinkBannerTitle")}</span>
-        </span>
-        <span className="block mt-1 text-muted-foreground">
-          {active ? t("freeDrinkBannerBodyActive") : t("freeDrinkBannerBodyInactive")}
-        </span>
-      </p>
+      <Gamepad2 className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+      <span className="whitespace-nowrap font-display tracking-wide text-primary">{t("freeDrinkBannerTitle")}</span>
+      <span className="text-muted-foreground">·</span>
+      <span className="whitespace-nowrap text-muted-foreground">
+        {active ? t("freeDrinkBannerBodyActive") : t("freeDrinkBannerBodyInactive")}
+      </span>
+      <span className="text-muted-foreground">·</span>
       <Link
         to="/game"
-        className="inline-block mt-2 font-display text-xs md:text-sm tracking-[0.15em] uppercase text-secondary hover:text-primary underline underline-offset-4"
+        className="whitespace-nowrap font-display text-xs uppercase tracking-[0.15em] text-secondary underline-offset-4 hover:text-primary hover:underline"
       >
         {t("freeDrinkBannerCta")}
       </Link>
+      <span className="px-4 text-primary/40" aria-hidden>
+        ◆
+      </span>
+    </div>
+  );
+}
+
+export default function FreeDrinkBanner() {
+  const active = isFreeDrinkPromotionActive();
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return (
+    <div
+      className={`relative z-30 overflow-hidden border-b ${
+        active ? "border-primary/40 bg-primary/10" : "border-border/80 bg-muted/30"
+      }`}
+    >
+      {reduceMotion ? (
+        <div className="flex justify-center py-1">
+          <MarqueeSegment active={active} />
+        </div>
+      ) : (
+        <div className="overflow-hidden">
+          <div className="flex w-max animate-marquee">
+            <MarqueeSegment active={active} />
+            <MarqueeSegment active={active} ariaHidden />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
