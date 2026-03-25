@@ -20,7 +20,7 @@ const Index = () => {
       </AnimatePresence>
 
       {!showIntro && (
-        <div className="bg-background w-full min-w-0 overflow-x-hidden max-w-[100vw] pt-14 md:pt-16">
+        <div className="bg-background w-full min-w-0 overflow-x-hidden max-w-[100vw] pt-16 sm:pt-[4.25rem] md:pt-[4.5rem] lg:pt-20 xl:pt-[5.5rem]">
           <Navbar />
           <FreeDrinkBanner />
           <HeroSection />

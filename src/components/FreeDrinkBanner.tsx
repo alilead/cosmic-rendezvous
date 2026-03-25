@@ -60,8 +60,8 @@ export default function FreeDrinkBanner() {
           <MarqueeSegment active={active} />
         </div>
       ) : (
-        <div className="overflow-hidden">
-          <div className="flex w-max animate-marquee">
+        <div className="flex min-h-[2.75rem] items-center overflow-hidden">
+          <div className="flex w-max animate-marquee items-center">
             <MarqueeSegment active={active} />
             <MarqueeSegment active={active} ariaHidden />
           </div>
