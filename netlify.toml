@@ -3,7 +3,14 @@
   publish = "dist"
   functions = "netlify/functions"
 
-# SPA: serve index.html for all routes (API is under /.netlify/functions/)
+# API proxy MUST come before the SPA catch-all, or POSTs to functions can be
+# rewritten to index.html and return 405 Method Not Allowed.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA: serve index.html for client routes only
 [[redirects]]
   from = "/*"
   to = "/index.html"

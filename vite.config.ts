@@ -12,6 +12,14 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      // With `npx netlify dev` (default :8888), map /api/* → functions like production
+      "/api": {
+        target: process.env.VITE_NETLIFY_DEV_URL || "http://127.0.0.1:8888",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/.netlify/functions"),
+      },
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

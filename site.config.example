@@ -6,3 +6,6 @@ VITE_CONTACT_EMAIL=info@cosmicrendezvous.ch
 
 # Site URL (for OG tags, canonical, etc.)
 VITE_SITE_URL=https://www.cosmicrendezvous.ch
+
+# Optional: only if the SPA is NOT on Netlify but functions are (booking / leaderboard / admin).
+# VITE_FUNCTIONS_ORIGIN=https://cosmic-bar.netlify.app

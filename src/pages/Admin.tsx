@@ -14,9 +14,11 @@ import {
 } from "@/components/ui/select";
 import { Loader2, LogOut, RefreshCw, Download, Search } from "lucide-react";
 import { toast } from "sonner";
+import { netlifyFunctionUrl } from "@/lib/netlifyApi";
 
 const ADMIN_KEY_STORAGE = "cosmic_admin_key";
-const API_ADMIN_BOOKINGS = "/.netlify/functions/admin-bookings";
+
+const API_ADMIN_BOOKINGS = netlifyFunctionUrl("admin-bookings");
 
 type Booking = {
   id: string;

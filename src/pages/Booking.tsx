@@ -19,6 +19,7 @@ import {
 import { Calendar, Clock, Users, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import rentalImg from "@/assets/space-rental.jpg";
+import { netlifyFunctionUrl } from "@/lib/netlifyApi";
 
 const EVENT_TYPE_VALUES = ["birthday", "private_party", "corporate", "dj_night", "other"] as const;
 
@@ -37,7 +38,7 @@ function buildBookingSchema(t: (key: string) => string) {
 
 type BookingForm = z.infer<ReturnType<typeof buildBookingSchema>>;
 
-const API_BOOKING = "/.netlify/functions/booking";
+const API_BOOKING = netlifyFunctionUrl("booking");
 
 export default function Booking() {
   const { t } = useLanguage();

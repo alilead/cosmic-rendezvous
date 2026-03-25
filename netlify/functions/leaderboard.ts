@@ -1,5 +1,10 @@
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
+import { Resend } from "resend";
 import { getSupabase, GAME_SCORES_TABLE } from "./_lib/supabase";
+import { dailyHighBarHtml, dailyHighPlayerHtml } from "./_lib/emails";
+
+const FROM = "Cosmic Cafe <info@cosmic-cafe.ch>";
+const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
 
 const TOP_N = 10;
 const MAX_NAME_LENGTH = 20;
@@ -64,6 +69,21 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid score" }) };
       }
 
+      const startOfUtcDay = new Date();
+      startOfUtcDay.setUTCHours(0, 0, 0, 0);
+      const endOfUtcDay = new Date(startOfUtcDay);
+      endOfUtcDay.setUTCDate(endOfUtcDay.getUTCDate() + 1);
+
+      const { data: todayRows, error: dayErr } = await supabase
+        .from(GAME_SCORES_TABLE)
+        .select("score")
+        .gte("created_at", startOfUtcDay.toISOString())
+        .lt("created_at", endOfUtcDay.toISOString());
+
+      if (dayErr) console.warn("[leaderboard] today scores query:", dayErr);
+      const prevMax =
+        todayRows && todayRows.length > 0 ? Math.max(...todayRows.map((r) => r.score)) : null;
+
       function missingEmailColumn(err: { message?: string } | null): boolean {
         const m = (err?.message ?? "").toLowerCase();
         if (!m.includes("email")) return false;
@@ -98,6 +118,33 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         console.error("[leaderboard] insert error:", error);
         return { statusCode: 500, headers, body: JSON.stringify({ error: "Failed to submit score" }) };
       }
+
+      const isNewDailyHigh = prevMax === null || scoreVal > prevMax;
+      const resendKey = process.env.RESEND_API_KEY;
+      if (isNewDailyHigh && resendKey) {
+        try {
+          const resend = new Resend(resendKey);
+          if (emailVal) {
+            const { error: e1 } = await resend.emails.send({
+              from: FROM,
+              to: [emailVal],
+              subject: `Cosmic Cafe — Top score du jour (${scoreVal} pts)`,
+              html: dailyHighPlayerHtml({ playerName, score: scoreVal }),
+            });
+            if (e1) console.error("[leaderboard] player email:", e1);
+          }
+          const { error: e2 } = await resend.emails.send({
+            from: FROM,
+            to: [BAR_EMAIL],
+            subject: `[Alien Jump] Record du jour : ${playerName.replace(/[\r\n]/g, " ").slice(0, 40)} — ${scoreVal} pts`,
+            html: dailyHighBarHtml({ playerName, score: scoreVal, email: emailVal || null }),
+          });
+          if (e2) console.error("[leaderboard] bar email:", e2);
+        } catch (err) {
+          console.error("[leaderboard] Resend error:", err);
+        }
+      }
+
       return { statusCode: 200, headers, body: JSON.stringify({ score: data }) };
     }
   } catch (err) {
