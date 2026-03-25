@@ -43,15 +43,15 @@ export const translations = {
 
     freeDrinkBannerTitle: "Défi Alien Jump — boisson offerte",
     freeDrinkBannerBodyActive:
-      "Le meilleur score du jour gagne une boisson offerte — du lundi au samedi, après 12h30 (heure de Genève).",
+      "Top 3 des scores du jour : boisson offerte — lun–sam après 12h30 (Genève). Suivez-nous sur Instagram, newsletter, puis email au classement.",
     freeDrinkBannerBodyInactive:
-      "Le défi « meilleur score du jour » est actif du lundi au samedi, après 12h30 (Genève). Revenez pendant ces créneaux !",
+      "Récompense top 3 du jour (lun–sam après 12h30, Genève). Revenez pendant les heures prévues !",
     freeDrinkBannerCta: "Jouer au jeu",
 
     gamePromoActive:
-      "Meilleur score du jour = boisson offerte (lun–sam après 12h30, heure de Genève). Indiquez votre email à la fin de partie.",
+      "Top 3 du jour = boisson offerte (lun–sam après 12h30, Genève). À la fin : Instagram + newsletter + email pour valider le score.",
     gamePromoInactive:
-      "Boisson pour le meilleur score du jour : lun–sam après 12h30 (Genève). En dehors de ces heures, le classement reste ouvert sans récompense.",
+      "Boisson pour le top 3 du jour : lun–sam après 12h30 (Genève). Hors créneau, le classement reste ouvert sans récompense.",
 
     // Menu
     menuTitle: "LA CARTE",
@@ -179,15 +179,15 @@ export const translations = {
 
     freeDrinkBannerTitle: "Alien Jump challenge — free drink",
     freeDrinkBannerBodyActive:
-      "Today's top score wins a free drink — Monday to Saturday, after 12:30 (Geneva time).",
+      "Today’s top 3 scores win a free drink — Mon–Sat after 12:30 (Geneva). Follow on Instagram, subscribe to news, then submit your email.",
     freeDrinkBannerBodyInactive:
-      "The “top score of the day” reward runs Monday–Saturday after 12:30 (Geneva). Come back during those hours!",
+      "Top-3 daily reward runs Mon–Sat after 12:30 (Geneva). Come back during those hours!",
     freeDrinkBannerCta: "Play the game",
 
     gamePromoActive:
-      "Top score of the day = free drink (Mon–Sat after 12:30 Geneva time). Add your email on the game-over screen.",
+      "Daily top 3 = free drink (Mon–Sat after 12:30 Geneva). At game over: Instagram + newsletter + email to submit your score.",
     gamePromoInactive:
-      "Free drink for the daily top score: Mon–Sat after 12:30 (Geneva). Outside those hours the leaderboard is open without the reward.",
+      "Free drink for the daily top 3: Mon–Sat after 12:30 (Geneva). Outside those hours the leaderboard is open without the reward.",
 
     menuTitle: "THE MENU",
     menuSubtitle: "Elixirs from another world",

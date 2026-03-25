@@ -89,39 +89,42 @@ ${data.message ? `<li><strong>Message:</strong> ${data.message}</li>` : ""}
 </ul>`;
 }
 
-/** Player: new daily high score on Alien Jump (optional reward at the bar). */
-export function dailyHighPlayerHtml(data: { playerName: string; score: number }): string {
+/** Player: ranked in today’s top 3 on Alien Jump (reward at the bar during promo hours). */
+export function dailyTopThreePlayerHtml(data: { playerName: string; score: number; rank: number }): string {
   const name = escapeHtml(data.playerName);
   const pink = "#e91e8c";
   const cyan = "#00e5ff";
+  const rankLabel = data.rank === 1 ? "1er" : data.rank === 2 ? "2e" : "3e";
   return `
 <!DOCTYPE html><html lang="fr"><body style="margin:0;padding:0;background:#0a0a0f;font-family:system-ui,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0f;"><tr><td align="center" style="padding:32px 16px;">
 <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#111;border:1px solid ${pink};">
 <tr><td style="padding:32px 24px;text-align:center;">
   <p style="margin:0;font-size:11px;letter-spacing:4px;color:${cyan};">Alien Jump · Cosmic Cafe</p>
-  <h1 style="margin:8px 0 0;font-size:24px;letter-spacing:3px;color:${pink};">Top score du jour !</h1>
+  <h1 style="margin:8px 0 0;font-size:24px;letter-spacing:3px;color:${pink};">Top 3 du jour — ${rankLabel} place</h1>
 </td></tr>
 <tr><td style="padding:0 24px 24px;">
   <p style="margin:0;font-size:16px;color:#e0e0e0;">Bravo ${name},</p>
-  <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#b0b0b0;">Tu viens d’établir le <strong style="color:#fff;">meilleur score du jour</strong> avec <strong style="color:${cyan};">${data.score}</strong> points.</p>
+  <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#b0b0b0;">Tu fais partie du <strong style="color:#fff;">top 3 des scores du jour</strong> (${rankLabel}) avec <strong style="color:${cyan};">${data.score}</strong> points.</p>
   <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#b0b0b0;">Présente cet email au bar : <strong style="color:#fff;">une boisson offerte</strong> t’attend (selon disponibilité, sur présentation de ce message).</p>
 </td></tr>
 <tr><td style="padding:24px;text-align:center;font-size:13px;color:#666;">Cosmic Cafe · Genève</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
-/** Bar: notify team that someone beat today’s high score (free drink). */
-export function dailyHighBarHtml(data: {
+/** Bar: top-3 daily finisher (free drink). */
+export function dailyTopThreeBarHtml(data: {
   playerName: string;
   score: number;
+  rank: number;
   email: string | null;
 }): string {
   const name = escapeHtml(data.playerName);
   const em = data.email ? escapeHtml(data.email) : "—";
-  return `<p><strong>Alien Jump — nouveau record du jour</strong></p>
+  return `<p><strong>Alien Jump — Top 3 du jour (#${data.rank})</strong></p>
 <ul>
 <li><strong>Joueur:</strong> ${name}</li>
+<li><strong>Rang du jour:</strong> ${data.rank}</li>
 <li><strong>Score:</strong> ${data.score}</li>
 <li><strong>Email:</strong> ${em}</li>
 </ul>

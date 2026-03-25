@@ -205,6 +205,14 @@
       width: 14px; height: 14px;
     }
     .consent-row a { color: inherit; text-decoration: underline; }
+    .ig-link {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; max-width: 280px; margin: 0 auto 10px; padding: 10px 12px;
+      border-radius: 8px; border: 1px solid rgba(233,30,140,0.45);
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff; font-size: 13px; font-weight: 600; text-decoration: none;
+    }
+    .ig-link:hover { filter: brightness(1.08); }
   </style>
 </head>
 <body>
@@ -223,7 +231,17 @@
           <h3 id="go_score" class="menu-sub">You scored 0 points</h3>
           <div id="submitScoreBox" class="submit-score" style="display:none;">
             <input type="text" id="playerName" placeholder="Your name" maxlength="20" tabindex="0" autocomplete="name" />
-            <input type="email" id="playerEmail" placeholder="Your email (optional)" maxlength="100" tabindex="0" autocomplete="email" />
+            <p style="font-size:11px;color:#aaa;margin:8px 0 6px;text-align:center;">Top 3 daily prizes · Follow us, subscribe to news, then email</p>
+            <a class="ig-link" id="igOpenLink" href="https://www.instagram.com/cosmiccafe.geneva/" target="_blank" rel="noopener noreferrer">Open Instagram · @cosmiccafe.geneva</a>
+            <label class="consent-row" for="igFollow">
+              <input type="checkbox" id="igFollow" tabindex="0" />
+              <span>I follow Cosmic Cafe on Instagram</span>
+            </label>
+            <label class="consent-row" for="newsletterSub">
+              <input type="checkbox" id="newsletterSub" tabindex="0" />
+              <span>I subscribe to the newsletter (scoreboard &amp; updates)</span>
+            </label>
+            <input type="email" id="playerEmail" placeholder="Your email (required)" maxlength="100" tabindex="0" autocomplete="email" />
             <label class="consent-row" for="privacyConsent">
               <input type="checkbox" id="privacyConsent" tabindex="0" />
               <span>
@@ -946,11 +964,25 @@
     var nameEl = document.getElementById('playerName');
     var emailEl = document.getElementById('playerEmail');
     var consentEl = document.getElementById('privacyConsent');
+    var igFollow = document.getElementById('igFollow');
+    var newsletterSub = document.getElementById('newsletterSub');
     var msgEl = document.getElementById('submitMsg');
     var btn = this;
     var name = (nameEl && nameEl.value.trim()) || 'Alien';
     var email = (emailEl && emailEl.value.trim()) || '';
     var consentGiven = hasSitePrivacyConsent() || !!(consentEl && consentEl.checked);
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (msgEl) msgEl.innerHTML = 'Please enter a valid email for the scoreboard and newsletter.';
+      return;
+    }
+    if (!igFollow || !igFollow.checked) {
+      if (msgEl) msgEl.innerHTML = 'Please confirm you follow us on Instagram.';
+      return;
+    }
+    if (!newsletterSub || !newsletterSub.checked) {
+      if (msgEl) msgEl.innerHTML = 'Please confirm newsletter subscription.';
+      return;
+    }
     if (!consentGiven) {
       if (msgEl) msgEl.innerHTML = 'Please accept the Privacy Policy before submitting.';
       return;
@@ -960,16 +992,24 @@
     fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ player_name: name.slice(0, 20), score: score, email: email })
+      body: JSON.stringify({
+        player_name: name.slice(0, 20),
+        score: score,
+        email: email,
+        instagram_followed: true,
+        newsletter_opt_in: true
+      })
     }).then(function(r) {
-      if (!r.ok) throw new Error('Leaderboard POST failed');
-      return r.json();
+      return r.json().then(function(j) {
+        if (!r.ok) throw new Error((j && j.error) || 'Leaderboard POST failed');
+        return j;
+      });
     }).then(function(data) {
       if (msgEl) msgEl.innerHTML = 'Score submitted!';
       fetchLeaderboard();
       btn.disabled = false;
-    }).catch(function() {
-      if (msgEl) msgEl.innerHTML = 'Failed to submit.';
+    }).catch(function(err) {
+      if (msgEl) msgEl.innerHTML = (err && err.message) ? String(err.message) : 'Failed to submit.';
       btn.disabled = false;
     });
   });

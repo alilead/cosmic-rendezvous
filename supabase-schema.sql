@@ -36,6 +36,10 @@ create table if not exists public.game_scores (
 
 create index if not exists idx_game_scores_score on public.game_scores (score desc);
 
+-- Optional: set via leaderboard POST (Alien Jump prize flow)
+alter table public.game_scores add column if not exists instagram_followed boolean;
+alter table public.game_scores add column if not exists newsletter_opt_in boolean;
+
 alter table public.game_scores enable row level security;
 
 drop policy if exists "Service role only" on public.game_scores;
