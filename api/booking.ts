@@ -1,4 +1,4 @@
 import { netlifyHandlerToVercel } from "./_vercelAdapter";
-import { handler } from "../netlify/functions/booking";
+import { handler } from "../server/booking";
 
 export default netlifyHandlerToVercel(handler);

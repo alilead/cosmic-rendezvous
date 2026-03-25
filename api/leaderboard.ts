@@ -1,4 +1,4 @@
 import { netlifyHandlerToVercel } from "./_vercelAdapter";
-import { handler } from "../netlify/functions/leaderboard";
+import { handler } from "../server/leaderboard";
 
 export default netlifyHandlerToVercel(handler);

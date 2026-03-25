@@ -29,11 +29,19 @@ export function netlifyHandlerToVercel(handler: Handler) {
       headers: flattenHeaders(req.headers),
     } as HandlerEvent;
 
-    const result = await handler(event, {} as never);
-    const h = result.headers ?? {};
-    for (const [key, val] of Object.entries(h)) {
-      if (val !== undefined) res.setHeader(key, String(val));
+    try {
+      const result = await handler(event, {} as never);
+      const h = result.headers ?? {};
+      for (const [key, val] of Object.entries(h)) {
+        if (val !== undefined) res.setHeader(key, String(val));
+      }
+      res.status(result.statusCode).send(result.body ?? "");
+    } catch (e) {
+      console.error("[api] handler error:", e);
+      res
+        .status(500)
+        .setHeader("Content-Type", "application/json")
+        .send(JSON.stringify({ error: "Internal server error" }));
     }
-    res.status(result.statusCode).send(result.body ?? "");
   };
 }
