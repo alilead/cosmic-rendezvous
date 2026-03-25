@@ -32,7 +32,7 @@ export const translations = {
     // Rental
     rentalTitle: "LOUEZ L'ESPACE",
     rentalDesc:
-      "Rencontrez l'équipe pour parler location de l'espace : téléphone, au bar ou en visio. Nous convenons ensemble de votre projet.",
+      "Rencontrez l'équipe pour parler location de l'espace ou d'un événement : sur place, par téléphone ou en visio. Disponibilités pour ces rendez-vous : lun–sam à partir de midi (12h). Nous convenons ensemble de votre projet.",
     rentalFeature1: "Fêtes privées & Corporates",
     rentalFeature2: "Système son professionnel",
     rentalFeature3: "Éclairage néon immersif",
@@ -43,15 +43,15 @@ export const translations = {
 
     freeDrinkBannerTitle: "Défi Alien Jump — boisson offerte",
     freeDrinkBannerBodyActive:
-      "Top 3 des scores du jour : boisson offerte — lun–sam après 12h30 (Genève). Suivez-nous sur Instagram, newsletter, puis email au classement.",
+      "Top 3 des scores du jour : boisson offerte 24h/24, 7j/7. Suivez-nous sur Instagram, newsletter, puis email au classement.",
     freeDrinkBannerBodyInactive:
-      "Récompense top 3 du jour (lun–sam après 12h30, Genève). Revenez pendant les heures prévues !",
+      "Top 3 du jour : boisson offerte 24h/24, 7j/7. Suivez-nous sur Instagram, newsletter, puis email au classement.",
     freeDrinkBannerCta: "Jouer au jeu",
 
     gamePromoActive:
-      "Top 3 du jour = boisson offerte (lun–sam après 12h30, Genève). À la fin : Instagram + newsletter + email pour valider le score.",
+      "Top 3 du jour = boisson offerte 24h/24. À la fin : Instagram + newsletter + email pour valider le score.",
     gamePromoInactive:
-      "Boisson pour le top 3 du jour : lun–sam après 12h30 (Genève). Hors créneau, le classement reste ouvert sans récompense.",
+      "Top 3 du jour = boisson offerte 24h/24. À la fin : Instagram + newsletter + email pour valider le score.",
 
     // Menu
     menuTitle: "LA CARTE",
@@ -95,7 +95,7 @@ export const translations = {
     // Booking (meet team — venue rental discussion)
     bookingTitle: "Rencontrer l'équipe",
     bookingSubtitle:
-      "Prenez rendez-vous pour discuter de la location de l'espace (équipe, entreprise, projet). Téléphone, au bar ou en visio. Nous vous recontacterons pour convenir d'un créneau.",
+      "Prenez rendez-vous pour discuter de la location de l'espace (équipe, entreprise, projet) : en face à face, par téléphone ou en visio. Créneaux de disponibilité pour ces échanges : lun–sam à partir de midi (12h). Nous vous recontacterons pour convenir d'un créneau.",
     bookingYourInfo: "Vos informations",
     bookingEventDetails: "Votre rendez-vous",
     bookingName: "Nom",
@@ -111,7 +111,7 @@ export const translations = {
     bookingSuccessToast: "Demande envoyée",
     bookingRequestReceivedTitle: "Demande reçue",
     bookingRequestReceivedDesc:
-      "Nous avons bien reçu votre demande de rendez-vous. Nous vous recontacterons pour organiser un échange (téléphone, sur place ou visio) et parler de la location.",
+      "Nous avons bien reçu votre demande de rendez-vous. Nous vous recontacterons pour organiser un échange (sur place, téléphone ou visio) dans les créneaux habituels — lun–sam à partir de midi — et parler de la location.",
     bookingEmailNotSentNote: "Nous n'avons pas pu envoyer l'email de confirmation, mais votre demande est bien enregistrée. Contactez-nous si besoin.",
     bookingContactQuestion: "Une question ?",
     bookingMakeAnother: "Faire une autre demande",
@@ -168,7 +168,7 @@ export const translations = {
 
     rentalTitle: "RENT THE SPACE",
     rentalDesc:
-      "Meet our team to discuss hiring the venue — by phone, in person, or video. We'll align on your project together.",
+      "Meet our team to discuss venue rental or your event — in person, by phone, or video. Meeting slots for these conversations: Mon–Sat from noon (12:00). We'll align on your project together.",
     rentalFeature1: "Private & corporate parties",
     rentalFeature2: "Professional sound system",
     rentalFeature3: "Immersive neon lighting",
@@ -179,15 +179,15 @@ export const translations = {
 
     freeDrinkBannerTitle: "Alien Jump challenge — free drink",
     freeDrinkBannerBodyActive:
-      "Today’s top 3 scores win a free drink — Mon–Sat after 12:30 (Geneva). Follow on Instagram, subscribe to news, then submit your email.",
+      "Today’s top 3 scores win a free drink — 24/7. Follow on Instagram, subscribe to news, then submit your email.",
     freeDrinkBannerBodyInactive:
-      "Top-3 daily reward runs Mon–Sat after 12:30 (Geneva). Come back during those hours!",
+      "Top 3 of the day get a free drink — 24/7. Follow on Instagram, subscribe to news, then submit your email.",
     freeDrinkBannerCta: "Play the game",
 
     gamePromoActive:
-      "Daily top 3 = free drink (Mon–Sat after 12:30 Geneva). At game over: Instagram + newsletter + email to submit your score.",
+      "Daily top 3 = free drink, 24/7. At game over: Instagram + newsletter + email to submit your score.",
     gamePromoInactive:
-      "Free drink for the daily top 3: Mon–Sat after 12:30 (Geneva). Outside those hours the leaderboard is open without the reward.",
+      "Daily top 3 = free drink, 24/7. At game over: Instagram + newsletter + email to submit your score.",
 
     menuTitle: "THE MENU",
     menuSubtitle: "Elixirs from another world",
@@ -227,7 +227,7 @@ export const translations = {
     // Booking (meet team — venue rental discussion)
     bookingTitle: "Meet the team",
     bookingSubtitle:
-      "Request a meeting to discuss venue rental (team or project). Phone, at the bar, or video. We'll get back to you to schedule.",
+      "Request a meeting about venue rental (team or project): face to face, phone, or video. Availability for these meetings: Mon–Sat from noon (12:00). We'll get back to you to schedule.",
     bookingYourInfo: "Your information",
     bookingEventDetails: "Your meeting",
     bookingName: "Name",
@@ -243,7 +243,7 @@ export const translations = {
     bookingSuccessToast: "Request sent",
     bookingRequestReceivedTitle: "Request received",
     bookingRequestReceivedDesc:
-      "We've received your meeting request. We'll contact you to arrange a call, visit, or video chat about venue rental.",
+      "We've received your meeting request. We'll contact you to arrange a call, visit, or video chat about venue rental — typically Mon–Sat from noon onward.",
     bookingEmailNotSentNote: "We couldn't send a confirmation email, but your request is saved. Contact us to confirm if needed.",
     bookingContactQuestion: "Any questions?",
     bookingMakeAnother: "Make another request",

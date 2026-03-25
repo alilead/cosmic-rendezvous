@@ -89,7 +89,7 @@ ${data.message ? `<li><strong>Message:</strong> ${data.message}</li>` : ""}
 </ul>`;
 }
 
-/** Player: ranked in today’s top 3 on Alien Jump (reward at the bar during promo hours). */
+/** Player: ranked in today’s top 3 on Alien Jump (free drink; promo is 24/7). */
 export function dailyTopThreePlayerHtml(data: { playerName: string; score: number; rank: number }): string {
   const name = escapeHtml(data.playerName);
   const pink = "#e91e8c";
