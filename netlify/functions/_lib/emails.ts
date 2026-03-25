@@ -1,9 +1,12 @@
 const EVENT_TYPE_LABELS: Record<string, string> = {
+  meeting_phone: "Appel téléphonique",
+  meeting_in_person: "Rencontre sur place",
+  meeting_video: "Visioconférence",
+  other: "Autre",
   birthday: "Anniversaire",
   private_party: "Fête privée",
   corporate: "Événement corporate",
   dj_night: "DJ night / Soirée",
-  other: "Autre",
 };
 
 function formatDate(iso: string): string {
@@ -55,13 +58,13 @@ export function guestRequestReceivedHtml(data: BookingEmailData): string {
 </td></tr>
 <tr><td style="padding:0 24px 24px;">
   <p style="margin:0;font-size:16px;color:#e0e0e0;">Bonjour ${data.name},</p>
-  <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#b0b0b0;">Nous avons bien reçu votre demande de location d'espace. Nous vous recontacterons rapidement pour confirmer la disponibilité.</p>
+  <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#b0b0b0;">Nous avons bien reçu votre demande de rendez-vous pour discuter de la location de l'espace. Nous vous recontacterons pour convenir d'un échange (téléphone, sur place ou visio).</p>
 </td></tr>
 <tr><td style="padding:0 24px 24px;">
   <table width="100%" cellpadding="12" cellspacing="0" style="background:#1a1a24;border:1px solid #333;">
   <tr><td style="font-size:13px;color:${cyan};">Date</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${displayDate}</td></tr>
   <tr><td style="font-size:13px;color:${cyan};">Heure souhaitée</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${data.time}</td></tr>
-  <tr><td style="font-size:13px;color:${cyan};">Type d'événement</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${eventTypeLabel(data.event_type)}</td></tr>
+  <tr><td style="font-size:13px;color:${cyan};">Format d'échange</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${eventTypeLabel(data.event_type)}</td></tr>
   <tr><td style="font-size:13px;color:${cyan};">Nombre de personnes</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${data.guest_count}</td></tr>
   <tr><td style="font-size:13px;color:${cyan};">Téléphone</td><td style="text-align:right;font-size:14px;color:#e0e0e0;">${data.phone}</td></tr>
   ${data.message ? `<tr><td colspan="2" style="padding-top:12px;border-top:1px solid #333;font-size:13px;color:${cyan};">Message</td></tr><tr><td colspan="2" style="font-size:14px;color:#e0e0e0;">${data.message}</td></tr>` : ""}
@@ -74,13 +77,13 @@ export function guestRequestReceivedHtml(data: BookingEmailData): string {
 /** Bar: new rental request. */
 export function barNotificationHtml(data: BookingEmailData): string {
   const displayDate = formatDate(data.date);
-  return `<p><strong>Nouvelle demande de location d'espace – Cosmic Cafe</strong></p><ul>
+  return `<p><strong>Nouvelle demande de rendez-vous (location) – Cosmic Cafe</strong></p><ul>
 <li><strong>Nom:</strong> ${data.name}</li>
 <li><strong>Email:</strong> ${data.email}</li>
 <li><strong>Téléphone:</strong> ${data.phone}</li>
 <li><strong>Date:</strong> ${displayDate}</li>
 <li><strong>Heure souhaitée:</strong> ${data.time}</li>
-<li><strong>Type d'événement:</strong> ${eventTypeLabel(data.event_type)}</li>
+<li><strong>Format d'échange:</strong> ${eventTypeLabel(data.event_type)}</li>
 <li><strong>Nombre de personnes:</strong> ${data.guest_count}</li>
 ${data.message ? `<li><strong>Message:</strong> ${data.message}</li>` : ""}
 </ul>`;

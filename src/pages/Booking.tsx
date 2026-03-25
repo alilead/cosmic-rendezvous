@@ -16,12 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Clock, Users, CheckCircle } from "lucide-react";
+import { Calendar, Clock, Users, CheckCircle, Video } from "lucide-react";
 import { toast } from "sonner";
 import rentalImg from "@/assets/space-rental.jpg";
 import { netlifyFunctionUrl } from "@/lib/netlifyApi";
 
-const EVENT_TYPE_VALUES = ["birthday", "private_party", "corporate", "dj_night", "other"] as const;
+const EVENT_TYPE_VALUES = ["meeting_phone", "meeting_in_person", "meeting_video", "other"] as const;
+
+const CALENDLY_URL = (import.meta.env.VITE_CALENDLY_URL as string | undefined)?.trim() || "";
 
 function buildBookingSchema(t: (key: string) => string) {
   return z.object({
@@ -56,7 +58,7 @@ export default function Booking() {
     watch,
   } = useForm<BookingForm>({
     resolver: zodResolver(schema),
-    defaultValues: { event_type: "birthday", guest_count: 10 },
+    defaultValues: { event_type: "meeting_in_person", guest_count: 4 },
     shouldFocusError: true,
   });
 
@@ -103,10 +105,9 @@ export default function Booking() {
   };
 
   const eventTypeLabels: Record<(typeof EVENT_TYPE_VALUES)[number], string> = {
-    birthday: t("bookingEventTypeBirthday"),
-    private_party: t("bookingEventTypePrivateParty"),
-    corporate: t("bookingEventTypeCorporate"),
-    dj_night: t("bookingEventTypeDjNight"),
+    meeting_phone: t("bookingEventTypeMeetingPhone"),
+    meeting_in_person: t("bookingEventTypeMeetingInPerson"),
+    meeting_video: t("bookingEventTypeMeetingVideo"),
     other: t("bookingEventTypeOther"),
   };
 
@@ -171,6 +172,21 @@ export default function Booking() {
       <section className="py-12 md:py-16">
         <div className="container max-w-3xl mx-auto px-4">
           <div className="bg-card border border-border rounded-lg p-8 md:p-12 shadow-xl text-card-foreground">
+            {CALENDLY_URL ? (
+              <div className="mb-8 rounded-lg border border-secondary/40 bg-secondary/5 p-6 text-center">
+                <Video className="w-8 h-8 mx-auto mb-3 text-secondary" aria-hidden />
+                <h2 className="font-display text-lg tracking-wider text-secondary mb-2">{t("bookingCalendlyTitle")}</h2>
+                <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">{t("bookingCalendlyBody")}</p>
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center min-h-[44px] px-6 py-2 rounded-sm font-display text-xs tracking-[0.15em] uppercase border border-secondary text-secondary hover:bg-secondary/10 transition-colors"
+                >
+                  {t("bookingCalendlyCta")}
+                </a>
+              </div>
+            ) : null}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-4">
                 <h2 className="text-2xl font-display font-bold tracking-wider text-primary">

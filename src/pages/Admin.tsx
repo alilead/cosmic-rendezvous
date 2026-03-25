@@ -36,6 +36,9 @@ type Booking = {
 };
 
 const EVENT_LABELS: Record<string, string> = {
+  meeting_phone: "Phone call",
+  meeting_in_person: "In person",
+  meeting_video: "Video call",
   birthday: "Birthday",
   private_party: "Private party",
   corporate: "Corporate",

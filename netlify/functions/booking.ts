@@ -6,7 +6,7 @@ import { guestRequestReceivedHtml, barNotificationHtml } from "./_lib/emails";
 const FROM = "Cosmic Cafe <info@cosmic-cafe.ch>";
 const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
 
-const EVENT_TYPES = ["birthday", "private_party", "corporate", "dj_night", "other"] as const;
+const EVENT_TYPES = ["meeting_phone", "meeting_in_person", "meeting_video", "other"] as const;
 
 function corsHeaders() {
   return {
@@ -114,7 +114,7 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         from: FROM,
         to: [email],
         bcc: [BAR_EMAIL],
-        subject: `Demande de location – Cosmic Cafe – ${name}`,
+        subject: `Rendez-vous location – Cosmic Cafe – ${name}`,
         html: guestRequestReceivedHtml(emailData),
       });
       if (sendErr) {
@@ -125,7 +125,7 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
         const { error: barErr } = await resend.emails.send({
           from: FROM,
           to: [BAR_EMAIL],
-          subject: `[Cosmic] Nouvelle demande de location : ${name} – ${date} ${time}`,
+          subject: `[Cosmic] Nouveau rendez-vous location : ${name} – ${date} ${time}`,
           html: barNotificationHtml(emailData),
         });
         if (barErr) console.error("[booking] Bar notification email failed:", barErr);

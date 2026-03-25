@@ -9,3 +9,6 @@ VITE_SITE_URL=https://www.cosmicrendezvous.ch
 
 # Optional: only if the SPA is NOT on Netlify but functions are (booking / leaderboard / admin).
 # VITE_FUNCTIONS_ORIGIN=https://cosmic-bar.netlify.app
+
+# Calendly — video meeting link shown on /booking (optional)
+# VITE_CALENDLY_URL=https://calendly.com/your-link

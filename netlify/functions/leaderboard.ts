@@ -2,6 +2,7 @@ import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { Resend } from "resend";
 import { getSupabase, GAME_SCORES_TABLE } from "./_lib/supabase";
 import { dailyHighBarHtml, dailyHighPlayerHtml } from "./_lib/emails";
+import { isFreeDrinkPromotionActive } from "./_lib/promotion";
 
 const FROM = "Cosmic Cafe <info@cosmic-cafe.ch>";
 const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
@@ -121,7 +122,8 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
 
       const isNewDailyHigh = prevMax === null || scoreVal > prevMax;
       const resendKey = process.env.RESEND_API_KEY;
-      if (isNewDailyHigh && resendKey) {
+      const promoWindow = isFreeDrinkPromotionActive();
+      if (isNewDailyHigh && resendKey && promoWindow) {
         try {
           const resend = new Resend(resendKey);
           if (emailVal) {

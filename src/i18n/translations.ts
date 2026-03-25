@@ -9,7 +9,7 @@ export const translations = {
     // Nav
     navHome: "Accueil",
     navAbout: "À propos",
-    navRental: "Réservation",
+    navRental: "Rencontre",
     navMenu: "La Carte",
     navGallery: "Galerie",
     navGame: "Jeu",
@@ -31,14 +31,27 @@ export const translations = {
 
     // Rental
     rentalTitle: "LOUEZ L'ESPACE",
-    rentalDesc: "Transformez votre événement en expérience cosmique. Notre espace s'adapte à vos ambitions les plus intergalactiques.",
+    rentalDesc:
+      "Rencontrez l'équipe pour parler location de l'espace : téléphone, au bar ou en visio. Nous convenons ensemble de votre projet.",
     rentalFeature1: "Fêtes privées & Corporates",
     rentalFeature2: "Système son professionnel",
     rentalFeature3: "Éclairage néon immersif",
     rentalFeature4: "Centre de Genève",
     rentalIdealFor: "IDÉAL POUR",
     rentalIdeals: ["Fêtes privées", "Événements corporate", "Showcases artistiques", "DJ nights", "Anniversaires", "Lancements"] as readonly string[],
-    rentalCta: "Vérifier la disponibilité",
+    rentalCta: "Planifier un rendez-vous",
+
+    freeDrinkBannerTitle: "Défi Alien Jump — boisson offerte",
+    freeDrinkBannerBodyActive:
+      "Le meilleur score du jour gagne une boisson offerte — du lundi au samedi, après 12h30 (heure de Genève).",
+    freeDrinkBannerBodyInactive:
+      "Le défi « meilleur score du jour » est actif du lundi au samedi, après 12h30 (Genève). Revenez pendant ces créneaux !",
+    freeDrinkBannerCta: "Jouer au jeu",
+
+    gamePromoActive:
+      "Meilleur score du jour = boisson offerte (lun–sam après 12h30, heure de Genève). Indiquez votre email à la fin de partie.",
+    gamePromoInactive:
+      "Boisson pour le meilleur score du jour : lun–sam après 12h30 (Genève). En dehors de ces heures, le classement reste ouvert sans récompense.",
 
     // Menu
     menuTitle: "LA CARTE",
@@ -79,32 +92,36 @@ export const translations = {
     altAboutImg: "Intérieur Cosmic Café",
     altRentalImg: "Espace événementiel",
 
-    // Booking (space rental)
-    bookingTitle: "Louez l'espace",
-    bookingSubtitle: "Demande de location pour votre événement",
+    // Booking (meet team — venue rental discussion)
+    bookingTitle: "Rencontrer l'équipe",
+    bookingSubtitle:
+      "Prenez rendez-vous pour discuter de la location de l'espace (équipe, entreprise, projet). Téléphone, au bar ou en visio. Nous vous recontacterons pour convenir d'un créneau.",
     bookingYourInfo: "Vos informations",
-    bookingEventDetails: "Détails de l'événement",
+    bookingEventDetails: "Votre rendez-vous",
     bookingName: "Nom",
     bookingEmail: "Email",
     bookingPhone: "Téléphone",
-    bookingEventType: "Type d'événement",
+    bookingEventType: "Type d'échange souhaité",
     bookingDate: "Date souhaitée",
     bookingTime: "Heure souhaitée",
-    bookingGuests: "Nombre de personnes",
-    bookingMessage: "Message / demandes particulières",
+    bookingGuests: "Nombre de personnes (équipe)",
+    bookingMessage: "Message — disponibilités, questions (optionnel)",
     bookingSubmit: "Envoyer la demande",
     bookingSubmitting: "Envoi…",
     bookingSuccessToast: "Demande envoyée",
     bookingRequestReceivedTitle: "Demande reçue",
-    bookingRequestReceivedDesc: "Nous avons bien reçu votre demande de location. Nous vous recontacterons rapidement pour confirmer la disponibilité.",
+    bookingRequestReceivedDesc:
+      "Nous avons bien reçu votre demande de rendez-vous. Nous vous recontacterons pour organiser un échange (téléphone, sur place ou visio) et parler de la location.",
     bookingEmailNotSentNote: "Nous n'avons pas pu envoyer l'email de confirmation, mais votre demande est bien enregistrée. Contactez-nous si besoin.",
     bookingContactQuestion: "Une question ?",
     bookingMakeAnother: "Faire une autre demande",
-    bookingEventTypeBirthday: "Anniversaire",
-    bookingEventTypePrivateParty: "Fête privée",
-    bookingEventTypeCorporate: "Événement corporate",
-    bookingEventTypeDjNight: "DJ night / Soirée",
+    bookingEventTypeMeetingPhone: "Appel téléphonique",
+    bookingEventTypeMeetingInPerson: "Rencontre au bar / sur place",
+    bookingEventTypeMeetingVideo: "Visioconférence",
     bookingEventTypeOther: "Autre",
+    bookingCalendlyTitle: "Visioconférence",
+    bookingCalendlyBody: "Réservez directement un créneau visio avec l'équipe (Calendly).",
+    bookingCalendlyCta: "Ouvrir Calendly",
     bookingValidationName: "Au moins 2 caractères",
     bookingValidationEmail: "Email invalide",
     bookingValidationPhone: "Au moins 10 caractères",
@@ -131,7 +148,7 @@ export const translations = {
 
     navHome: "Home",
     navAbout: "About",
-    navRental: "Reservation",
+    navRental: "Meet us",
     navMenu: "Menu",
     navGallery: "Gallery",
     navGame: "Game",
@@ -150,14 +167,27 @@ export const translations = {
     aboutTags: ["Neon", "Underground", "Cosmic"] as readonly string[],
 
     rentalTitle: "RENT THE SPACE",
-    rentalDesc: "Turn your event into a cosmic experience. Our space adapts to your most intergalactic ambitions.",
+    rentalDesc:
+      "Meet our team to discuss hiring the venue — by phone, in person, or video. We'll align on your project together.",
     rentalFeature1: "Private & corporate parties",
     rentalFeature2: "Professional sound system",
     rentalFeature3: "Immersive neon lighting",
     rentalFeature4: "Central Geneva",
     rentalIdealFor: "IDEAL FOR",
     rentalIdeals: ["Private parties", "Corporate events", "Artist showcases", "DJ nights", "Birthdays", "Launch events"] as readonly string[],
-    rentalCta: "Check availability",
+    rentalCta: "Book a meeting",
+
+    freeDrinkBannerTitle: "Alien Jump challenge — free drink",
+    freeDrinkBannerBodyActive:
+      "Today's top score wins a free drink — Monday to Saturday, after 12:30 (Geneva time).",
+    freeDrinkBannerBodyInactive:
+      "The “top score of the day” reward runs Monday–Saturday after 12:30 (Geneva). Come back during those hours!",
+    freeDrinkBannerCta: "Play the game",
+
+    gamePromoActive:
+      "Top score of the day = free drink (Mon–Sat after 12:30 Geneva time). Add your email on the game-over screen.",
+    gamePromoInactive:
+      "Free drink for the daily top score: Mon–Sat after 12:30 (Geneva). Outside those hours the leaderboard is open without the reward.",
 
     menuTitle: "THE MENU",
     menuSubtitle: "Elixirs from another world",
@@ -194,32 +224,36 @@ export const translations = {
     altAboutImg: "Cosmic Cafe interior",
     altRentalImg: "Event space",
 
-    // Booking (space rental)
-    bookingTitle: "Rent the space",
-    bookingSubtitle: "Request a booking for your event",
+    // Booking (meet team — venue rental discussion)
+    bookingTitle: "Meet the team",
+    bookingSubtitle:
+      "Request a meeting to discuss venue rental (team or project). Phone, at the bar, or video. We'll get back to you to schedule.",
     bookingYourInfo: "Your information",
-    bookingEventDetails: "Event details",
+    bookingEventDetails: "Your meeting",
     bookingName: "Name",
     bookingEmail: "Email",
     bookingPhone: "Phone",
-    bookingEventType: "Event type",
+    bookingEventType: "Preferred format",
     bookingDate: "Preferred date",
     bookingTime: "Preferred time",
-    bookingGuests: "Number of guests",
-    bookingMessage: "Message / special requests",
+    bookingGuests: "Group size (team)",
+    bookingMessage: "Message — availability, questions (optional)",
     bookingSubmit: "Send request",
     bookingSubmitting: "Sending…",
     bookingSuccessToast: "Request sent",
     bookingRequestReceivedTitle: "Request received",
-    bookingRequestReceivedDesc: "We have received your rental request. We will get back to you shortly to confirm availability.",
+    bookingRequestReceivedDesc:
+      "We've received your meeting request. We'll contact you to arrange a call, visit, or video chat about venue rental.",
     bookingEmailNotSentNote: "We couldn't send a confirmation email, but your request is saved. Contact us to confirm if needed.",
     bookingContactQuestion: "Any questions?",
     bookingMakeAnother: "Make another request",
-    bookingEventTypeBirthday: "Birthday",
-    bookingEventTypePrivateParty: "Private party",
-    bookingEventTypeCorporate: "Corporate event",
-    bookingEventTypeDjNight: "DJ night / Party",
+    bookingEventTypeMeetingPhone: "Phone call",
+    bookingEventTypeMeetingInPerson: "In person at the bar",
+    bookingEventTypeMeetingVideo: "Video call",
     bookingEventTypeOther: "Other",
+    bookingCalendlyTitle: "Video call",
+    bookingCalendlyBody: "Book a video slot directly with the team (Calendly).",
+    bookingCalendlyCta: "Open Calendly",
     bookingValidationName: "At least 2 characters",
     bookingValidationEmail: "Invalid email",
     bookingValidationPhone: "At least 10 characters",
