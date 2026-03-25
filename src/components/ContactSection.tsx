@@ -10,7 +10,7 @@ const ContactSection = () => {
   const contactItems = [
     { icon: MapPin, labelKey: "contactLocation" as const, href: "https://www.google.com/maps/search/genève+cosmic+bar" },
     { icon: Phone, labelKey: "contactPhone" as const, href: "tel:+41795247754" },
-    { icon: Instagram, labelKey: "contactInstagram" as const, href: "https://instagram.com" },
+    { icon: Instagram, labelKey: "contactInstagram" as const, href: "https://www.instagram.com/cosmic_cafe_gva/" },
     { icon: Mail, labelKey: "contactEmail" as const, href: "mailto:info@cosmicrendezvous.ch" },
   ];
 
