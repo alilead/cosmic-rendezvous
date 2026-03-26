@@ -63,6 +63,8 @@ export default function Booking() {
     shouldFocusError: true,
   });
 
+  const { lang } = useLanguage();
+
   const onSubmit = async (data: BookingForm) => {
     setApiError(null);
     setIsSubmitting(true);
@@ -110,6 +112,7 @@ export default function Booking() {
           guest_count: data.guest_count,
           event_type: data.event_type,
           message: data.message?.trim() || null,
+          lang: lang,
         }),
         signal: controller.signal,
       });

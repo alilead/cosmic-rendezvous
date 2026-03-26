@@ -57,6 +57,7 @@ export const handler = async (event: any, _context: any) => {
     ? (o.event_type as string)
     : "other";
   const message = o.message != null && o.message !== "" ? String(o.message).trim() : null;
+  const lang = o.lang === "en" ? "en" : "fr";
 
   if (
     name.length < 2 ||
@@ -77,7 +78,7 @@ export const handler = async (event: any, _context: any) => {
   }
 
   const resend = new Resend(key);
-  const emailData = { name, email, phone, date, time, guest_count: guestCount, event_type: eventType, message };
+  const emailData = { name, email, phone, date, time, guest_count: guestCount, event_type: eventType, message, lang };
 
   try {
     const supabase = getSupabase();
@@ -113,10 +114,13 @@ export const handler = async (event: any, _context: any) => {
     let guestEmailSent = false;
     let barEmailSent = false;
     try {
+      const subject = lang === "en" 
+        ? `Meeting request – Cosmic Cafe – ${name}`
+        : `Rendez-vous location – Cosmic Cafe – ${name}`;
       const { error: guestErr } = await resend.emails.send({
         from: FROM,
         to: [email],
-        subject: `Rendez-vous location – Cosmic Cafe – ${name}`,
+        subject,
         html: guestRequestReceivedHtml(emailData),
       });
       if (guestErr) {
