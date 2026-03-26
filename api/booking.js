@@ -101,11 +101,6 @@ export default async function booking(req, res) {
     return;
   }
 
-  // Debug marker: helps confirm Vercel is invoking this exact file.
-  // Remove once booking email flow is confirmed working.
-  json(res, 200, { marker: "booking.js", typeofReqBody: typeof req.body });
-  return;
-
   let key = process.env.RESEND_API_KEY;
   if (!key) {
     json(res, 503, { error: "Booking service not configured" });
@@ -145,8 +140,7 @@ export default async function booking(req, res) {
       }
     }
   } catch (e) {
-    const preview = typeof req.body === "string" ? req.body.slice(0, 200) : null;
-    json(res, 400, { error: "Invalid JSON", typeofBody: typeof req.body, bodyPreview: preview });
+    json(res, 400, { error: "Invalid JSON" });
     return;
   }
 
