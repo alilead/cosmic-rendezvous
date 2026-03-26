@@ -115,30 +115,29 @@ export default async function booking(req, res) {
   let body;
   try {
     body = req.body ?? {};
-    if (typeof body === "string") {
-      const t = body.trim();
-      // Vercel should usually provide a parsed object, but sometimes this comes as a string.
-      // Be tolerant: attempt to parse the JSON object inside the string.
-      const firstCurly = t.indexOf("{");
-      const lastCurly = t.lastIndexOf("}");
-      const firstSquare = t.indexOf("[");
-      const lastSquare = t.lastIndexOf("]");
 
-      const looksLikeJsonObject = t.startsWith("{") && lastCurly > firstCurly;
-      const looksLikeJsonArray = t.startsWith("[") && lastSquare > firstSquare;
+    // Some Vercel setups don't populate `req.body` for custom functions.
+    // If it looks empty, read raw request stream and parse JSON.
+    const isPlainObject = body && typeof body === "object" && !Array.isArray(body);
+    const hasAnyKeys = isPlainObject ? Object.keys(body).length > 0 : false;
+    const shouldReadRaw = !hasAnyKeys;
 
-      if (looksLikeJsonObject) {
-        body = JSON.parse(t);
-      } else if (looksLikeJsonArray) {
-        body = JSON.parse(t);
-      } else if (firstCurly !== -1 && lastCurly !== -1 && lastCurly > firstCurly) {
-        body = JSON.parse(t.slice(firstCurly, lastCurly + 1));
-      } else if (firstSquare !== -1 && lastSquare !== -1 && lastSquare > firstSquare) {
-        body = JSON.parse(t.slice(firstSquare, lastSquare + 1));
-      } else {
-        body = JSON.parse(t); // will throw
+    if (shouldReadRaw) {
+      const raw = await new Promise((resolve, reject) => {
+        let data = "";
+        req.on("data", (chunk) => {
+          data += chunk;
+        });
+        req.on("end", () => resolve(data));
+        req.on("error", reject);
+      });
+      if (typeof raw === "string" && raw.trim()) {
+        body = JSON.parse(raw);
       }
     }
+
+    // If for any reason it still arrived as a string, parse it.
+    if (typeof body === "string") body = JSON.parse(body);
   } catch (e) {
     json(res, 400, { error: "Invalid JSON" });
     return;
