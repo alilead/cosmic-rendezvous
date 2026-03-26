@@ -12,3 +12,10 @@ VITE_SITE_URL=https://www.cosmic-cafe.ch
 
 # Calendly — video meeting link shown on /booking (optional)
 # VITE_CALENDLY_URL=https://calendly.com/your-link
+
+# Supabase anon (booking fallback)
+# If `/api/booking` is unavailable, we insert the booking directly into `public.bookings`
+# from the browser using the anon public key.
+# Get these from Supabase → Project Settings → API.
+# VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+# VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_PUBLIC_KEY
