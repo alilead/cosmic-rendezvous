@@ -115,9 +115,33 @@ export default async function booking(req, res) {
   let body;
   try {
     body = req.body ?? {};
-    if (typeof body === "string") body = JSON.parse(body);
-  } catch {
-    json(res, 400, { error: "Invalid JSON" });
+    if (typeof body === "string") {
+      const t = body.trim();
+      // Vercel should usually provide a parsed object, but sometimes this comes as a string.
+      // Be tolerant: attempt to parse the JSON object inside the string.
+      const firstCurly = t.indexOf("{");
+      const lastCurly = t.lastIndexOf("}");
+      const firstSquare = t.indexOf("[");
+      const lastSquare = t.lastIndexOf("]");
+
+      const looksLikeJsonObject = t.startsWith("{") && lastCurly > firstCurly;
+      const looksLikeJsonArray = t.startsWith("[") && lastSquare > firstSquare;
+
+      if (looksLikeJsonObject) {
+        body = JSON.parse(t);
+      } else if (looksLikeJsonArray) {
+        body = JSON.parse(t);
+      } else if (firstCurly !== -1 && lastCurly !== -1 && lastCurly > firstCurly) {
+        body = JSON.parse(t.slice(firstCurly, lastCurly + 1));
+      } else if (firstSquare !== -1 && lastSquare !== -1 && lastSquare > firstSquare) {
+        body = JSON.parse(t.slice(firstSquare, lastSquare + 1));
+      } else {
+        body = JSON.parse(t); // will throw
+      }
+    }
+  } catch (e) {
+    const preview = typeof req.body === "string" ? req.body.slice(0, 200) : null;
+    json(res, 400, { error: "Invalid JSON", typeofBody: typeof req.body, bodyPreview: preview });
     return;
   }
 
