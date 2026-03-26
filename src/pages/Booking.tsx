@@ -172,7 +172,7 @@ export default function Booking() {
               )}
               <p className="text-sm text-muted-foreground mb-8">
                 {t("bookingContactQuestion")}{" "}
-                <a href="tel:+41795247754" className="text-primary font-semibold hover:underline">
+                <a href="tel:+41795247754" className="text-secondary font-semibold hover:underline">
                   +41 79 524 77 54
                 </a>
               </p>
@@ -180,7 +180,7 @@ export default function Booking() {
                 <Button variant="outline" asChild>
                   <Link to="/">{t("navHome")}</Link>
                 </Button>
-                <Button onClick={() => setIsSubmitted(false)} className="border-primary text-primary hover:bg-primary/10">
+                <Button onClick={() => setIsSubmitted(false)} className="bg-primary text-primary-foreground hover:bg-primary/90">
                   {t("bookingMakeAnother")}
                 </Button>
               </div>
