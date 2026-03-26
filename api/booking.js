@@ -154,7 +154,18 @@ export default async function booking(req, res) {
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (name.length < 2 || !emailOk || phone.length < 10 || !date || !time || !Number.isInteger(guestCount) || guestCount < 1 || guestCount > 200) {
-    json(res, 400, { error: "Invalid booking data" });
+    json(res, 400, {
+      error: "Invalid booking data",
+      debug: {
+        name,
+        email,
+        phone,
+        date,
+        time,
+        guestCount,
+        eventType: eventType,
+      },
+    });
     return;
   }
 
