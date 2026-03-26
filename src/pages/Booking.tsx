@@ -195,7 +195,7 @@ export default function Booking() {
     <div className="min-h-screen bg-background">
       <Navbar />
       {/* Hero section — Spinella-style */}
-      <section className="relative min-h-[280px] sm:min-h-[320px] md:h-80 flex items-center justify-center">
+      <section className="relative min-h-[320px] sm:min-h-[360px] md:min-h-[380px] flex items-center justify-center pt-20 md:pt-24">
         <div className="absolute inset-0">
           <img src={rentalImg} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-background/70" />

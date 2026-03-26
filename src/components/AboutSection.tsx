@@ -31,7 +31,7 @@ const AboutSection = () => {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              <img src="/photo/cosmic.jpeg" alt={t("altAboutImg")} className="w-full h-full object-cover object-center" />
+              <img src="/photo/WhatsApp Image 2026-03-25 at 16.42.50.jpeg" alt={t("altAboutImg")} className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
               <div className="absolute inset-0 border border-primary/20 rounded-lg neon-border-pink" />
             </motion.div>
