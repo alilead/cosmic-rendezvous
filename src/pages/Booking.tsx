@@ -20,6 +20,7 @@ import { Calendar, Clock, Users, CheckCircle, Video } from "lucide-react";
 import { toast } from "sonner";
 import rentalImg from "@/assets/space-rental.jpg";
 import { netlifyFunctionUrl } from "@/lib/netlifyApi";
+import { supabaseAnon } from "@/lib/supabaseAnon";
 
 const EVENT_TYPE_VALUES = ["meeting_phone", "meeting_in_person", "meeting_video", "other"] as const;
 
@@ -67,6 +68,35 @@ export default function Booking() {
     setIsSubmitting(true);
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+    const attemptFallbackInsert = async () => {
+      if (!supabaseAnon) {
+        throw new Error("Supabase anon client is not configured");
+      }
+
+      const { error: insertErr } = await supabaseAnon
+        .from("bookings")
+        .insert({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          date: data.date,
+          time: data.time,
+          guest_count: data.guest_count,
+          event_type: data.event_type,
+          message: data.message?.trim() || null,
+          status: "request",
+        })
+        .select("id")
+        .single();
+
+      if (insertErr) throw insertErr;
+
+      // Fallback does not send emails; we still show the same "request received" flow.
+      setEmailSent(false);
+      setIsSubmitted(true);
+      toast.success(t("bookingSuccessToast"));
+    };
     try {
       const res = await fetch(API_BOOKING, {
         method: "POST",
@@ -91,14 +121,25 @@ export default function Booking() {
         setIsSubmitted(true);
         toast.success(t("bookingSuccessToast"));
       } else {
-        setApiError(serverError || t("bookingErrorMessage"));
-        toast.error(serverError || t("bookingErrorMessage"));
+        try {
+          await attemptFallbackInsert();
+        } catch (fallbackErr) {
+          const msg = serverError || t("bookingErrorMessage");
+          setApiError(msg);
+          toast.error(msg);
+          console.error("[booking] fallback insert failed:", fallbackErr);
+        }
       }
     } catch (e) {
       clearTimeout(timeoutId);
-      const msg = e instanceof Error ? e.message : t("bookingErrorMessage");
-      setApiError(msg);
-      toast.error(msg);
+      try {
+        await attemptFallbackInsert();
+      } catch (fallbackErr) {
+        const msg = e instanceof Error ? e.message : t("bookingErrorMessage");
+        setApiError(msg);
+        toast.error(msg);
+        console.error("[booking] fallback insert failed:", fallbackErr);
+      }
     } finally {
       setIsSubmitting(false);
     }

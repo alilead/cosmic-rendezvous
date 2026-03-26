@@ -25,6 +25,14 @@ create policy "Service role only"
   using (false)
   with check (false);
 
+-- Allow booking requests to be inserted by the public (anon) client.
+-- This is used as a fallback when serverless `/api/booking` is unavailable.
+create policy "Public insert booking requests"
+  on public.bookings
+  for insert
+  to anon
+  with check (true);
+
 -- 2. Game scores table (Alien Jump leaderboard)
 create table if not exists public.game_scores (
   id uuid primary key default gen_random_uuid(),
