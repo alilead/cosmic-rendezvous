@@ -113,6 +113,7 @@ export default async function booking(req, res) {
   }
 
   let body;
+  let rawBodyRead = "";
   try {
     body = req.body ?? {};
 
@@ -123,7 +124,7 @@ export default async function booking(req, res) {
     const shouldReadRaw = !hasAnyKeys;
 
     if (shouldReadRaw) {
-      const raw = await new Promise((resolve, reject) => {
+      rawBodyRead = await new Promise((resolve, reject) => {
         let data = "";
         req.on("data", (chunk) => {
           data += chunk;
@@ -164,6 +165,9 @@ export default async function booking(req, res) {
         time,
         guestCount,
         eventType: eventType,
+        reqBodyType: typeof req.body,
+        reqBodyKeys: req.body && typeof req.body === "object" ? Object.keys(req.body) : null,
+        rawBodyReadLength: rawBodyRead ? rawBodyRead.length : 0,
       },
     });
     return;
