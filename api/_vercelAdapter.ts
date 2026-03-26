@@ -1,6 +1,3 @@
-import type { Handler, HandlerEvent } from "@netlify/functions";
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-
 function bodyToString(raw: unknown): string | null {
   if (raw === undefined || raw === null) return null;
   if (typeof raw === "string") return raw;
@@ -9,25 +6,25 @@ function bodyToString(raw: unknown): string | null {
   return String(raw);
 }
 
-function flattenHeaders(headers: VercelRequest["headers"]): HandlerEvent["headers"] {
+function flattenHeaders(headers: any): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(headers)) {
     if (v === undefined) continue;
     out[k] = Array.isArray(v) ? v[0] ?? "" : v;
   }
-  return out as HandlerEvent["headers"];
+  return out;
 }
 
 /** Bridge Netlify `Handler` to Vercel Node serverless (`api/*.ts`). */
-export function netlifyHandlerToVercel(handler: Handler) {
-  return async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+export function netlifyHandlerToVercel(handler: any) {
+  return async (req: any, res: any): Promise<void> => {
     const body = bodyToString(req.body);
 
     const event = {
       httpMethod: req.method ?? "GET",
       body,
       headers: flattenHeaders(req.headers),
-    } as HandlerEvent;
+    };
 
     try {
       const result = await handler(event, {} as never);

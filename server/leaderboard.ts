@@ -1,4 +1,3 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { Resend } from "resend";
 import { getSupabase, GAME_SCORES_TABLE } from "./lib/supabase";
 import { dailyTopThreeBarHtml, dailyTopThreePlayerHtml } from "./lib/emails";
@@ -39,7 +38,7 @@ function missingSocialColumns(err: { message?: string } | null): boolean {
   );
 }
 
-export const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
+export const handler = async (event: any, _context: any) => {
   const headers = { ...corsHeaders(), "Content-Type": "application/json" };
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: corsHeaders(), body: "" };

@@ -1,11 +1,10 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { netlifyHandlerToVercel } from "./_vercelAdapter";
 
-function json(res: VercelResponse, statusCode: number, data: unknown) {
+function json(res: any, statusCode: number, data: unknown) {
   res.status(statusCode).setHeader("Content-Type", "application/json").send(JSON.stringify(data));
 }
 
-export default async function bookingRoute(req: VercelRequest, res: VercelResponse) {
+export default async function bookingRoute(req: any, res: any) {
   const method = (req.method ?? "GET").toUpperCase();
 
   // Keep this route responsive even if the heavy server handler fails to load.

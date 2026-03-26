@@ -1,4 +1,3 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { Resend } from "resend";
 import { getSupabase, BOOKINGS_TABLE } from "./lib/supabase";
 import { guestRequestReceivedHtml, barNotificationHtml } from "./lib/emails";
@@ -20,7 +19,7 @@ function jsonHeaders(): Record<string, string> {
   return { ...corsHeaders(), "Content-Type": "application/json" };
 }
 
-export const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
+export const handler = async (event: any, _context: any) => {
   const headers = jsonHeaders();
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: corsHeaders(), body: "" };

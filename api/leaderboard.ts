@@ -1,11 +1,10 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { netlifyHandlerToVercel } from "./_vercelAdapter";
 
-function json(res: VercelResponse, statusCode: number, data: unknown) {
+function json(res: any, statusCode: number, data: unknown) {
   res.status(statusCode).setHeader("Content-Type", "application/json").send(JSON.stringify(data));
 }
 
-export default async function leaderboardRoute(req: VercelRequest, res: VercelResponse) {
+export default async function leaderboardRoute(req: any, res: any) {
   const method = (req.method ?? "GET").toUpperCase();
 
   if (method === "OPTIONS") {

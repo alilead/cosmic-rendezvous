@@ -1,5 +1,4 @@
-import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
-import { getSupabase, BOOKINGS_TABLE, type BookingRow } from "./lib/supabase";
+import { getSupabase, BOOKINGS_TABLE } from "./lib/supabase";
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET?.trim() || "";
 
@@ -15,7 +14,7 @@ function jsonHeaders(): Record<string, string> {
   return { ...corsHeaders(), "Content-Type": "application/json" };
 }
 
-function isAuthorized(event: HandlerEvent): boolean {
+function isAuthorized(event: any): boolean {
   if (!ADMIN_SECRET) return false;
   const h = event.headers as Record<string, string | undefined>;
   const auth =
@@ -26,7 +25,7 @@ function isAuthorized(event: HandlerEvent): boolean {
   return auth === ADMIN_SECRET;
 }
 
-export const handler: Handler = async (event: HandlerEvent, _context: HandlerContext) => {
+export const handler = async (event: any, _context: any) => {
   const headers = jsonHeaders();
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: corsHeaders(), body: "" };
@@ -71,7 +70,7 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ bookings: (data ?? []) as BookingRow[] }),
+        body: JSON.stringify({ bookings: data ?? [] }),
       };
     }
 
@@ -110,7 +109,7 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ booking: data as BookingRow }),
+        body: JSON.stringify({ booking: data }),
       };
     }
   } catch (err) {
