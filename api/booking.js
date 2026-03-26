@@ -244,6 +244,7 @@ export default async function booking(req, res) {
     }
 
     json(res, 200, {
+      apiVersion: "booking.js",
       success: true,
       confirmed: false,
       emailSent: guestEmailSent,
