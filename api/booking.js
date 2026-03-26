@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
 
 const EVENT_TYPES = ["meeting_phone", "meeting_in_person", "meeting_video", "other"];
-const FROM = "Cosmic Cafe <info@cosmic-cafe.ch>";
+const DEFAULT_BAR_EMAIL = "info@cosmic-cafe.ch";
 
 function corsHeaders() {
   return {
@@ -173,7 +173,8 @@ export default async function booking(req, res) {
     return;
   }
 
-  const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
+  const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || DEFAULT_BAR_EMAIL;
+  const FROM = `Cosmic Cafe <${BAR_EMAIL}>`;
 
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
   const resend = new Resend(key);
@@ -203,6 +204,8 @@ export default async function booking(req, res) {
 
     let guestEmailSent = false;
     let barEmailSent = false;
+    let guestEmailError = null;
+    let barEmailError = null;
 
     const emailData = { name, email, phone, date, time, guest_count: guestCount, event_type: eventType, message };
 
@@ -214,9 +217,13 @@ export default async function booking(req, res) {
         html: guestRequestReceivedHtml(emailData),
       });
       guestEmailSent = !guestErr;
-      if (guestErr) console.error("[booking] guest email failed:", guestErr);
+      if (guestErr) {
+        guestEmailError = typeof guestErr === "string" ? guestErr : guestErr?.message || JSON.stringify(guestErr);
+        console.error("[booking] guest email failed:", guestErr);
+      }
     } catch (e) {
       console.error("[booking] guest email threw:", e);
+      guestEmailError = e?.message || String(e);
     }
 
     try {
@@ -227,12 +234,24 @@ export default async function booking(req, res) {
         html: barNotificationHtml(emailData),
       });
       barEmailSent = !barErr;
-      if (barErr) console.error("[booking] bar email failed:", barErr);
+      if (barErr) {
+        barEmailError = typeof barErr === "string" ? barErr : barErr?.message || JSON.stringify(barErr);
+        console.error("[booking] bar email failed:", barErr);
+      }
     } catch (e) {
       console.error("[booking] bar email threw:", e);
+      barEmailError = e?.message || String(e);
     }
 
-    json(res, 200, { success: true, confirmed: false, emailSent: guestEmailSent, guestEmailSent, barEmailSent });
+    json(res, 200, {
+      success: true,
+      confirmed: false,
+      emailSent: guestEmailSent,
+      guestEmailSent,
+      barEmailSent,
+      guestEmailError,
+      barEmailError,
+    });
   } catch (e) {
     console.error("[booking] error:", e);
     json(res, 500, { error: "Failed to process booking" });
