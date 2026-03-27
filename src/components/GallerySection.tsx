@@ -2,21 +2,14 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Photos in public/photo (includes cosmic photos from Downloads\cosmic photos)
+// Six gallery images — synced from Downloads\cosmic photos
 const GALLERY_PHOTOS = [
   "WhatsApp Image 2026-03-25 at 16.42.39 (1).jpeg",
   "WhatsApp Image 2026-03-25 at 16.42.40.jpeg",
   "WhatsApp Image 2026-03-25 at 16.42.41 (1).jpeg",
   "WhatsApp Image 2026-03-25 at 16.42.41 (2).jpeg",
-  "WhatsApp Image 2026-03-25 at 16.42.41.jpeg",
-  "WhatsApp Image 2026-03-25 at 16.42.50.jpeg",
-  "cosmic.jpeg",
-  "section.jpeg",
-  "WhatsApp Image 2026-03-05 at 18.49.44.jpeg",
-  "WhatsApp Image 2026-03-05 at 18.49.45.jpeg",
-  "WhatsApp Image 2026-03-05 at 18.49.46.jpeg",
-  "WhatsApp Image 2026-03-05 at 18.49.47.jpeg",
-  "WhatsApp Image 2026-03-05 at 18.49.48.jpeg",
+  "gallery-cosmic-5.png",
+  "gallery-cosmic-6.png",
 ];
 
 const ALT_KEYS = [
