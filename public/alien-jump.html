@@ -298,6 +298,7 @@
   var API = (window.location.hostname.indexOf('netlify.app') !== -1)
     ? SAME_ORIGIN_API
     : NETLIFY_API;
+  var isSubmittingScore = false;
   var PRIVACY_LS = 'cosmic-privacy-consent-v1';
   function hasSitePrivacyConsent() {
     try { return localStorage.getItem(PRIVACY_LS) === '1'; } catch (e) { return false; }
@@ -968,6 +969,7 @@
     var newsletterSub = document.getElementById('newsletterSub');
     var msgEl = document.getElementById('submitMsg');
     var btn = this;
+    if (isSubmittingScore) return;
     var name = (nameEl && nameEl.value.trim()) || 'Alien';
     var email = (emailEl && emailEl.value.trim()) || '';
     var consentGiven = hasSitePrivacyConsent() || !!(consentEl && consentEl.checked);
@@ -988,6 +990,7 @@
       return;
     }
     btn.disabled = true;
+    isSubmittingScore = true;
     if (msgEl) msgEl.innerHTML = 'Submitting…';
     fetch(API, {
       method: 'POST',
@@ -1008,9 +1011,11 @@
       if (msgEl) msgEl.innerHTML = 'Score submitted!';
       fetchLeaderboard();
       btn.disabled = false;
+      isSubmittingScore = false;
     }).catch(function(err) {
       if (msgEl) msgEl.innerHTML = (err && err.message) ? String(err.message) : 'Failed to submit.';
       btn.disabled = false;
+      isSubmittingScore = false;
     });
   });
 

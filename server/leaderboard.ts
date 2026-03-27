@@ -9,6 +9,7 @@ const BAR_EMAIL = process.env.BAR_EMAIL?.trim() || "info@cosmic-cafe.ch";
 const TOP_N = 10;
 const MAX_NAME_LENGTH = 20;
 const MAX_EMAIL_LENGTH = 100;
+const DUPLICATE_WINDOW_MS = 20_000;
 
 function corsHeaders() {
   return {
@@ -103,6 +104,21 @@ export const handler = async (event: any, _context: any) => {
       const scoreVal = typeof o.score === "number" ? Math.floor(o.score) : Number(o.score);
       if (!Number.isInteger(scoreVal) || scoreVal < 0) {
         return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid score" }) };
+      }
+
+      // Guard against accidental double-click submits (same email + same score).
+      const duplicateSince = new Date(Date.now() - DUPLICATE_WINDOW_MS).toISOString();
+      const { data: recentDup } = await supabase
+        .from(GAME_SCORES_TABLE)
+        .select("id, player_name, score, created_at")
+        .eq("email", emailVal)
+        .eq("score", scoreVal)
+        .gte("created_at", duplicateSince)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (recentDup) {
+        return { statusCode: 200, headers, body: JSON.stringify({ score: recentDup, duplicate: true }) };
       }
 
       const startOfUtcDay = new Date();
