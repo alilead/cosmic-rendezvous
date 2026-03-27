@@ -47,6 +47,10 @@ export const translations = {
     freeDrinkBannerBodyInactive:
       "Top 3 du jour : boisson offerte 24h/24, 7j/7. Suivez-nous sur Instagram, newsletter, puis email au classement.",
     freeDrinkBannerCta: "Jouer au jeu",
+    freeDrinkPopupTitle: "Boisson offerte",
+    freeDrinkPopupBody: "Top 3 des scores du jour = boisson offerte.",
+    freeDrinkPopupCta: "Jouer maintenant",
+    freeDrinkPopupClose: "Fermer",
 
     gamePromoActive:
       "Top 3 du jour = boisson offerte 24h/24. À la fin : Instagram + newsletter + email pour valider le score.",
@@ -183,6 +187,10 @@ export const translations = {
     freeDrinkBannerBodyInactive:
       "Top 3 of the day get a free drink — 24/7. Follow on Instagram, subscribe to news, then submit your email.",
     freeDrinkBannerCta: "Play the game",
+    freeDrinkPopupTitle: "Free drink",
+    freeDrinkPopupBody: "Top 3 scores of the day get a free drink.",
+    freeDrinkPopupCta: "Play now",
+    freeDrinkPopupClose: "Close",
 
     gamePromoActive:
       "Daily top 3 = free drink, 24/7. At game over: Instagram + newsletter + email to submit your score.",

@@ -8,7 +8,7 @@ import RentalSection from "@/components/RentalSection";
 import MenuSection from "@/components/MenuSection";
 import GallerySection from "@/components/GallerySection";
 import ContactSection from "@/components/ContactSection";
-import FreeDrinkBanner from "@/components/FreeDrinkBanner";
+import FreeDrinkPopup from "@/components/FreeDrinkPopup";
 
 const Index = () => {
   const [showIntro, setShowIntro] = useState(true);
@@ -22,7 +22,7 @@ const Index = () => {
       {!showIntro && (
         <div className="bg-background w-full min-w-0 overflow-x-hidden max-w-[100vw] pt-16 sm:pt-[4.25rem] md:pt-[4.5rem] lg:pt-20 xl:pt-[5.5rem]">
           <Navbar />
-          <FreeDrinkBanner />
+          <FreeDrinkPopup />
           <HeroSection />
           <AboutSection />
           <RentalSection />
