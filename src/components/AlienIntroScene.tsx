@@ -6,6 +6,7 @@ import * as THREE from "three";
 
 const WAVING_FBX = "/Waving.fbx";
 const BACKFLIP_FBX = "/Backflip.fbx";
+const WAVE_AUDIO = "/alien-wave.mp3";
 
 type AnimationType = "waving" | "backflip" | "sequence";
 
@@ -15,12 +16,28 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
   
   const groupRef = useRef<THREE.Group>(null);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentAnimation, setCurrentAnimation] = useState<"waving" | "backflip">(
     animationType === "sequence" ? "backflip" : animationType
   );
   const [hasPlayedBackflip, setHasPlayedBackflip] = useState(false);
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
 
   const activeFbx = currentAnimation === "waving" ? wavingFbx : backflipFbx;
+
+  // Initialize audio
+  useEffect(() => {
+    const audio = new Audio(WAVE_AUDIO);
+    audio.volume = 0.7; // 70% volume
+    audioRef.current = audio;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!activeFbx?.animations?.length) return;
@@ -63,11 +80,27 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
       action.clampWhenFinished = true; // Stay at final pose
       action.timeScale = 0.5; // 50% speed (slower waving)
       action.play();
+      
+      // Play audio when waving starts
+      if (!hasPlayedAudio && audioRef.current) {
+        audioRef.current.play().catch(err => {
+          console.log("Audio autoplay prevented:", err);
+        });
+        setHasPlayedAudio(true);
+      }
     } else {
       // Standalone animations loop infinitely
       action.setLoop(THREE.LoopRepeat, Infinity);
       if (currentAnimation === "waving") {
         action.timeScale = 0.5; // Slower waving for standalone too
+        
+        // Play audio for standalone waving too
+        if (!hasPlayedAudio && audioRef.current) {
+          audioRef.current.play().catch(err => {
+            console.log("Audio autoplay prevented:", err);
+          });
+          setHasPlayedAudio(true);
+        }
       }
       action.play();
     }
@@ -79,13 +112,14 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
       }
       mixerRef.current = null;
     };
-  }, [activeFbx, currentAnimation, animationType, hasPlayedBackflip]);
+  }, [activeFbx, currentAnimation, animationType, hasPlayedBackflip, hasPlayedAudio]);
 
   // Handle external animation type changes
   useEffect(() => {
     if (animationType !== "sequence") {
       setCurrentAnimation(animationType);
       setHasPlayedBackflip(false);
+      setHasPlayedAudio(false);
     }
   }, [animationType]);
 

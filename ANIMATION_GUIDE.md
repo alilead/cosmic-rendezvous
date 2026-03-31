@@ -19,6 +19,9 @@ Start → Backflip (once) → Land → Wave slowly (3x) → Stand still
 - Backflip: `public/Backflip.fbx`
 - Original: `public/alen.fbx` (kept for reference)
 
+### Audio Files
+- Wave Sound: `public/alien-wave.mp3` - Plays when alien starts waving
+
 ### Component Files
 - Main Scene: `src/components/AlienIntroScene.tsx`
 - Intro Component: `src/components/AlienIntro.tsx`
@@ -86,21 +89,24 @@ The intro screen now automatically plays the sequence:
 1. Alien performs a backflip (once)
 2. Lands smoothly
 3. Waves 3 times at 50% speed (slower, more natural)
-4. Stays in standing pose
-5. User can click "Enter" anytime during the sequence
+4. Audio plays when waving starts (70% volume)
+5. Stays in standing pose
+6. User can click "Enter" anytime during the sequence
 
 ### How It Works
 
 1. **Loading**: Both FBX files are preloaded using Three.js FBXLoader
-2. **Sequence Mode**: 
+2. **Audio**: Audio file is loaded and ready to play
+3. **Sequence Mode**: 
    - Starts with backflip animation
    - Sets loop mode to `LoopOnce` for backflip
    - Listens for "finished" event from AnimationMixer
    - Automatically switches to waving animation when backflip completes
+   - Plays audio when waving starts (handles autoplay restrictions gracefully)
    - Waving animation plays 3 times at 50% speed (`timeScale = 0.5`)
    - Uses `clampWhenFinished` to hold the final standing pose
-3. **Animation Mixer**: Three.js AnimationMixer handles animation playback and transitions
-4. **State Management**: React state tracks which animation is currently playing
+4. **Animation Mixer**: Three.js AnimationMixer handles animation playback and transitions
+5. **State Management**: React state tracks which animation is currently playing
 
 ## Customization Options
 
@@ -123,6 +129,30 @@ Modify the loop count for waving:
 action.setLoop(THREE.LoopRepeat, 3); // Current: 3 waves
 action.setLoop(THREE.LoopRepeat, 5); // 5 waves
 action.setLoop(THREE.LoopRepeat, 1); // Just 1 wave
+```
+
+### Adjust Audio Volume
+In `AlienIntroScene.tsx`, modify the audio volume:
+
+```tsx
+// In the audio initialization useEffect
+audio.volume = 0.7;  // Current: 70% volume
+audio.volume = 1.0;  // Full volume
+audio.volume = 0.5;  // 50% volume
+audio.volume = 0.3;  // Quiet (30% volume)
+```
+
+### Disable Audio
+To disable audio completely:
+
+```tsx
+// Comment out or remove the audio play section
+// if (!hasPlayedAudio && audioRef.current) {
+//   audioRef.current.play().catch(err => {
+//     console.log("Audio autoplay prevented:", err);
+//   });
+//   setHasPlayedAudio(true);
+// }
 ```
 
 ### Change Position/Scale
