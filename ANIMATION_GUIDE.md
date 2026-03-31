@@ -4,11 +4,12 @@
 The alien character performs a dynamic animation sequence:
 1. **Backflip** - Performs a backflip once (plays once)
 2. **Landing** - Smooth transition
-3. **Waving** - Continuous friendly greeting (loops forever)
+3. **Waving** - Waves 3 times at 50% speed (slower, more natural)
+4. **Standing** - Stays in standing pose
 
 ## Animation Sequence Flow
 ```
-Start → Backflip (once) → Land → Waving (loop) → Continue waving...
+Start → Backflip (once) → Land → Wave slowly (3x) → Stand still
 ```
 
 ## File Locations
@@ -25,12 +26,12 @@ Start → Backflip (once) → Land → Waving (loop) → Continue waving...
 
 ## Usage
 
-### 1. Default Sequence (Backflip → Wave)
+### 1. Default Sequence (Backflip → Wave → Stand)
 
 ```tsx
 import { AlienIntroScene } from "@/components/AlienIntroScene";
 
-// Plays backflip once, then loops waving animation
+// Plays backflip once, waves 3 times slowly, then stands still
 <AlienIntroScene ready={true} animationType="sequence" />
 
 // Or simply (sequence is the default)
@@ -84,8 +85,9 @@ import AlienAnimationDemo from "@/components/AlienAnimationDemo";
 The intro screen now automatically plays the sequence:
 1. Alien performs a backflip (once)
 2. Lands smoothly
-3. Starts waving continuously
-4. User can click "Enter" anytime during the sequence
+3. Waves 3 times at 50% speed (slower, more natural)
+4. Stays in standing pose
+5. User can click "Enter" anytime during the sequence
 
 ### How It Works
 
@@ -95,26 +97,32 @@ The intro screen now automatically plays the sequence:
    - Sets loop mode to `LoopOnce` for backflip
    - Listens for "finished" event from AnimationMixer
    - Automatically switches to waving animation when backflip completes
-   - Waving animation loops infinitely
+   - Waving animation plays 3 times at 50% speed (`timeScale = 0.5`)
+   - Uses `clampWhenFinished` to hold the final standing pose
 3. **Animation Mixer**: Three.js AnimationMixer handles animation playback and transitions
 4. **State Management**: React state tracks which animation is currently playing
 
 ## Customization Options
 
 ### Change Animation Speed
-In `AlienIntroScene.tsx`, modify the mixer update:
+In `AlienIntroScene.tsx`, modify the timeScale:
 
 ```tsx
-useFrame((_, delta) => {
-  // Normal speed
-  mixerRef.current?.update(delta);
-  
-  // Double speed
-  mixerRef.current?.update(delta * 2);
-  
-  // Half speed
-  mixerRef.current?.update(delta * 0.5);
-});
+// In the useEffect where action is created
+action.timeScale = 0.5;  // 50% speed (current for waving)
+action.timeScale = 1.0;  // Normal speed
+action.timeScale = 2.0;  // Double speed
+action.timeScale = 0.3;  // Very slow (30% speed)
+```
+
+### Change Number of Waves
+Modify the loop count for waving:
+
+```tsx
+// In sequence mode waving section
+action.setLoop(THREE.LoopRepeat, 3); // Current: 3 waves
+action.setLoop(THREE.LoopRepeat, 5); // 5 waves
+action.setLoop(THREE.LoopRepeat, 1); // Just 1 wave
 ```
 
 ### Change Position/Scale

@@ -57,9 +57,18 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
         }
         mixerRef.current = null;
       };
+    } else if (currentAnimation === "waving" && animationType === "sequence") {
+      // In sequence mode, waving plays 2-3 times at 50% speed then stops
+      action.setLoop(THREE.LoopRepeat, 3); // Play 3 times
+      action.clampWhenFinished = true; // Stay at final pose
+      action.timeScale = 0.5; // 50% speed (slower waving)
+      action.play();
     } else {
-      // Loop the animation (waving or standalone animations)
+      // Standalone animations loop infinitely
       action.setLoop(THREE.LoopRepeat, Infinity);
+      if (currentAnimation === "waving") {
+        action.timeScale = 0.5; // Slower waving for standalone too
+      }
       action.play();
     }
 
