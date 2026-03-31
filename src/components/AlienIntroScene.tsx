@@ -10,7 +10,10 @@ const WAVE_AUDIO = "/alien-wave.mp3";
 
 type AnimationType = "waving" | "backflip" | "sequence";
 
-function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationType }) {
+function AlienFBX({ animationType = "sequence", onUserInteraction }: { 
+  animationType?: AnimationType;
+  onUserInteraction?: () => void;
+}) {
   const wavingFbx = useLoader(FBXLoader, WAVING_FBX) as Group & { animations?: THREE.AnimationClip[] };
   const backflipFbx = useLoader(FBXLoader, BACKFLIP_FBX) as Group & { animations?: THREE.AnimationClip[] };
   
@@ -21,7 +24,8 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
     animationType === "sequence" ? "backflip" : animationType
   );
   const [hasPlayedBackflip, setHasPlayedBackflip] = useState(false);
-  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const [shouldPlayAudio, setShouldPlayAudio] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const activeFbx = currentAnimation === "waving" ? wavingFbx : backflipFbx;
 
@@ -38,6 +42,27 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
       }
     };
   }, []);
+
+  // Play audio when user interacts and waving starts
+  useEffect(() => {
+    if (userInteracted && shouldPlayAudio && audioRef.current) {
+      audioRef.current.play().catch(err => {
+        console.log("Audio play error:", err);
+      });
+      setShouldPlayAudio(false);
+    }
+  }, [userInteracted, shouldPlayAudio]);
+
+  // Listen for user interaction callback
+  useEffect(() => {
+    if (onUserInteraction) {
+      const handleInteraction = () => {
+        setUserInteracted(true);
+      };
+      // Store the callback
+      (window as any).__alienAudioInteraction = handleInteraction;
+    }
+  }, [onUserInteraction]);
 
   useEffect(() => {
     if (!activeFbx?.animations?.length) return;
@@ -81,26 +106,14 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
       action.timeScale = 0.5; // 50% speed (slower waving)
       action.play();
       
-      // Play audio when waving starts
-      if (!hasPlayedAudio && audioRef.current) {
-        audioRef.current.play().catch(err => {
-          console.log("Audio autoplay prevented:", err);
-        });
-        setHasPlayedAudio(true);
-      }
+      // Mark that audio should play (will play when user interacts)
+      setShouldPlayAudio(true);
     } else {
       // Standalone animations loop infinitely
       action.setLoop(THREE.LoopRepeat, Infinity);
       if (currentAnimation === "waving") {
         action.timeScale = 0.5; // Slower waving for standalone too
-        
-        // Play audio for standalone waving too
-        if (!hasPlayedAudio && audioRef.current) {
-          audioRef.current.play().catch(err => {
-            console.log("Audio autoplay prevented:", err);
-          });
-          setHasPlayedAudio(true);
-        }
+        setShouldPlayAudio(true);
       }
       action.play();
     }
@@ -112,14 +125,15 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
       }
       mixerRef.current = null;
     };
-  }, [activeFbx, currentAnimation, animationType, hasPlayedBackflip, hasPlayedAudio]);
+  }, [activeFbx, currentAnimation, animationType, hasPlayedBackflip]);
 
   // Handle external animation type changes
   useEffect(() => {
     if (animationType !== "sequence") {
       setCurrentAnimation(animationType);
       setHasPlayedBackflip(false);
-      setHasPlayedAudio(false);
+      setShouldPlayAudio(false);
+      setUserInteracted(false);
     }
   }, [animationType]);
 
@@ -136,10 +150,12 @@ function AlienFBX({ animationType = "sequence" }: { animationType?: AnimationTyp
 
 export function AlienIntroScene({ 
   ready, 
-  animationType = "sequence" 
+  animationType = "sequence",
+  onUserInteraction
 }: { 
   ready: boolean;
   animationType?: "waving" | "backflip" | "sequence";
+  onUserInteraction?: () => void;
 }) {
   return (
     <>
@@ -147,7 +163,7 @@ export function AlienIntroScene({
       <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
       <pointLight position={[-2, 2, 3]} intensity={0.8} />
       <pointLight position={[2, 1, 3]} intensity={0.6} />
-      <AlienFBX animationType={animationType} />
+      <AlienFBX animationType={animationType} onUserInteraction={onUserInteraction} />
     </>
   );
 }

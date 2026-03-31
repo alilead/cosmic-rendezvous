@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
   const [phase, setPhase] = useState<"loading" | "ready" | "exit">("loading");
   const [showPrompt, setShowPrompt] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
   const { t } = useLanguage();
 
   const handleEnter = useCallback(() => {
@@ -14,6 +15,16 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
     setPhase("exit");
     setTimeout(onEnter, 500);
   }, [onEnter, phase]);
+
+  const handleUserInteraction = useCallback(() => {
+    if (!userInteracted) {
+      setUserInteracted(true);
+      // Trigger audio play in AlienIntroScene
+      if ((window as any).__alienAudioInteraction) {
+        (window as any).__alienAudioInteraction();
+      }
+    }
+  }, [userInteracted]);
 
   const handleCreated = useCallback(() => {
     setPhase("ready");
@@ -24,7 +35,10 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
     <AnimatePresence>
       <motion.div
         className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background overflow-hidden cursor-pointer"
-        onClick={handleEnter}
+        onClick={(e) => {
+          handleUserInteraction();
+          handleEnter();
+        }}
         initial={false}
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
       >
@@ -41,7 +55,11 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
               gl={{ antialias: true, alpha: true }}
               className="w-full h-full"
             >
-              <AlienIntroScene ready={phase === "ready"} animationType="sequence" />
+              <AlienIntroScene 
+                ready={phase === "ready"} 
+                animationType="sequence"
+                onUserInteraction={handleUserInteraction}
+              />
             </Canvas>
           </Suspense>
         </motion.div>
@@ -64,6 +82,7 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleUserInteraction();
                   handleEnter();
                 }}
                 className="pointer-events-auto min-h-[48px] px-10 py-3 font-display text-lg md:text-xl tracking-[0.25em] uppercase border-2 border-primary text-primary bg-primary/20 hover:bg-primary/40 active:scale-95 transition-all duration-300 rounded-sm neon-border-pink animate-pulse-glow touch-manipulation flex items-center gap-3"
