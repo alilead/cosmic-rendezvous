@@ -41,7 +41,7 @@ const AlienIntro = ({ onEnter }: { onEnter: () => void }) => {
               gl={{ antialias: true, alpha: true }}
               className="w-full h-full"
             >
-              <AlienIntroScene ready={phase === "ready"} />
+              <AlienIntroScene ready={phase === "ready"} animationType="sequence" />
             </Canvas>
           </Suspense>
         </motion.div>
